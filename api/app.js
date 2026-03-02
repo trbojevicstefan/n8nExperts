@@ -28,7 +28,10 @@ import gigRoute from "./routes/gig.route.js";
 
 dotenv.config();
 
-const FRONTEND_URL = process.env.FRONTEND_URL || process.env.CLIENT_URL || "http://localhost:5173";
+const FRONTEND_URLS = (process.env.FRONTEND_URL || process.env.CLIENT_URL || "http://localhost:5173")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
 const MONGO_URI = process.env.MONGO_URI || process.env.MONGO;
 
 mongoose.set("strictQuery", true);
@@ -92,7 +95,7 @@ export const createApp = () => {
   configurePassport();
 
   const app = express();
-  const allowedOrigins = ["http://localhost:5173", "http://localhost:3000", FRONTEND_URL].filter(Boolean);
+  const allowedOrigins = ["http://localhost:5173", "http://localhost:3000", ...FRONTEND_URLS];
 
   app.use(
     cors({
