@@ -28,10 +28,33 @@ import gigRoute from "./routes/gig.route.js";
 
 dotenv.config();
 
-const FRONTEND_URLS = (process.env.FRONTEND_URL || process.env.CLIENT_URL || "http://localhost:5173")
-  .split(",")
-  .map((origin) => origin.trim())
-  .filter(Boolean);
+const normalizeOrigin = (value) => {
+  if (!value) return null;
+  const trimmed = value.trim();
+  if (!trimmed) return null;
+
+  try {
+    return new URL(trimmed).origin;
+  } catch {
+    return trimmed.replace(/\/+$/, "");
+  }
+};
+
+const parseOriginList = (value = "") =>
+  value
+    .split(",")
+    .map((origin) => normalizeOrigin(origin))
+    .filter(Boolean);
+
+const FRONTEND_URLS = [...parseOriginList(process.env.FRONTEND_URL), ...parseOriginList(process.env.CLIENT_URL)];
+const DEFAULT_ALLOWED_ORIGINS = [
+  "http://localhost:5173",
+  "http://localhost:3000",
+  "https://n8nexperts.io",
+  "https://www.n8nexperts.io",
+  "https://n8nexperts.web.app",
+  "https://n8nexperts.firebaseapp.com",
+];
 const MONGO_URI = process.env.MONGO_URI || process.env.MONGO;
 
 mongoose.set("strictQuery", true);
@@ -95,13 +118,14 @@ export const createApp = () => {
   configurePassport();
 
   const app = express();
-  const allowedOrigins = ["http://localhost:5173", "http://localhost:3000", ...FRONTEND_URLS];
+  const allowedOrigins = new Set([...DEFAULT_ALLOWED_ORIGINS, ...FRONTEND_URLS]);
 
   app.use(
     cors({
       origin(origin, callback) {
         if (!origin) return callback(null, true);
-        if (allowedOrigins.includes(origin)) return callback(null, true);
+        const normalizedOrigin = normalizeOrigin(origin);
+        if (normalizedOrigin && allowedOrigins.has(normalizedOrigin)) return callback(null, true);
         return callback(new Error("Not allowed by CORS"));
       },
       credentials: true,
