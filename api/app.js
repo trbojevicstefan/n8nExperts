@@ -66,28 +66,36 @@ const configurePassport = () => {
     return;
   }
 
-  passport.use(
-    new GoogleStrategy(
-      {
-        clientID: process.env.GOOGLE_CLIENT_ID || "",
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
-        callbackURL: "/api/auth/google/callback",
-      },
-      async (_accessToken, _refreshToken, profile, done) => {
-        try {
-          const user = {
-            googleId: profile.id,
-            email: profile.emails?.[0]?.value,
-            name: profile.displayName,
-            picture: profile.photos?.[0]?.value,
-          };
-          return done(null, user);
-        } catch (err) {
-          return done(err, null);
+  const clientID = process.env.GOOGLE_CLIENT_ID;
+  const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
+
+  if (clientID && clientSecret) {
+    passport.use(
+      new GoogleStrategy(
+        {
+          clientID: clientID,
+          clientSecret: clientSecret,
+          callbackURL: "/api/auth/google/callback",
+        },
+        async (_accessToken, _refreshToken, profile, done) => {
+          try {
+            const user = {
+              googleId: profile.id,
+              email: profile.emails?.[0]?.value,
+              name: profile.displayName,
+              picture: profile.photos?.[0]?.value,
+            };
+            return done(null, user);
+          } catch (err) {
+            return done(err, null);
+          }
         }
-      }
-    )
-  );
+      )
+    );
+  } else {
+    console.warn("Google OAuth credentials not found. Google login will be disabled.");
+  }
+
 
   hasConfiguredPassport = true;
 };
