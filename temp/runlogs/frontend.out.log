@@ -1,0 +1,118 @@
+
+> frontened@0.0.0 dev
+> vite --host 0.0.0.0 --port 5173
+
+
+  [32m[1mVITE[22m v7.3.1[39m  [2mready in [0m[1m1026[22m[2m[0m ms[22m
+
+  [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m5173[22m/[39m
+  [32m➜[39m  [1mNetwork[22m: [36mhttp://169.254.123.184:[1m5173[22m/[39m
+  [32m➜[39m  [1mNetwork[22m: [36mhttp://192.168.0.29:[1m5173[22m/[39m
+[2m23:12:14[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css[22m
+[2m23:12:39[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/context/AuthProvider.tsx, /src/pages/projects/PostProject.tsx, /src/pages/projects/MyJobs.tsx, /src/pages/experts/ExpertMarketplace.tsx, /src/pages/work/MyApplications.tsx, /src/pages/onboarding/ExpertWizard.tsx, /src/pages/work/FindWork.tsx, /src/pages/experts/ExpertProfile.tsx, /src/pages/experts/ExpertServices.tsx, /src/index.css[22m
+[2m23:13:00[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/context/AuthProvider.tsx, /src/pages/projects/PostProject.tsx, /src/pages/projects/MyJobs.tsx, /src/pages/experts/ExpertMarketplace.tsx, /src/pages/work/MyApplications.tsx, /src/pages/onboarding/ExpertWizard.tsx, /src/pages/work/FindWork.tsx, /src/pages/experts/ExpertProfile.tsx, /src/pages/experts/ExpertServices.tsx, /src/index.css[22m
+[2m23:14:54[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/routes/index.tsx, /src/index.css[22m
+[2m23:15:34[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/layout/Navbar.tsx, /src/index.css[22m
+[2m23:15:47[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/layout/MobileNav.tsx, /src/index.css[22m
+[2m23:16:13[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/projects/MyJobs.tsx, /src/index.css[22m
+[2m23:16:33[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/experts/ExpertProfile.tsx, /src/index.css[22m
+[2m23:19:00[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/layout/Navbar.tsx, /src/index.css[22m
+[2m23:24:12[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/experts/ExpertProfile.tsx, /src/index.css[22m
+[2m00:14:35[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css[22m
+[2m00:14:52[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/context/AuthProvider.tsx, /src/pages/projects/PostProject.tsx, /src/pages/projects/MyJobs.tsx, /src/pages/experts/ExpertMarketplace.tsx, /src/pages/work/MyApplications.tsx, /src/pages/onboarding/ExpertWizard.tsx, /src/pages/work/FindWork.tsx, /src/pages/experts/ExpertProfile.tsx, /src/pages/experts/ExpertServices.tsx, /src/pages/work/Invitations.tsx, /src/pages/workspace/Notifications.tsx, /src/pages/workspace/Inbox.tsx, /src/components/layout/Navbar.tsx, /src/index.css[22m
+[2m00:16:11[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/routes/index.tsx, /src/index.css[22m
+[2m00:16:20[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/components/layout/Navbar.tsx, /src/index.css[22m
+[2m00:16:41[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/work/FindWork.tsx, /src/index.css[22m
+[2m00:17:02[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/experts/ExpertProfile.tsx, /src/index.css[22m
+[2m00:17:37[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/onboarding/ExpertWizard.tsx, /src/index.css[22m
+[2m00:19:06[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/projects/MyJobs.tsx, /src/index.css[22m
+[2m00:19:47[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/work/MyApplications.tsx, /src/index.css[22m
+[2m00:21:10[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/onboarding/ExpertWizard.tsx, /src/index.css[22m
+[2m01:33:35[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css[22m
+[2m01:34:28[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/work/MyApplications.tsx, /src/index.css[22m
+[2m01:36:08[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/projects/MyJobs.tsx, /src/index.css[22m
+[2m01:36:44[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/onboarding/ExpertWizard.tsx, /src/index.css[22m
+[2m01:36:58[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/pages/work/FindWork.tsx, /src/index.css[22m
+[2m01:38:59[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css[22m
+[2m01:39:07[22m [36m[1m[vite][22m[39m [32mvite.config.ts changed, restarting server...[39m
+[2m01:39:07[22m [36m[1m[vite][22m[39m server restarted.
+[2m01:39:13[22m [36m[1m[vite][22m[39m [32mvite.config.ts changed, restarting server...[39m
+[2m01:41:00[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css, /src/pages/clients/ClientProfileEdit.tsx[22m
+[2m01:41:10[22m [36m[1m[vite][22m[39m changed tsconfig file detected: D:/projects/n8nExperts/frontend/tsconfig.app.json - Clearing cache and forcing full-reload to ensure TypeScript is compiled with updated config values.
+[2m01:41:10[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css[22m
+[2m01:41:24[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css[22m
+[2m01:46:48[22m [36m[1m[vite][22m[39m [32mvite.config.ts changed, restarting server...[39m
+[2m01:46:48[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m Re-optimizing dependencies because lockfile has changed
+[2m01:46:48[22m [36m[1m[vite][22m[39m server restarted.
+[2m01:46:58[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css[22m
+[2m01:47:24[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css[22m
+[2m01:47:48[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css[22m
+[2m08:34:27[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css[22m
+[2m08:34:44[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css, /src/context/AuthProvider.tsx, /src/pages/experts/ExpertProfile.tsx, /src/pages/onboarding/ExpertWizard.tsx, /src/pages/projects/PostProject.tsx, /src/pages/experts/ExpertServices.tsx, /src/pages/workspace/Notifications.tsx, /src/pages/experts/ExpertMarketplace.tsx, /src/pages/work/MyApplications.tsx, /src/pages/work/Invitations.tsx, /src/pages/clients/ClientProfileEdit.tsx, /src/pages/projects/MyJobs.tsx, /src/pages/clients/ClientPublicProfile.tsx, /src/pages/work/FindWork.tsx, /src/pages/workspace/Inbox.tsx, /src/components/layout/Navbar.tsx[22m
+[2m08:35:50[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/routes/index.tsx, /src/index.css[22m
+[2m08:35:57[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css, /src/components/layout/Navbar.tsx[22m
+[2m08:36:18[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css, /src/pages/work/FindWork.tsx[22m
+[2m08:36:43[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css, /src/pages/experts/ExpertMarketplace.tsx[22m
+[2m09:13:18[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/routes/index.tsx, /src/index.css[22m
+[2m09:13:24[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css, /src/components/layout/Navbar.tsx[22m
+[2m09:13:41[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css, /src/pages/work/FindWork.tsx[22m
+[2m09:13:54[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css, /src/pages/work/FindWork.tsx[22m
+[2m09:14:33[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css, /src/pages/work/FindWork.tsx[22m
+[2m09:15:03[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css, /src/pages/experts/ExpertMarketplace.tsx[22m
+[2m09:15:25[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css, /src/pages/work/SavedJobs.tsx[22m
+[2m09:15:54[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css, /src/pages/experts/SavedExperts.tsx[22m
+[2m09:16:01[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css[22m
+[2m09:16:10[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css, /src/context/AuthProvider.tsx, /src/pages/experts/ExpertProfile.tsx, /src/pages/onboarding/ExpertWizard.tsx, /src/pages/projects/PostProject.tsx, /src/pages/experts/ExpertServices.tsx, /src/pages/workspace/Notifications.tsx, /src/pages/experts/ExpertMarketplace.tsx, /src/pages/work/MyApplications.tsx, /src/pages/work/Invitations.tsx, /src/pages/clients/ClientProfileEdit.tsx, /src/pages/projects/MyJobs.tsx, /src/pages/clients/ClientPublicProfile.tsx, /src/pages/work/FindWork.tsx, /src/pages/workspace/Inbox.tsx, /src/components/layout/Navbar.tsx, /src/pages/experts/SavedExperts.tsx, /src/pages/work/SavedJobs.tsx, /src/pages/workspace/SavedSearches.tsx[22m
+[2m09:18:56[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css, /src/components/layout/Navbar.tsx[22m
+[2m09:20:18[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css, /src/pages/work/SavedJobs.tsx[22m
+[2m09:20:25[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css, /src/pages/experts/SavedExperts.tsx[22m
+[2m09:29:53[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css, /src/components/layout/Navbar.tsx[22m
+[2m09:38:02[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css[22m
+[2m09:38:10[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css, /src/context/AuthProvider.tsx, /src/pages/experts/ExpertProfile.tsx, /src/pages/onboarding/ExpertWizard.tsx, /src/pages/projects/PostProject.tsx, /src/pages/experts/ExpertServices.tsx, /src/pages/workspace/Notifications.tsx, /src/pages/experts/ExpertMarketplace.tsx, /src/pages/work/MyApplications.tsx, /src/pages/work/Invitations.tsx, /src/pages/clients/ClientProfileEdit.tsx, /src/pages/projects/MyJobs.tsx, /src/pages/clients/ClientPublicProfile.tsx, /src/pages/work/FindWork.tsx, /src/pages/workspace/Inbox.tsx, /src/components/layout/Navbar.tsx, /src/pages/experts/SavedExperts.tsx, /src/pages/work/SavedJobs.tsx, /src/pages/workspace/SavedSearches.tsx[22m
+[2m09:39:55[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/routes/index.tsx, /src/index.css[22m
+[2m09:40:09[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css, /src/components/layout/Navbar.tsx[22m
+[2m09:40:21[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css, /src/pages/projects/MyJobs.tsx[22m
+[2m09:48:20[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css, /src/pages/workspace/SavedSearches.tsx[22m
+[2m09:49:15[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css, /src/pages/workspace/SavedSearches.tsx[22m
+[2m09:49:25[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css, /src/pages/work/FindWork.tsx[22m
+[2m13:45:34[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css, /src/context/AuthProvider.tsx, /src/pages/experts/ExpertProfile.tsx, /src/pages/onboarding/ExpertWizard.tsx, /src/pages/projects/PostProject.tsx, /src/pages/experts/ExpertServices.tsx, /src/pages/workspace/Notifications.tsx, /src/pages/experts/ExpertMarketplace.tsx, /src/pages/work/MyApplications.tsx, /src/pages/work/Invitations.tsx, /src/pages/clients/ClientProfileEdit.tsx, /src/pages/projects/MyJobs.tsx, /src/pages/clients/ClientPublicProfile.tsx, /src/pages/work/FindWork.tsx, /src/pages/workspace/Inbox.tsx, /src/components/layout/Navbar.tsx, /src/pages/experts/SavedExperts.tsx, /src/pages/work/SavedJobs.tsx, /src/pages/projects/ApplicantPipeline.tsx, /src/pages/workspace/SavedSearches.tsx[22m
+[2m13:45:59[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css, /src/pages/projects/ApplicantPipeline.tsx[22m
+[2m13:46:45[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css, /src/pages/projects/ApplicantPipeline.tsx[22m
+[2m13:47:25[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css, /src/pages/projects/ApplicantPipeline.tsx[22m
+[2m18:11:41[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css[22m
+[2m18:11:52[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css, /src/context/AuthProvider.tsx, /src/pages/experts/ExpertProfile.tsx, /src/pages/onboarding/ExpertWizard.tsx, /src/pages/projects/PostProject.tsx, /src/pages/experts/ExpertServices.tsx, /src/pages/workspace/Notifications.tsx, /src/pages/experts/ExpertMarketplace.tsx, /src/pages/work/MyApplications.tsx, /src/pages/work/Invitations.tsx, /src/pages/clients/ClientProfileEdit.tsx, /src/pages/projects/MyJobs.tsx, /src/pages/clients/ClientPublicProfile.tsx, /src/pages/work/FindWork.tsx, /src/pages/workspace/Inbox.tsx, /src/components/layout/Navbar.tsx, /src/pages/experts/SavedExperts.tsx, /src/pages/work/SavedJobs.tsx, /src/pages/projects/ApplicantPipeline.tsx, /src/pages/workspace/SavedSearches.tsx[22m
+[2m18:12:43[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css, /src/pages/workspace/Inbox.tsx[22m
+[2m18:13:39[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css, /src/pages/workspace/Inbox.tsx[22m
+[2m18:14:33[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css, /src/pages/workspace/Inbox.tsx[22m
+[2m18:14:42[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css[22m
+[2m18:15:19[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css[22m
+[2m18:21:54[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css, /src/components/layout/Navbar.tsx[22m
+[2m18:23:54[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css[22m
+[2m18:39:30[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css, /src/context/AuthProvider.tsx, /src/pages/experts/ExpertProfile.tsx, /src/pages/onboarding/ExpertWizard.tsx, /src/pages/projects/PostProject.tsx, /src/pages/experts/ExpertServices.tsx, /src/pages/workspace/Notifications.tsx, /src/pages/experts/ExpertMarketplace.tsx, /src/pages/work/MyApplications.tsx, /src/pages/work/Invitations.tsx, /src/pages/clients/ClientProfileEdit.tsx, /src/pages/projects/MyJobs.tsx, /src/pages/clients/ClientPublicProfile.tsx, /src/pages/work/FindWork.tsx, /src/components/layout/Navbar.tsx, /src/pages/experts/SavedExperts.tsx, /src/pages/work/SavedJobs.tsx, /src/pages/projects/ApplicantPipeline.tsx, /src/pages/workspace/SavedSearches.tsx, /src/pages/workspace/Inbox.tsx[22m
+[2m18:39:48[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css, /src/pages/work/Invitations.tsx[22m
+[2m18:40:00[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css, /src/context/AuthProvider.tsx, /src/pages/experts/ExpertProfile.tsx, /src/pages/onboarding/ExpertWizard.tsx, /src/pages/projects/PostProject.tsx, /src/pages/experts/ExpertServices.tsx, /src/pages/workspace/Notifications.tsx, /src/pages/experts/ExpertMarketplace.tsx, /src/pages/work/MyApplications.tsx, /src/pages/work/Invitations.tsx, /src/pages/clients/ClientProfileEdit.tsx, /src/pages/projects/MyJobs.tsx, /src/pages/clients/ClientPublicProfile.tsx, /src/pages/work/FindWork.tsx, /src/components/layout/Navbar.tsx, /src/pages/experts/SavedExperts.tsx, /src/pages/work/SavedJobs.tsx, /src/pages/projects/ApplicantPipeline.tsx, /src/pages/workspace/SavedSearches.tsx, /src/pages/workspace/Inbox.tsx[22m
+[2m18:40:06[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css, /src/pages/experts/ExpertProfile.tsx[22m
+[2m18:40:47[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css, /src/components/layout/Navbar.tsx[22m
+[2m18:40:57[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css, /src/components/layout/Navbar.tsx[22m
+[2m18:41:04[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css, /src/components/layout/Navbar.tsx[22m
+[2m18:41:13[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css, /src/components/layout/Navbar.tsx[22m
+[2m18:41:20[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css, /src/components/layout/Navbar.tsx[22m
+[2m18:41:27[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css, /src/components/ui/sheet.tsx[22m
+[2m18:42:00[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css, /src/pages/workspace/Notifications.tsx[22m
+[2m18:42:19[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css, /src/pages/workspace/Inbox.tsx[22m
+[2m18:42:33[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css, /src/pages/work/FindWork.tsx[22m
+[2m18:42:58[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css, /src/pages/projects/ApplicantPipeline.tsx[22m
+[2m18:43:18[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css, /src/pages/projects/MyJobs.tsx[22m
+[2m18:43:36[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css, /src/pages/work/MyApplications.tsx[22m
+[2m18:43:56[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css, /src/pages/work/SavedJobs.tsx[22m
+[2m18:44:19[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css, /src/pages/experts/SavedExperts.tsx[22m
+[2m18:45:42[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css, /src/pages/Home.tsx[22m
+[2m18:45:54[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css, /src/pages/WhyUs.tsx[22m
+[2m18:46:02[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css, /src/pages/experts/ExpertMarketplace.tsx[22m
+[2m18:46:12[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css, /src/pages/work/FindWork.tsx[22m
+[2m18:46:29[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css, /src/components/layout/Footer.tsx[22m
+[2m18:46:41[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mpage reload [39m[2mindex.html[22m
+[2m18:48:28[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css[22m
+[2m18:57:10[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css, /src/pages/Home.tsx[22m
+[2m18:57:25[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/index.css, /src/pages/WhyUs.tsx[22m
+[2m18:57:31[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m [32mhmr update [39m[2m/src/routes/index.tsx, /src/index.css[22m

@@ -6,7 +6,11 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon server.js",
-    "start": "node server.js"
+    "start": "node server.js",
+    "migrate:roles": "node scripts/migrate-roles.js",
+    "migrate:phase2": "node scripts/migrate-phase2.js",
+    "seed:mvp": "node scripts/seed-mvp.js",
+    "test:integration": "node --test tests/integration/**/*.test.js"
   },
   "keywords": [],
   "author": "",
@@ -17,11 +21,18 @@
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "express-session": "^1.19.0",
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^6.9.2",
+    "multer": "^2.0.2",
+    "passport": "^0.7.0",
+    "passport-google-oauth20": "^2.0.0",
+    "passport-oauth2": "^1.8.0",
     "stripe": "^11.11.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.20"
+    "mongodb-memory-server": "^10.3.0",
+    "nodemon": "^2.0.20",
+    "supertest": "^7.1.4"
   }
 }

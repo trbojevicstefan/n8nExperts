@@ -12,6 +12,9 @@ export const deleteUser = async (req, res, next) => {
 };
 export const getUser = async (req, res, next) => {
   const user = await User.findById(req.params.id);
-
-  res.status(200).send(user);
+  if (!user) {
+    return next(createError(404, "User not found!"));
+  }
+  const { password, ...safe } = user._doc;
+  res.status(200).send(safe);
 };
