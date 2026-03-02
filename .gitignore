@@ -1,4 +1,3 @@
 node_modules
-.env
-.firebase
-firebase-debug.log
+/api/node_modules
+/frontend/node_modules
