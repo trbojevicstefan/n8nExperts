@@ -51,4 +51,5 @@ npm run firebase:deploy:hosting
 ## Notes
 
 - Frontend production API base URL defaults to `/api`, so Hosting rewrite handles backend calls.
+- Firebase Hosting forwards only the `__session` cookie to rewritten backends; auth session cookies must use this name for server-side auth to work.
 - If your Firebase project ID is not `n8nexperts`, update `.firebaserc`.

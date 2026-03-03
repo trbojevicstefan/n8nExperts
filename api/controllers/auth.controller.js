@@ -3,6 +3,8 @@ import createError from "../utils/createError.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
+const SESSION_COOKIE_NAME = "__session";
+
 const toPublicUser = (userDoc) => {
   const { password, ...safe } = userDoc._doc;
   const role = safe.role || (safe.isExpert || safe.isSeller ? "expert" : "client");
@@ -36,10 +38,14 @@ const signSessionToken = (user) =>
     process.env.JWT_KEY
   );
 
-const authCookieOptions = () => ({
+const authCookieBaseOptions = () => ({
   httpOnly: true,
   sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
   secure: process.env.NODE_ENV === "production",
+});
+
+const authCookieOptions = () => ({
+  ...authCookieBaseOptions(),
   maxAge: 7 * 24 * 60 * 60 * 1000,
 });
 
@@ -79,7 +85,7 @@ export const register = async (req, res, next) => {
     const token = signSessionToken(newUser);
 
     res
-      .cookie("accessToken", token, authCookieOptions())
+      .cookie(SESSION_COOKIE_NAME, token, authCookieOptions())
       .status(201)
       .json({ message: "User has been created.", user: toPublicUser(newUser) });
   } catch (err) {
@@ -110,7 +116,7 @@ export const login = async (req, res, next) => {
     const token = signSessionToken(user);
 
     res
-      .cookie("accessToken", token, authCookieOptions())
+      .cookie(SESSION_COOKIE_NAME, token, authCookieOptions())
       .status(200)
       .json(toPublicUser(user));
   } catch (err) {
@@ -148,7 +154,7 @@ export const googleCallback = async (req, res, next) => {
     const token = signSessionToken(user);
 
     res
-      .cookie("accessToken", token, authCookieOptions());
+      .cookie(SESSION_COOKIE_NAME, token, authCookieOptions());
 
     // Redirect to frontend
     res.redirect(process.env.FRONTEND_URL || "http://localhost:5173");
@@ -172,10 +178,9 @@ export const getCurrentUser = async (req, res, next) => {
 // LOGOUT CONTROLLER
 export const logout = async (req, res) => {
   res
-    .clearCookie("accessToken", {
-      sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
-      secure: process.env.NODE_ENV === "production",
-    })
+    .clearCookie(SESSION_COOKIE_NAME, authCookieBaseOptions())
+    // Clear the legacy cookie too so existing sessions are fully logged out.
+    .clearCookie("accessToken", authCookieBaseOptions())
     .status(200)
     .json({ message: "User has been logged out." });
 };

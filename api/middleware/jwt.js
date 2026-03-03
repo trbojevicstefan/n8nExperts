@@ -1,8 +1,10 @@
 import jwt from "jsonwebtoken";
 import createError from "../utils/createError.js";
 
+const getSessionToken = (req) => req.cookies?.__session || req.cookies?.accessToken;
+
 export const verifyToken = (req, res, next) => {
-  const token = req.cookies.accessToken;
+  const token = getSessionToken(req);
   if (!token) return next(createError(401, "You are not authenticated!"));
 
   jwt.verify(token, process.env.JWT_KEY, async (err, payload) => {
@@ -19,7 +21,7 @@ export const verifyToken = (req, res, next) => {
 
 // Optional auth - doesn't fail if no token, just adds user info if available
 export const optionalAuth = (req, res, next) => {
-  const token = req.cookies.accessToken;
+  const token = getSessionToken(req);
   if (!token) {
     return next();
   }
