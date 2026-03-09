@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { ContextAside, DenseListCard, EmptyState, PublicPageHero, StatStrip } from "@/components/layout/PagePrimitives";
 
 export default function ExpertProfile() {
   const { expertId } = useParams();
@@ -99,31 +100,43 @@ export default function ExpertProfile() {
     <div className="container py-8">
       {error && <div className="rounded-lg border border-red-400/30 bg-red-500/10 p-3 text-sm text-red-200 mb-5">{error}</div>}
 
-      <section className="panel p-6 md:p-8 mb-6">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-5">
+      <PublicPageHero
+        eyebrow="Expert profile"
+        title={expert.username}
+        description={expert.headline || "n8n Expert"}
+        className="mb-6"
+      >
+        <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
           <div className="flex items-center gap-4">
             <Avatar src={expert.img} fallback={expert.username} className="h-16 w-16" />
             <div>
-              <h1 className="text-3xl font-extrabold text-white">{expert.username}</h1>
-              <p className="text-slate-300">{expert.headline || "n8n Expert"}</p>
-              <p className="mt-1 text-xs text-amber-300">
+              <p className="text-xs text-amber-300">
                 {expert.ratingAvg ? `${expert.ratingAvg.toFixed(1)} / 5` : "No rating yet"}
                 {expert.ratingCount ? ` (${expert.ratingCount} reviews)` : ""}
               </p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {(expert.skills || []).map((skill) => (
+                  <Badge key={skill} variant="secondary">
+                    {skill}
+                  </Badge>
+                ))}
+              </div>
             </div>
           </div>
-          <Badge variant="outline">${expert.hourlyRate || 0}/hr</Badge>
+          <StatStrip
+            className="lg:min-w-[420px]"
+            items={[
+              { label: "Rate", value: `$${expert.hourlyRate || 0}/hr` },
+              { label: "Availability", value: expert.availability || "Not specified" },
+              { label: "Experience", value: expert.yearsExperience ? `${expert.yearsExperience} years` : "Not specified" },
+            ]}
+          />
         </div>
-        <p className="mt-5 text-slate-200 whitespace-pre-wrap">{expert.desc || "No bio yet."}</p>
-        <div className="mt-4 flex flex-wrap gap-2">
-          {(expert.skills || []).map((skill) => (
-            <Badge key={skill} variant="secondary">
-              {skill}
-            </Badge>
-          ))}
-        </div>
+        <p className="mt-5 max-w-[var(--max-width-copy)] whitespace-pre-wrap text-sm leading-7 text-[var(--color-text-secondary)]">
+          {expert.desc || "No bio yet."}
+        </p>
         {profileCompleteness && (
-          <div className="mt-5 rounded-xl border border-white/10 bg-white/5 p-4">
+          <div className="mt-5 rounded-2xl border border-white/10 bg-white/5 p-4 max-w-md">
             <p className="text-xs uppercase tracking-wider text-slate-400">Profile completeness</p>
             <div className="mt-2 h-2 rounded-full bg-white/10">
               <div className="h-2 rounded-full bg-sky-300" style={{ width: `${profileCompleteness.score}%` }} />
@@ -131,16 +144,16 @@ export default function ExpertProfile() {
             <p className="mt-2 text-sm text-slate-300">{profileCompleteness.score}% complete</p>
           </div>
         )}
-      </section>
+      </PublicPageHero>
 
       <div className="grid lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
           <section className="panel p-6">
             <h2 className="text-xl font-bold text-white">Portfolio</h2>
             <div className="mt-4 space-y-3">
-              {portfolio.length === 0 && <p className="text-sm text-slate-300">No published work yet.</p>}
+              {portfolio.length === 0 && <EmptyState title="No published work yet." className="py-4" />}
               {portfolio.map((item) => (
-                <article key={item._id} className="rounded-xl border border-white/10 bg-white/5 p-4">
+                <DenseListCard key={item._id}>
                   <p className="font-semibold text-white">{item.title}</p>
                   <p className="text-sm text-slate-300 mt-2">{item.summary}</p>
                   {item.link && (
@@ -154,7 +167,7 @@ export default function ExpertProfile() {
                       View Case Study
                     </a>
                   )}
-                </article>
+                </DenseListCard>
               ))}
             </div>
           </section>
@@ -162,16 +175,16 @@ export default function ExpertProfile() {
           <section className="panel p-6">
             <h2 className="text-xl font-bold text-white">Services</h2>
             <div className="mt-4 space-y-3">
-              {services.length === 0 && <p className="text-sm text-slate-300">No services published yet.</p>}
+              {services.length === 0 && <EmptyState title="No services published yet." className="py-4" />}
               {services.map((service) => (
-                <article key={service._id} className="rounded-xl border border-white/10 bg-white/5 p-4">
+                <DenseListCard key={service._id}>
                   <div className="flex items-center justify-between gap-3">
                     <p className="font-semibold text-white">{service.title}</p>
                     <Badge variant="outline">{service.serviceType}</Badge>
                   </div>
                   <p className="text-sm text-slate-300 mt-2">{service.shortDesc}</p>
                   <p className="text-primary font-semibold mt-3">${service.price}</p>
-                </article>
+                </DenseListCard>
               ))}
             </div>
           </section>
@@ -232,11 +245,11 @@ export default function ExpertProfile() {
           <section className="panel p-6">
             <h2 className="text-xl font-bold text-white">Client Reviews</h2>
             <div className="mt-4 space-y-3">
-              {reviews.length === 0 && <p className="text-sm text-slate-300">No reviews yet.</p>}
+              {reviews.length === 0 && <EmptyState title="No reviews yet." className="py-4" />}
               {reviews.map((review) => {
                 const client = typeof review.clientId === "string" ? null : review.clientId;
                 return (
-                  <article key={review._id} className="rounded-xl border border-white/10 bg-white/5 p-4">
+                  <DenseListCard key={review._id}>
                     <div className="flex flex-wrap items-center justify-between gap-2">
                       <p className="text-sm font-semibold text-white">{client?.username || "Client"}</p>
                       <p className="text-sm text-amber-300 inline-flex items-center gap-1">
@@ -246,16 +259,19 @@ export default function ExpertProfile() {
                     </div>
                     {review.comment && <p className="mt-2 text-sm text-slate-300 whitespace-pre-wrap">{review.comment}</p>}
                     <p className="mt-2 text-xs text-slate-500">{new Date(review.createdAt).toLocaleDateString()}</p>
-                  </article>
+                  </DenseListCard>
                 );
               })}
             </div>
           </section>
         </div>
 
-        <aside className="panel p-6 h-fit lg:sticky lg:top-28">
-          <h2 className="text-xl font-bold text-white">Invite to Job</h2>
-          <p className="text-sm text-slate-300 mt-2">Send this expert an invitation to one of your active projects.</p>
+        <ContextAside
+          eyebrow="Invite to job"
+          title="Move from profile review into outreach."
+          description="Invite this expert into one of your active projects once the proof, rate, and availability look aligned."
+          className="h-fit lg:sticky lg:top-28"
+        >
           {user?.role === "client" ? (
             <div className="mt-4 space-y-4">
               <div className="space-y-2">
@@ -300,7 +316,7 @@ export default function ExpertProfile() {
               Availability: {expert.availability || "available"}
             </p>
           </div>
-        </aside>
+        </ContextAside>
       </div>
     </div>
   );

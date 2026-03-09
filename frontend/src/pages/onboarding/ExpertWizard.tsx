@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { AppPageHeader, ContextAside, StatStrip } from "@/components/layout/PagePrimitives";
 
 const engagementOptions = ["fixed", "hourly", "consulting"] as const;
 
@@ -118,8 +119,8 @@ export default function ExpertWizard() {
         calendarLink: profileData.calendarLink.trim() || undefined,
       });
       await refreshSession();
-      setMessage("Profile saved.");
       await loadData();
+      setMessage("Profile saved.");
     } catch (err: unknown) {
       const apiError = err as { response?: { data?: { message?: string } } };
       setMessage(apiError.response?.data?.message || "Failed to save profile.");
@@ -167,49 +168,59 @@ export default function ExpertWizard() {
   return (
     <div className="px-4 py-8">
       <div className="container space-y-6">
-        <section className="page-hero panel relative overflow-hidden rounded-3xl px-6 py-8 md:px-8 md:py-10">
-          <div className="relative z-10">
-            <p className="inline-flex items-center gap-2 rounded-full border border-sky-300/20 bg-sky-300/10 px-4 py-1 text-xs font-bold uppercase tracking-[0.16em] text-sky-100">
+        <AppPageHeader
+          eyebrow={
+            <>
               <UserRoundCheck className="h-3.5 w-3.5" />
-              Expert Setup
-            </p>
-            <h1 className="mt-4 text-3xl font-extrabold text-white md:text-4xl">Publish your expert profile</h1>
-            <p className="mt-3 max-w-2xl text-sm text-slate-300 md:text-base">
-              Add your headline, bio, skills, availability, and portfolio highlights so clients can evaluate you quickly.
-            </p>
-          </div>
-        </section>
+              Profile setup
+            </>
+          }
+          title="Set up your expert profile"
+          description="Start with the basics clients care about first: what you do, what you charge, and what kind of work you can handle."
+        >
+          <StatStrip
+            items={[
+              { label: "Work samples", value: portfolio.length },
+              { label: "Profile score", value: profileCompleteness ? `${profileCompleteness.score}%` : "Not scored" },
+              { label: "Goal", value: "Easy to trust", hint: "A clear profile gets more replies than a vague one." },
+            ]}
+          />
+        </AppPageHeader>
 
         {message && <div className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-slate-200">{message}</div>}
 
+        <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_320px]">
         <form onSubmit={saveProfile}>
           <Card className="rounded-2xl">
             <CardHeader>
-              <CardTitle>Public Profile</CardTitle>
-              <CardDescription>These details appear on your public expert page.</CardDescription>
+              <CardTitle>Start with the basics</CardTitle>
+              <CardDescription>These are the first things clients will look at on your profile.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label>Headline</Label>
+                <Label htmlFor="expert-headline">Headline</Label>
                 <Input
+                  id="expert-headline"
                   value={profileData.headline}
                   onChange={(e) => setProfileData((prev) => ({ ...prev, headline: e.target.value }))}
                   placeholder="Senior n8n automation engineer"
                 />
               </div>
               <div className="space-y-2">
-                <Label>Bio</Label>
+                <Label htmlFor="expert-bio">Bio</Label>
                 <Textarea
+                  id="expert-bio"
                   className="min-h-[140px]"
                   value={profileData.desc}
                   onChange={(e) => setProfileData((prev) => ({ ...prev, desc: e.target.value }))}
-                  placeholder="Describe your n8n expertise and delivery approach."
+                  placeholder="Say what you build, who you help, and what makes your work reliable."
                 />
               </div>
               <div className="grid gap-4 sm:grid-cols-3">
                 <div className="space-y-2">
-                  <Label>Hourly Rate</Label>
+                  <Label htmlFor="expert-hourly-rate">Hourly Rate</Label>
                   <Input
+                    id="expert-hourly-rate"
                     type="number"
                     min="0"
                     value={profileData.hourlyRate}
@@ -217,8 +228,9 @@ export default function ExpertWizard() {
                   />
                 </div>
                 <div className="space-y-2 sm:col-span-2">
-                  <Label>Skills (comma separated)</Label>
+                  <Label htmlFor="expert-skills">Skills (comma separated)</Label>
                   <Input
+                    id="expert-skills"
                     value={profileData.skills}
                     onChange={(e) => setProfileData((prev) => ({ ...prev, skills: e.target.value }))}
                     placeholder="n8n, API integration, webhooks"
@@ -226,8 +238,9 @@ export default function ExpertWizard() {
                 </div>
               </div>
               <div className="space-y-2">
-                <Label>Availability</Label>
+                <Label htmlFor="expert-availability">Availability</Label>
                 <select
+                  id="expert-availability"
                   className="w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] px-4 py-3 text-sm text-white"
                   value={profileData.availability}
                   onChange={(e) =>
@@ -242,12 +255,17 @@ export default function ExpertWizard() {
                   <option value="unavailable">Unavailable</option>
                 </select>
               </div>
+              <div className="rounded-xl border border-white/10 bg-white/5 p-4 text-sm text-slate-300">
+                <p className="font-semibold text-white">Save this first</p>
+                <p className="mt-2">You can stop after these basics and come back later for the optional details below.</p>
+              </div>
               <details className="rounded-xl border border-white/10 bg-white/5 p-3">
-                <summary className="cursor-pointer text-sm font-semibold text-white">Experience and credibility (optional)</summary>
+                <summary className="cursor-pointer text-sm font-semibold text-white">Add more details later (optional)</summary>
                 <div className="grid gap-4 sm:grid-cols-2 mt-3">
                   <div className="space-y-2">
-                    <Label>Years of Experience</Label>
+                    <Label htmlFor="expert-years-experience">Years of Experience</Label>
                     <Input
+                      id="expert-years-experience"
                       type="number"
                       min="0"
                       value={profileData.yearsExperience}
@@ -255,52 +273,52 @@ export default function ExpertWizard() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label>Timezone</Label>
+                    <Label htmlFor="expert-timezone">Timezone</Label>
                     <Input
+                      id="expert-timezone"
                       value={profileData.timezone}
                       onChange={(e) => setProfileData((prev) => ({ ...prev, timezone: e.target.value }))}
                       placeholder="UTC+1, America/New_York"
                     />
                   </div>
                   <div className="space-y-2 sm:col-span-2">
-                    <Label>Languages (comma separated)</Label>
+                    <Label htmlFor="expert-languages">Languages (comma separated)</Label>
                     <Input
+                      id="expert-languages"
                       value={profileData.languages}
                       onChange={(e) => setProfileData((prev) => ({ ...prev, languages: e.target.value }))}
                       placeholder="English, Spanish"
                     />
                   </div>
                   <div className="space-y-2 sm:col-span-2">
-                    <Label>Industries (comma separated)</Label>
+                    <Label htmlFor="expert-industries">Industries (comma separated)</Label>
                     <Input
+                      id="expert-industries"
                       value={profileData.industries}
                       onChange={(e) => setProfileData((prev) => ({ ...prev, industries: e.target.value }))}
                       placeholder="E-commerce, SaaS, Fintech"
                     />
                   </div>
                   <div className="space-y-2 sm:col-span-2">
-                    <Label>Certifications (comma separated)</Label>
+                    <Label htmlFor="expert-certifications">Certifications (comma separated)</Label>
                     <Input
+                      id="expert-certifications"
                       value={profileData.certifications}
                       onChange={(e) => setProfileData((prev) => ({ ...prev, certifications: e.target.value }))}
                     />
                   </div>
-                </div>
-              </details>
-
-              <details className="rounded-xl border border-white/10 bg-white/5 p-3">
-                <summary className="cursor-pointer text-sm font-semibold text-white">Work preferences and availability (optional)</summary>
-                <div className="grid gap-4 sm:grid-cols-2 mt-3">
                   <div className="space-y-2 sm:col-span-2">
-                    <Label>Preferred Engagements (fixed, hourly, consulting)</Label>
+                    <Label htmlFor="expert-preferred-engagements">Preferred Engagements (fixed, hourly, consulting)</Label>
                     <Input
+                      id="expert-preferred-engagements"
                       value={profileData.preferredEngagements}
                       onChange={(e) => setProfileData((prev) => ({ ...prev, preferredEngagements: e.target.value }))}
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label>Minimum Project Budget</Label>
+                    <Label htmlFor="expert-minimum-project-budget">Minimum Project Budget</Label>
                     <Input
+                      id="expert-minimum-project-budget"
                       type="number"
                       min="0"
                       value={profileData.minimumProjectBudget}
@@ -308,8 +326,9 @@ export default function ExpertWizard() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label>Availability (hours/week)</Label>
+                    <Label htmlFor="expert-availability-hours">Availability (hours/week)</Label>
                     <Input
+                      id="expert-availability-hours"
                       type="number"
                       min="0"
                       max="168"
@@ -318,8 +337,9 @@ export default function ExpertWizard() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label>Response SLA (hours)</Label>
+                    <Label htmlFor="expert-response-sla">Response SLA (hours)</Label>
                     <Input
+                      id="expert-response-sla"
                       type="number"
                       min="0"
                       value={profileData.responseSLAHours}
@@ -327,8 +347,9 @@ export default function ExpertWizard() {
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label>Calendar Link</Label>
+                    <Label htmlFor="expert-calendar-link">Calendar Link</Label>
                     <Input
+                      id="expert-calendar-link"
                       value={profileData.calendarLink}
                       onChange={(e) => setProfileData((prev) => ({ ...prev, calendarLink: e.target.value }))}
                       placeholder="https://cal.com/..."
@@ -357,9 +378,9 @@ export default function ExpertWizard() {
           <CardHeader>
             <CardTitle className="inline-flex items-center gap-2">
               <FolderKanban className="h-5 w-5" />
-              Portfolio
+              Add one work sample
             </CardTitle>
-            <CardDescription>Add and publish your best work.</CardDescription>
+            <CardDescription>You do not need a full portfolio to start. One strong example already helps.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid gap-3">
@@ -386,19 +407,22 @@ export default function ExpertWizard() {
             </div>
 
             <div className="space-y-3 border-t border-white/10 pt-4">
-              <Label>New Portfolio Item</Label>
+              <Label htmlFor="expert-portfolio-title">New Portfolio Item</Label>
               <Input
+                id="expert-portfolio-title"
                 placeholder="Title"
                 value={newItem.title}
                 onChange={(e) => setNewItem((prev) => ({ ...prev, title: e.target.value }))}
               />
               <Textarea
+                id="expert-portfolio-summary"
                 placeholder="Summary"
                 className="min-h-[120px]"
                 value={newItem.summary}
                 onChange={(e) => setNewItem((prev) => ({ ...prev, summary: e.target.value }))}
               />
               <Input
+                id="expert-portfolio-link"
                 placeholder="Link (optional)"
                 value={newItem.link}
                 onChange={(e) => setNewItem((prev) => ({ ...prev, link: e.target.value }))}
@@ -407,6 +431,23 @@ export default function ExpertWizard() {
             </div>
           </CardContent>
         </Card>
+        <ContextAside
+          eyebrow="Keep it simple"
+          title="Clients only need a few things to understand you."
+          description="Most people scan headline, bio, skills, rate, availability, and one example of work. Start there."
+        >
+          <div className="space-y-3 text-sm text-[var(--color-text-secondary)]">
+            <div className="rounded-2xl border border-white/8 bg-white/5 p-4">
+              <p className="font-semibold text-white">Keep the top fields clear</p>
+              <p className="mt-2">Say what kind of automation work you do best and what clients can expect from you.</p>
+            </div>
+            <div className="rounded-2xl border border-white/8 bg-white/5 p-4">
+              <p className="font-semibold text-white">Add proof over time</p>
+              <p className="mt-2">A service or one work sample makes the profile much easier to trust than a headline alone.</p>
+            </div>
+          </div>
+        </ContextAside>
+        </div>
       </div>
     </div>
   );

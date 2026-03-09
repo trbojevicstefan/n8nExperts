@@ -2,7 +2,9 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { ArrowRight, BriefcaseBusiness, UserRoundCog } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
+import { usePageMeta } from "@/hooks/usePageMeta";
 import type { Role } from "@/types";
+import { ContextAside } from "@/components/layout/PagePrimitives";
 
 export default function Register() {
   const [searchParams] = useSearchParams();
@@ -20,6 +22,13 @@ export default function Register() {
 
   const { register } = useAuth();
   const navigate = useNavigate();
+
+  usePageMeta({
+    title: "Create Account | n8nExperts",
+    description: "Create your n8nExperts account as a client hiring automation talent or an expert publishing stronger proof and services.",
+    canonicalPath: "/auth/register",
+    noIndex: true,
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,7 +52,7 @@ export default function Register() {
       navigate(role === "expert" ? "/expert/setup" : "/my-jobs");
     } catch (err: unknown) {
       const apiError = err as { response?: { data?: { message?: string } } };
-      setError(apiError.response?.data?.message || "Registration failed. Please try again.");
+      setError(apiError.response?.data?.message || "We could not create the account. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -51,54 +60,43 @@ export default function Register() {
 
   return (
     <div className="min-h-[calc(100vh-4rem)] px-4 py-10">
-      <div className="container grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
-        <section className="page-hero panel relative overflow-hidden rounded-3xl px-7 py-10 md:px-10">
-          <div className="relative z-10">
-            <p className="inline-flex items-center rounded-full border border-sky-300/25 bg-sky-300/10 px-4 py-1 text-xs font-bold uppercase tracking-[0.16em] text-sky-100">
-              Create Account
-            </p>
-            <h1 className="mt-5 max-w-xl text-4xl font-extrabold leading-tight text-white md:text-5xl">Start with the right role.</h1>
-            <p className="mt-4 max-w-lg text-sm text-slate-300 md:text-base">
-              Client accounts can post projects. Expert accounts can publish profiles, services, and portfolio work.
-            </p>
-            <div className="mt-8 space-y-3">
-              <button
-                type="button"
-                onClick={() => setRole("client")}
-                className={`flex w-full items-center justify-between rounded-xl border px-4 py-3 text-left transition ${
-                  role === "client"
-                    ? "border-primary/45 bg-primary/12 text-white"
-                    : "border-white/10 bg-white/5 text-slate-300 hover:border-white/25 hover:text-white"
-                }`}
-              >
-                <span>
-                  <p className="text-sm font-semibold">Client Workspace</p>
-                  <p className="text-xs text-slate-300">Post jobs and manage applicants</p>
-                </span>
-                <BriefcaseBusiness className="h-4 w-4" />
-              </button>
-              <button
-                type="button"
-                onClick={() => setRole("expert")}
-                className={`flex w-full items-center justify-between rounded-xl border px-4 py-3 text-left transition ${
-                  role === "expert"
-                    ? "border-primary/45 bg-primary/12 text-white"
-                    : "border-white/10 bg-white/5 text-slate-300 hover:border-white/25 hover:text-white"
-                }`}
-              >
-                <span>
-                  <p className="text-sm font-semibold">Expert Workspace</p>
-                  <p className="text-xs text-slate-300">Publish profile and apply to jobs</p>
-                </span>
-                <UserRoundCog className="h-4 w-4" />
-              </button>
-            </div>
-          </div>
-        </section>
-
+      <div className="container grid gap-6 lg:grid-cols-[0.95fr_0.8fr]">
         <section className="glass rounded-3xl p-7 md:p-8">
           <h2 className="text-2xl font-extrabold text-white">Create your n8nExperts account</h2>
-          <p className="mt-2 text-sm text-slate-300">Complete setup in less than a minute.</p>
+          <p className="mt-2 text-sm text-slate-300">Choose what you want to do first, then create your account.</p>
+
+          <div className="mt-5 grid gap-3 sm:grid-cols-2">
+            <button
+              type="button"
+              onClick={() => setRole("client")}
+              className={`flex items-center justify-between rounded-2xl border px-4 py-3 text-left transition ${
+                role === "client"
+                  ? "border-primary/45 bg-primary/12 text-white"
+                  : "border-white/10 bg-white/6 text-slate-300 hover:border-white/25 hover:text-white"
+              }`}
+            >
+              <span>
+                <p className="text-sm font-semibold">Client Workspace</p>
+                <p className="mt-1 text-xs text-[var(--color-text-secondary)]">Post jobs and hire experts</p>
+              </span>
+              <BriefcaseBusiness className="h-4 w-4" />
+            </button>
+            <button
+              type="button"
+              onClick={() => setRole("expert")}
+              className={`flex items-center justify-between rounded-2xl border px-4 py-3 text-left transition ${
+                role === "expert"
+                  ? "border-primary/45 bg-primary/12 text-white"
+                  : "border-white/10 bg-white/6 text-slate-300 hover:border-white/25 hover:text-white"
+              }`}
+            >
+              <span>
+                <p className="text-sm font-semibold">Expert Workspace</p>
+                <p className="mt-1 text-xs text-[var(--color-text-secondary)]">Show your work and apply to jobs</p>
+              </span>
+              <UserRoundCog className="h-4 w-4" />
+            </button>
+          </div>
 
           <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
             <div>
@@ -155,6 +153,11 @@ export default function Register() {
             </button>
           </form>
 
+          <div className="mt-6 rounded-2xl border border-white/8 bg-white/5 p-4 text-sm text-[var(--color-text-secondary)]">
+            <p className="font-semibold text-white">After signup</p>
+            <p className="mt-2">{role === "expert" ? "You will land on your profile setup page and fill in the basics first." : "You will land in your job dashboard and can post a job right away."}</p>
+          </div>
+
           <p className="mt-5 text-sm text-slate-300">
             Already have an account?
             <Link to="/auth/login" className="ml-1.5 font-semibold text-primary hover:underline">
@@ -162,6 +165,24 @@ export default function Register() {
             </Link>
           </p>
         </section>
+
+        <ContextAside
+          eyebrow="Create account"
+          title="Choose the side of the platform you need first."
+          description="Think of this as choosing your starting point. Clients start in hiring. Experts start in profile setup and job search."
+          className="self-start"
+        >
+          <div className="space-y-3">
+            <div className="rounded-2xl border border-white/8 bg-white/5 p-4">
+              <p className="text-sm font-semibold text-white">Client accounts</p>
+              <p className="mt-2 text-sm text-[var(--color-text-secondary)]">Best for posting jobs, reviewing applicants, and talking to experts.</p>
+            </div>
+            <div className="rounded-2xl border border-white/8 bg-white/5 p-4">
+              <p className="text-sm font-semibold text-white">Expert accounts</p>
+              <p className="mt-2 text-sm text-[var(--color-text-secondary)]">Best for building a profile, publishing services, and applying to jobs.</p>
+            </div>
+          </div>
+        </ContextAside>
       </div>
     </div>
   );

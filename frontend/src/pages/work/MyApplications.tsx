@@ -6,6 +6,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { usePageMeta } from "@/hooks/usePageMeta";
+import { AppPageHeader, DenseListCard, EmptyState, FilterToolbar, StatStrip } from "@/components/layout/PagePrimitives";
 
 const appStatuses = ["submitted", "shortlisted", "accepted", "rejected"] as const;
 type AppStatus = (typeof appStatuses)[number];
@@ -28,6 +30,12 @@ export default function MyApplications() {
   const [activeWork, setActiveWork] = useState<JobApplication[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  usePageMeta({
+    title: "My Applications | n8nExperts",
+    description: "Track submitted, shortlisted, accepted, and rejected n8n job applications with clearer client trust context.",
+    canonicalPath: "/my-applications",
+  });
 
   const tabFilter: AppTab = isAppTab(searchParams.get("tab")) ? (searchParams.get("tab") as AppTab) : "all";
   const sourceFilter = searchParams.get("source") || "all";
@@ -111,17 +119,36 @@ export default function MyApplications() {
 
   return (
     <div className="container py-8">
-      <section className="panel p-6 md:p-8 mb-6">
-        <h1 className="text-3xl md:text-4xl font-extrabold text-white">My Applications</h1>
-        <p className="mt-2 text-slate-300">Track each proposal stage with timeline context and clear client trust signals.</p>
-      </section>
+      <AppPageHeader
+        eyebrow="Expert workspace"
+        title="My Applications"
+        description="See where each application stands and what you should do next."
+      >
+        <StatStrip
+          items={[
+            { label: "Track", value: `${applications.length}`, hint: "Applications in the current view." },
+            { label: "Accepted", value: `${activeWork.length}`, hint: "Jobs already moving into work." },
+            { label: "Focus", value: statusLabel[tabFilter === "all" ? "submitted" : (tabFilter as AppStatus)] || "All", hint: "Use filters to reduce noise." },
+          ]}
+        />
+      </AppPageHeader>
 
       {error && <div className="rounded-lg border border-red-400/30 bg-red-500/10 p-3 text-sm text-red-200 mb-5">{error}</div>}
 
       <section className="panel p-5 mb-5">
         <h2 className="text-sm uppercase tracking-wider font-semibold text-slate-300">Accepted / Started Jobs</h2>
         <div className="mt-3 grid gap-2">
-          {activeWork.length === 0 && <p className="text-sm text-slate-400">No accepted jobs yet.</p>}
+          {activeWork.length === 0 && (
+            <EmptyState
+              title="No accepted jobs yet."
+              description="When a client accepts your application, that job will show up here."
+              action={
+                <Link to="/jobs" className="inline-flex items-center rounded-full border border-white/10 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/5">
+                  Browse jobs
+                </Link>
+              }
+            />
+          )}
           {activeWork.map((application) => {
             const job = typeof application.jobId === "string" ? null : application.jobId;
             const status = job?.status || "in_progress";
@@ -147,7 +174,7 @@ export default function MyApplications() {
         </div>
       </section>
 
-      <section className="panel p-5">
+      <FilterToolbar className="mb-5" title="Filter applications" description="Use a simple filter, then focus on the application list.">
         <div className="flex flex-wrap items-end gap-3 mb-5">
           <Tabs value={tabFilter} onValueChange={(value) => updateSearch({ tab: value })}>
             <TabsList aria-label="Application status tabs">
@@ -202,9 +229,21 @@ export default function MyApplications() {
             </div>
           </div>
         </div>
+      </FilterToolbar>
 
+      <section className="panel p-5">
         {loading && <p className="text-sm text-slate-300">Loading applications...</p>}
-        {!loading && applications.length === 0 && <p className="text-sm text-slate-300">No applications match this view.</p>}
+        {!loading && applications.length === 0 && (
+          <EmptyState
+            title="No applications match this view."
+            description="Try a different filter, or browse open jobs if you have not applied yet."
+            action={
+              <Link to="/jobs" className="inline-flex items-center rounded-full border border-white/10 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/5">
+                Find work
+              </Link>
+            }
+          />
+        )}
 
         <div className="space-y-5">
           {renderStatuses.map((status) => (
@@ -215,7 +254,7 @@ export default function MyApplications() {
               </header>
 
               {grouped[status].length === 0 && (
-                <div className="rounded-xl border border-white/10 bg-white/5 p-3 text-sm text-slate-400">No applications in this stage.</div>
+                <EmptyState title="No applications in this stage." className="py-4" />
               )}
 
               {grouped[status].map((application) => {
@@ -224,7 +263,7 @@ export default function MyApplications() {
                 const isWithdrawn = Boolean(application.withdrawnAt);
 
                 return (
-                  <article key={application._id} className="rounded-xl border border-white/10 bg-white/5 p-4">
+                  <DenseListCard key={application._id}>
                     <div className="flex flex-wrap items-start justify-between gap-3">
                       <div>
                         <p className="font-semibold text-white">{job?.title || "Job"}</p>
@@ -274,7 +313,7 @@ export default function MyApplications() {
                         Withdraw
                       </Button>
                     )}
-                  </article>
+                  </DenseListCard>
                 );
               })}
             </section>

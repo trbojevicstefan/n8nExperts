@@ -2,6 +2,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { ShieldCheck, Workflow } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
+import { usePageMeta } from "@/hooks/usePageMeta";
+import { ContextAside } from "@/components/layout/PagePrimitives";
 
 export default function Login() {
   const [formData, setFormData] = useState({ username: "", password: "" });
@@ -9,6 +11,13 @@ export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const { login, user } = useAuth();
   const navigate = useNavigate();
+
+  usePageMeta({
+    title: "Log In | n8nExperts",
+    description: "Access your n8nExperts workspace to manage experts, jobs, applications, invitations, and inbox activity.",
+    canonicalPath: "/auth/login",
+    noIndex: true,
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,7 +29,7 @@ export default function Login() {
       navigate("/");
     } catch (err: unknown) {
       const apiError = err as { response?: { data?: { message?: string } } };
-      setError(apiError.response?.data?.message || "Login failed. Please try again.");
+      setError(apiError.response?.data?.message || "We could not sign you in. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -28,36 +37,11 @@ export default function Login() {
 
   return (
     <div className="min-h-[calc(100vh-4rem)] px-4 py-10">
-      <div className="container grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
-        <section className="page-hero panel relative overflow-hidden rounded-3xl px-7 py-10 md:px-10">
-          <div className="relative z-10">
-            <p className="inline-flex items-center gap-2 rounded-full border border-sky-300/25 bg-sky-300/10 px-4 py-1 text-xs font-bold uppercase tracking-[0.16em] text-sky-100">
-              <Workflow className="h-3.5 w-3.5" />
-              Welcome Back
-            </p>
-            <h1 className="mt-5 max-w-xl text-4xl font-extrabold leading-tight text-white md:text-5xl">
-              Continue building better n8n automations.
-            </h1>
-            <p className="mt-4 max-w-lg text-sm text-slate-300 md:text-base">
-              Sign in to manage your profile, jobs, and applications. Session state restores automatically across refreshes.
-            </p>
-            <div className="mt-7 space-y-3">
-              <div className="glass-card rounded-xl p-4">
-                <p className="text-sm font-semibold text-white">Clients</p>
-                <p className="mt-1 text-sm text-slate-300">Post projects, review applicants, and invite experts directly.</p>
-              </div>
-              <div className="glass-card rounded-xl p-4">
-                <p className="text-sm font-semibold text-white">Experts</p>
-                <p className="mt-1 text-sm text-slate-300">Publish your services, showcase work, and track applications.</p>
-              </div>
-            </div>
-          </div>
-        </section>
-
+      <div className="container grid gap-6 lg:grid-cols-[0.95fr_0.75fr]">
         <section className="glass rounded-3xl p-7 md:p-8">
           <h2 className="text-2xl font-extrabold text-white">Sign in</h2>
           <p className="mt-2 text-sm text-slate-300">
-            {user ? `Signed in as ${user.username}` : "Access your n8nExperts account"}
+            {user ? `Signed in as ${user.username}` : "Pick up where you left off."}
           </p>
 
           <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
@@ -93,6 +77,11 @@ export default function Login() {
             </button>
           </form>
 
+          <div className="mt-6 rounded-2xl border border-white/8 bg-white/5 p-4 text-sm text-[var(--color-text-secondary)]">
+            <p className="font-semibold text-white">What happens next</p>
+            <p className="mt-2">Clients go back to jobs and hiring. Experts go back to applications, messages, and profile updates.</p>
+          </div>
+
           <p className="mt-5 text-sm text-slate-300">
             Don&apos;t have an account?
             <Link to="/auth/role-select" className="ml-1.5 font-semibold text-primary hover:underline">
@@ -100,6 +89,27 @@ export default function Login() {
             </Link>
           </p>
         </section>
+
+        <ContextAside
+          eyebrow="Welcome back"
+          title="Sign in and get back to work."
+          description="This page should feel direct. Sign in, land in your workspace, and keep going without extra steps."
+          className="self-start"
+        >
+          <div className="space-y-3">
+            <div className="rounded-2xl border border-white/8 bg-white/5 p-4">
+              <p className="inline-flex items-center gap-2 text-sm font-semibold text-white">
+                <Workflow className="h-4 w-4 text-[var(--color-accent-cool)]" />
+                Clients
+              </p>
+              <p className="mt-2 text-sm text-[var(--color-text-secondary)]">Post jobs, review applicants, message experts, and keep hiring moving.</p>
+            </div>
+            <div className="rounded-2xl border border-white/8 bg-white/5 p-4">
+              <p className="text-sm font-semibold text-white">Experts</p>
+              <p className="mt-2 text-sm text-[var(--color-text-secondary)]">Apply to jobs, reply to messages, and keep your profile and services up to date.</p>
+            </div>
+          </div>
+        </ContextAside>
       </div>
     </div>
   );

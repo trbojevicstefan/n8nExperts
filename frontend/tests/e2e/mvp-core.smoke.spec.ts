@@ -33,7 +33,7 @@ test.describe("MVP core smoke", () => {
 
     await page.waitForURL("**/my-jobs");
     await expect(page.getByRole("heading", { name: /my jobs/i })).toBeVisible();
-    await expect(page.getByText(title)).toBeVisible();
+    await expect(page.getByRole("button", { name: title })).toBeVisible();
   });
 
   test("expert can publish profile and service", async ({ page }) => {
@@ -56,14 +56,14 @@ test.describe("MVP core smoke", () => {
     await expect(page.getByText(/profile saved/i)).toBeVisible();
 
     await page.goto("/expert/services");
-    await page.getByLabel("Title").fill(serviceTitle);
+    await page.getByLabel(/^Title$/).fill(serviceTitle);
     await page
-      .getByLabel("Description")
+      .getByLabel(/^Description$/)
       .fill("Production n8n workflow implementation with retry strategy, observability, and post-launch support.");
-    await page.getByLabel("Short Title").fill("Reliable n8n delivery");
-    await page.getByLabel("Short Description").fill("Resilient n8n setup with docs.");
-    await page.getByLabel("Price").fill("1400");
-    await page.getByLabel("Delivery Days").fill("9");
+    await page.getByLabel(/^Short Title$/).fill("Reliable n8n delivery");
+    await page.getByLabel(/^Short Description$/).fill("Resilient n8n setup with docs.");
+    await page.getByLabel(/^Price$/).fill("1400");
+    await page.getByLabel(/^Delivery Days$/).fill("9");
     await page.getByRole("button", { name: /publish service/i }).click();
 
     await expect(page.getByText(serviceTitle)).toBeVisible();
@@ -108,4 +108,3 @@ test.describe("MVP core smoke", () => {
     await expect(page.getByText(title)).toBeVisible();
   });
 });
-

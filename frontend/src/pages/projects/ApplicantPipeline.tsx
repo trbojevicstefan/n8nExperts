@@ -8,6 +8,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { usePageMeta } from "@/hooks/usePageMeta";
+import { AppPageHeader, EmptyState, FilterToolbar, StatStrip } from "@/components/layout/PagePrimitives";
 
 const pipelineStatuses = ["submitted", "shortlisted", "accepted", "rejected"] as const;
 type PipelineStatus = (typeof pipelineStatuses)[number];
@@ -78,6 +80,12 @@ export default function ApplicantPipeline() {
   const [didAutoApplyDefaultView, setDidAutoApplyDefaultView] = useState(false);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
+
+  usePageMeta({
+    title: "Applicant Pipeline | n8nExperts",
+    description: "Operate the applicant queue across all jobs with filters, saved views, notes, status grouping, and bulk actions.",
+    canonicalPath: "/my-jobs/pipeline",
+  });
 
   const statusFilter: PipelineFilter = isPipelineFilter(searchParams.get("status")) ? (searchParams.get("status") as PipelineFilter) : "all";
   const sourceFilter = readStringParam(searchParams, "source") || "all";
@@ -350,24 +358,24 @@ export default function ApplicantPipeline() {
 
   return (
     <div className="container py-8 space-y-6">
-      <section className="panel p-6 md:p-8">
-        <h1 className="text-3xl md:text-4xl font-extrabold text-white">Applicant Pipeline</h1>
-        <p className="mt-2 text-slate-300">
-          Manage applicants across all jobs with status-grouped queues, saved views, and bulk operations.
-        </p>
-        <div className="mt-4 flex flex-wrap gap-2">
-          {pipelineStatuses.map((status) => (
-            <Badge key={status} variant={statusFilter === status ? "default" : "secondary"}>
-              {statusLabel[status]} ({countsByStatus[status] || 0})
-            </Badge>
-          ))}
-        </div>
-      </section>
+      <AppPageHeader
+        eyebrow="Client hiring ops"
+        title="Applicant pipeline"
+        description="Manage applicants across all jobs with status-grouped queues, saved views, and bulk actions that keep hiring ops legible."
+      >
+        <StatStrip
+          items={[
+            { label: "Submitted", value: countsByStatus.submitted || 0 },
+            { label: "Shortlisted", value: countsByStatus.shortlisted || 0 },
+            { label: "Accepted", value: countsByStatus.accepted || 0 },
+          ]}
+        />
+      </AppPageHeader>
 
       {error && <div className="rounded-lg border border-red-400/30 bg-red-500/10 p-3 text-sm text-red-200">{error}</div>}
       {message && <div className="rounded-lg border border-emerald-400/30 bg-emerald-500/10 p-3 text-sm text-emerald-200">{message}</div>}
 
-      <section className="panel p-5 space-y-4">
+      <FilterToolbar className="panel p-5 space-y-4" title="Cross-job filters" description="Use saved views and compact controls to reduce noise before making shortlist or rejection decisions.">
         <div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-3">
           <div className="space-y-2 sm:col-span-2">
             <Label htmlFor="pipeline-search">Search</Label>
@@ -459,14 +467,14 @@ export default function ApplicantPipeline() {
             </Link>
           </div>
         </div>
-      </section>
+      </FilterToolbar>
 
       <section className="panel p-5 space-y-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <h2 className="text-lg font-semibold text-white">Saved Pipeline Views</h2>
           <Badge variant="outline">{savedViews.length}</Badge>
         </div>
-        {savedViews.length === 0 && <p className="text-sm text-slate-400">No saved views yet.</p>}
+        {savedViews.length === 0 && <EmptyState title="No saved views yet." className="py-4" />}
         <div className="grid gap-3 md:grid-cols-2">
           {savedViews.map((view) => (
             <article key={view._id} className="rounded-xl border border-white/10 bg-white/5 p-3">
@@ -524,7 +532,9 @@ export default function ApplicantPipeline() {
         </div>
 
         {loading && <p className="text-sm text-slate-300">Loading applications...</p>}
-        {!loading && applications.length === 0 && <p className="text-sm text-slate-300">No applications match these filters.</p>}
+        {!loading && applications.length === 0 && (
+          <EmptyState title="No applications match these filters." description="Broaden the saved view or remove some controls to see more of the queue." />
+        )}
 
         {sectionsToRender.map((sectionStatus) => {
           const sectionIds = groupedApplications[sectionStatus].map((item) => item._id);

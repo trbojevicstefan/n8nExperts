@@ -6,6 +6,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { usePageMeta } from "@/hooks/usePageMeta";
+import { AppPageHeader, ContextAside, StatStrip } from "@/components/layout/PagePrimitives";
 
 export default function PostProject() {
   const navigate = useNavigate();
@@ -19,6 +21,12 @@ export default function PostProject() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
+
+  usePageMeta({
+    title: "Post Project | n8nExperts",
+    description: "Create a clearer n8n project brief with outcomes, systems, budget model, and trust-building context for experts.",
+    canonicalPath: "/post-project",
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -49,20 +57,28 @@ export default function PostProject() {
 
   return (
     <div className="container py-8">
-      <section className="page-hero rounded-3xl border border-white/10 bg-[rgba(16,24,36,0.72)] px-6 py-10 md:px-10 mb-8">
-        <p className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.18em] font-bold text-sky-300">
-          <PencilRuler className="h-4 w-4" />
-          Client Workspace
-        </p>
-        <h1 className="mt-3 text-3xl md:text-5xl font-extrabold text-white">Post a new automation project</h1>
-        <p className="mt-3 text-slate-300 max-w-2xl">
-          Clear briefs attract better experts. Define outcomes, integrations, and constraints so experts can send precise
-          proposals.
-        </p>
-      </section>
+        <AppPageHeader
+        eyebrow={
+          <>
+            <PencilRuler className="h-4 w-4" />
+            Client workspace
+          </>
+        }
+        title="Post a Job"
+        description="Explain what you need, what systems are involved, and what a good result looks like."
+      >
+        <StatStrip
+          items={[
+            { label: "Start with", value: "The goal", hint: "Say what should happen when the automation works." },
+            { label: "Include", value: "Main systems", hint: "Mention the tools and handoffs involved." },
+            { label: "Expect", value: "Better replies", hint: "A clearer job post leads to better applications." },
+          ]}
+        />
+      </AppPageHeader>
 
-      <form onSubmit={handleSubmit} className="panel p-6 md:p-8">
-        <div className="grid gap-5">
+      <div className="mt-6 grid gap-6 xl:grid-cols-[minmax(0,1fr)_320px]">
+        <form onSubmit={handleSubmit} className="panel p-6 md:p-8">
+          <div className="grid gap-5">
           <div className="space-y-2">
             <Label htmlFor="title">Project Title</Label>
             <Input
@@ -145,8 +161,30 @@ export default function PostProject() {
               {isSubmitting ? "Publishing..." : "Publish Project"}
             </Button>
           </div>
-        </div>
-      </form>
+          </div>
+        </form>
+
+        <ContextAside
+          eyebrow="Quick checklist"
+          title="Make it easy for someone to say yes or no."
+          description="A good job post answers the goal, the tools involved, the budget, and any important constraints."
+        >
+          <div className="space-y-3 text-sm text-[var(--color-text-secondary)]">
+            <div className="rounded-2xl border border-white/8 bg-white/5 p-4">
+              <p className="font-semibold text-white">Primary outcome</p>
+              <p className="mt-2">What should happen automatically once the workflow is live?</p>
+            </div>
+            <div className="rounded-2xl border border-white/8 bg-white/5 p-4">
+              <p className="font-semibold text-white">Operational details</p>
+              <p className="mt-2">Name the systems, team handoffs, and any failure modes that matter.</p>
+            </div>
+            <div className="rounded-2xl border border-white/8 bg-white/5 p-4">
+              <p className="font-semibold text-white">Decision quality</p>
+              <p className="mt-2">A stronger brief reduces generic bidding and improves your shortlist quality.</p>
+            </div>
+          </div>
+        </ContextAside>
+      </div>
     </div>
   );
 }

@@ -49,11 +49,11 @@ const parseOriginList = (value = "") =>
 const FRONTEND_URLS = [...parseOriginList(process.env.FRONTEND_URL), ...parseOriginList(process.env.CLIENT_URL)];
 const DEFAULT_ALLOWED_ORIGINS = [
   "http://localhost:5173",
+  "http://127.0.0.1:5173",
   "http://localhost:3000",
+  "http://127.0.0.1:3000",
   "https://n8nexperts.io",
   "https://www.n8nexperts.io",
-  "https://n8nexperts.web.app",
-  "https://n8nexperts.firebaseapp.com",
 ];
 const MONGO_URI = process.env.MONGO_URI || process.env.MONGO;
 

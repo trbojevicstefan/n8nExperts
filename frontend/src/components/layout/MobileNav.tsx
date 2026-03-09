@@ -1,49 +1,45 @@
 import { Link, useLocation } from "react-router-dom";
-import { Bell, Home, MessageSquare, Search, Briefcase, User } from "lucide-react";
+import { Bell, Briefcase, FolderOpen, Home, MessageSquare, PlusSquare, Search, Sparkles, UserRound } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
+import { mobileClientNav, mobileExpertNav, mobilePublicNav } from "@/content/site";
+
+const iconMap = {
+  Home,
+  How: Sparkles,
+  Experts: Search,
+  Jobs: Briefcase,
+  Post: PlusSquare,
+  Work: Search,
+  Apps: Sparkles,
+  "My Apps": FolderOpen,
+  Invites: Bell,
+  Pipeline: Sparkles,
+  Inbox: MessageSquare,
+  Messages: MessageSquare,
+  Profile: UserRound,
+} as const;
 
 export function MobileNav() {
   const location = useLocation();
   const { user } = useAuth();
 
-  const navItems = !user
-    ? [
-        { name: "Home", href: "/", icon: Home },
-        { name: "Experts", href: "/find-experts", icon: Search },
-        { name: "Jobs", href: "/jobs", icon: Briefcase },
-        { name: "Login", href: "/auth/login", icon: User },
-      ]
-    : user.role === "expert"
-      ? [
-          { name: "Home", href: "/", icon: Home },
-          { name: "Jobs", href: "/jobs", icon: Search },
-          { name: "Inbox", href: "/inbox", icon: MessageSquare },
-          { name: "Alerts", href: "/notifications", icon: Bell },
-        ]
-      : [
-          { name: "Home", href: "/", icon: Home },
-          { name: "Experts", href: "/find-experts", icon: Search },
-          { name: "Inbox", href: "/inbox", icon: MessageSquare },
-          { name: "Alerts", href: "/notifications", icon: Bell },
-        ];
+  const navItems = !user ? mobilePublicNav : user.role === "expert" ? mobileExpertNav : mobileClientNav;
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 glass border-t border-[var(--color-border)] md:hidden">
-      <div className="flex items-center justify-around h-16">
+    <nav className="mobile-bottom-nav md:hidden">
+      <div className="grid h-full grid-cols-4">
         {navItems.map((item) => {
-          const Icon = item.icon;
-          const isActive = location.pathname === item.href;
+          const Icon = iconMap[item.label as keyof typeof iconMap] || Sparkles;
+          const isActive = location.pathname === item.href || (item.href !== "/" && location.pathname.startsWith(`${item.href}/`));
 
           return (
             <Link
               key={item.href}
               to={item.href}
-              className={`flex flex-col items-center gap-1 px-4 py-2 transition-colors ${
-                isActive ? "text-[var(--color-primary)]" : "text-[var(--color-text-muted)] hover:text-white"
-              }`}
+              className={isActive ? "mobile-bottom-link mobile-bottom-link-active" : "mobile-bottom-link"}
             >
-              <Icon className="h-5 w-5" />
-              <span className="text-xs font-medium">{item.name}</span>
+              <Icon className="h-4 w-4" />
+              <span>{item.label}</span>
             </Link>
           );
         })}

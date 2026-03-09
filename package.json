@@ -4,9 +4,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build:frontend": "npm --prefix frontend run build",
-    "firebase:deploy:hosting": "npm run build:frontend && firebase deploy --only hosting",
-    "firebase:deploy:api": "gcloud run deploy n8nexperts-api --source ./api --region us-central1 --allow-unauthenticated"
+    "build:frontend": "npm --prefix frontend run build"
   },
   "keywords": [],
   "author": "",

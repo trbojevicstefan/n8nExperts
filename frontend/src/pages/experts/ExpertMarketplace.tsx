@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { DenseListCard, EmptyState, FilterToolbar, PublicPageHero, StatStrip } from "@/components/layout/PagePrimitives";
 
 export default function ExpertMarketplace() {
   usePageMeta({
@@ -139,18 +140,43 @@ export default function ExpertMarketplace() {
 
   return (
     <div className="container py-8">
-      <section className="page-hero panel p-6 md:p-8 mb-6">
-        <p className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.18em] font-bold text-sky-300">
-          <Globe2 className="h-4 w-4" />
-          Client Discovery
-        </p>
-        <h1 className="mt-3 text-3xl md:text-5xl font-extrabold text-white">Explore expert profiles</h1>
-        <p className="mt-3 text-slate-300 max-w-2xl">
-          Filter by specialization, compare public portfolios, and invite experts into your jobs.
-        </p>
-      </section>
+      <PublicPageHero
+        eyebrow={
+          <>
+            <Globe2 className="h-4 w-4" />
+            Client discovery
+          </>
+        }
+        title="Explore expert profiles"
+        description="Search by specialty, compare proof and rate context, and move into shortlist or invitation flow with better signal quality."
+      >
+        <StatStrip
+          items={[
+            { label: "Start with", value: "Relevant skills", hint: "Use search and filters to narrow the field." },
+            { label: "Validate", value: "Proof", hint: "Compare portfolio depth and service framing, not just headlines." },
+            { label: "Move into", value: "Action", hint: "Save experts or invite directly when fit looks credible." },
+          ]}
+        />
+      </PublicPageHero>
 
-      <div className="panel p-4 mb-6">
+      <FilterToolbar
+        className="mt-6"
+        title="Refine the shortlist"
+        description="Keep the filter controls compact so the expert cards remain the dominant scanning surface."
+        actions={
+          user?.role === "client" ? (
+            <>
+              <Button size="sm" variant="outline" onClick={saveCurrentSearch}>
+                <BookmarkPlus className="h-4 w-4 mr-1" />
+                Save current search
+              </Button>
+              <Link to="/saved-searches" className="text-xs text-sky-300 hover:underline">
+                Manage saved searches
+              </Link>
+            </>
+          ) : null
+        }
+      >
         <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-5">
           <div className="relative xl:col-span-2">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
@@ -178,27 +204,21 @@ export default function ExpertMarketplace() {
             </select>
           </div>
         </div>
-        {user?.role === "client" && (
-          <div className="mt-3 flex items-center gap-3">
-            <Button size="sm" variant="outline" onClick={saveCurrentSearch}>
-              <BookmarkPlus className="h-4 w-4 mr-1" />
-              Save current search
-            </Button>
-            <Link to="/saved-searches" className="text-xs text-sky-300 hover:underline">
-              Manage saved searches
-            </Link>
-          </div>
-        )}
         {info && <p className="mt-2 text-xs text-emerald-300">{info}</p>}
-      </div>
+        <p className="mt-3 text-xs text-[var(--color-text-muted)]">
+          Best practice: filter first by specialty or stack, then use public proof and rate context to compare the shortlist.
+        </p>
+      </FilterToolbar>
 
       {error && <div className="rounded-lg border border-red-400/30 bg-red-500/10 p-3 text-sm text-red-200 mb-4">{error}</div>}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+      <div className="mt-6 grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
         {loading && <p className="text-slate-300">Loading experts...</p>}
-        {!loading && experts.length === 0 && <p className="text-slate-300">No experts match this filter.</p>}
+        {!loading && experts.length === 0 && (
+          <EmptyState title="No experts match this filter." description="Remove one or more constraints to broaden the discovery set." className="md:col-span-2 xl:col-span-3" />
+        )}
         {experts.map((expert) => (
-          <article key={expert._id} className="panel p-5">
+          <DenseListCard key={expert._id}>
             <div className="flex items-start justify-between gap-3">
               <div className="flex items-center gap-3">
                 <Avatar src={expert.img} fallback={expert.username} className="h-12 w-12" />
@@ -236,7 +256,7 @@ export default function ExpertMarketplace() {
                 )}
               </div>
             </div>
-          </article>
+          </DenseListCard>
         ))}
       </div>
     </div>

@@ -8,6 +8,8 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { usePageMeta } from "@/hooks/usePageMeta";
+import { AppPageHeader, DenseListCard, EmptyState, StatStrip } from "@/components/layout/PagePrimitives";
 
 const invitationStatusVariant: Record<Invitation["status"], "outline" | "success" | "warning"> = {
   sent: "warning",
@@ -24,6 +26,12 @@ export default function Invitations() {
   const [form, setForm] = useState({
     coverLetter: "",
     estimatedDuration: "",
+  });
+
+  usePageMeta({
+    title: "Invitations | n8nExperts",
+    description: "Review direct client invitations, decide whether the brief is worth pursuing, and respond with a stronger delivery framing.",
+    canonicalPath: "/invitations",
   });
 
   const loadInvitations = async () => {
@@ -69,20 +77,45 @@ export default function Invitations() {
 
   return (
     <div className="container py-8">
-      <section className="panel p-6 md:p-8 mb-6">
-        <p className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.18em] font-bold text-sky-300">
-          <MailOpen className="h-4 w-4" />
-          Expert Invitations
-        </p>
-        <h1 className="mt-3 text-3xl md:text-4xl font-extrabold text-white">Invitation Inbox</h1>
-        <p className="mt-2 text-slate-300">Review invitations and respond with accept or decline actions.</p>
-      </section>
+      <AppPageHeader
+        eyebrow={
+          <>
+            <MailOpen className="h-4 w-4" />
+            Expert invitations
+          </>
+        }
+        title="Invitation inbox"
+        description="Review direct client outreach, decide whether the brief is worth pursuing, and respond with enough context to make acceptance meaningful."
+      >
+        <StatStrip
+          items={[
+            { label: "Total", value: invitations.length },
+            { label: "Pending", value: invitations.filter((invitation) => invitation.status === "sent").length },
+            { label: "Accepted", value: invitations.filter((invitation) => invitation.status === "accepted").length },
+          ]}
+        />
+      </AppPageHeader>
 
       {error && <div className="rounded-lg border border-red-400/30 bg-red-500/10 p-3 text-sm text-red-200 mb-4">{error}</div>}
 
-      <section className="panel p-5 space-y-3">
+      <section className="panel p-5 space-y-3 mt-6">
         {loading && <p className="text-sm text-slate-300">Loading invitations...</p>}
-        {!loading && invitations.length === 0 && <p className="text-sm text-slate-300">No invitations yet.</p>}
+        {!loading && invitations.length === 0 && (
+          <EmptyState
+            title="No invitations yet."
+            description="Clients can invite you after they find your profile or services. Keep those pages clear and current."
+            action={
+              <div className="flex flex-wrap gap-2">
+                <Link to="/expert/setup" className="inline-flex items-center rounded-full border border-white/10 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/5">
+                  Update profile
+                </Link>
+                <Link to="/expert/services" className="inline-flex items-center rounded-full border border-white/10 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/5">
+                  Add a service
+                </Link>
+              </div>
+            }
+          />
+        )}
 
         {invitations.map((invitation) => {
           const job = typeof invitation.jobId === "string" ? null : invitation.jobId;
@@ -91,7 +124,7 @@ export default function Invitations() {
           const isActive = activeInvitationId === invitation._id;
 
           return (
-            <article key={invitation._id} className="rounded-xl border border-white/10 bg-white/5 p-4">
+            <DenseListCard key={invitation._id}>
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
                   <h2 className="text-lg font-semibold text-white">{job?.title || "Job Invitation"}</h2>
@@ -148,7 +181,7 @@ export default function Invitations() {
                   </Button>
                 </div>
               )}
-            </article>
+            </DenseListCard>
           );
         })}
       </section>

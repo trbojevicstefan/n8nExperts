@@ -1,173 +1,192 @@
+import { ArrowRightLeft, BriefcaseBusiness, MessagesSquare, SearchCode, ShieldCheck, Sparkles, UserRoundCheck, Workflow } from "lucide-react";
 import { Link } from "react-router-dom";
-import { BriefcaseBusiness, SearchCode, UserRoundCheck, Workflow } from "lucide-react";
+import { ConversionRail } from "@/components/marketing/ConversionRail";
+import { PageHero } from "@/components/marketing/PageHero";
+import { SectionHeading } from "@/components/marketing/SectionHeading";
+import { homeContent } from "@/content/site";
 import { usePageMeta } from "@/hooks/usePageMeta";
-
-const stats = [
-  { label: "Live Experts", value: "120+" },
-  { label: "Open Projects", value: "40+" },
-  { label: "Application SLA", value: "<24h" },
-];
-
-const workflowSteps = [
-  {
-    title: "1. Post clear n8n jobs",
-    description: "Clients publish scope, required integrations, budget model, and priority outcomes.",
-  },
-  {
-    title: "2. Review expert proof",
-    description: "Compare profile depth, portfolio examples, services, and ratings before outreach.",
-  },
-  {
-    title: "3. Invite or accept applications",
-    description: "Use invitations and status pipelines to shortlist, accept, and start work quickly.",
-  },
-  {
-    title: "4. Track delivery and quality",
-    description: "Follow started/completed jobs, active inbox threads, and post-completion reviews.",
-  },
-];
-
-const faqs = [
-  {
-    q: "What can clients do today?",
-    a: "Post jobs, invite experts, manage applicants by status, track active work, and leave reviews after completion.",
-  },
-  {
-    q: "What can experts do today?",
-    a: "Publish a public profile, add services and portfolio work, receive invitations, chat in-context, and apply to open jobs.",
-  },
-  {
-    q: "Does this include payments?",
-    a: "No. This phase is quality-first marketplace operations only. Payments and email are intentionally out of scope.",
-  },
-  {
-    q: "Who operates n8nExperts?",
-    a: "n8nExperts is built and operated by n8nlab.io for teams shipping production n8n automations.",
-  },
-];
 
 export default function Home() {
   usePageMeta({
-    title: "n8nExperts | Hire n8n Experts and Find n8n Projects",
+    title: "n8nExperts | Hire n8n experts with clearer trust and workflow context",
     description:
-      "n8nExperts is a focused marketplace where clients post n8n projects and experts publish profiles, services, and portfolio work.",
+      "n8nExperts is a trust-first marketplace for teams hiring n8n specialists and experts presenting stronger delivery proof.",
+    canonicalPath: "/",
   });
 
   return (
-    <div className="min-h-screen">
-      <section className="pt-28 pb-20">
-        <div className="container">
-          <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-[linear-gradient(140deg,rgba(7,13,20,0.96),rgba(13,22,34,0.94))] px-7 py-12 md:px-12 md:py-16">
-            <div className="pointer-events-none absolute -left-24 -top-20 h-72 w-72 rounded-full bg-sky-400/20 blur-3xl" />
-            <div className="pointer-events-none absolute -right-24 -bottom-20 h-80 w-80 rounded-full bg-primary/20 blur-3xl" />
-            <div className="relative z-10 max-w-3xl">
-              <p className="inline-flex items-center gap-2 rounded-full border border-sky-300/20 bg-sky-300/10 px-4 py-1.5 text-xs font-bold uppercase tracking-[0.18em] text-sky-200">
-                <Workflow className="h-3.5 w-3.5" />
-                n8n Experts Marketplace
-              </p>
-              <h1 className="mt-6 text-4xl md:text-6xl font-extrabold leading-[1.04] text-white">
-                Hire vetted n8n specialists,
-                <span className="gradient-text"> launch automation faster.</span>
-              </h1>
-              <p className="mt-6 text-lg text-slate-300 max-w-2xl">
-                Clients post real automation jobs. Experts publish public profiles, services, and portfolio outcomes. Both sides
-                move through a clean invitation, application, and delivery workflow.
-              </p>
-              <div className="mt-8 flex flex-wrap gap-3">
-                <Link
-                  to="/find-experts"
-                  className="inline-flex items-center justify-center rounded-xl bg-primary px-6 py-3 text-sm font-bold text-white shadow-[0_8px_25px_var(--color-primary-glow)] hover:bg-primary-hover"
-                >
-                  Find Experts
-                </Link>
-                <Link
-                  to="/jobs"
-                  className="inline-flex items-center justify-center rounded-xl border border-white/20 bg-white/5 px-6 py-3 text-sm font-bold text-white hover:bg-white/10"
-                >
-                  Explore Jobs
-                </Link>
-              </div>
-              <div className="mt-8 grid grid-cols-3 gap-3 max-w-xl">
-                {stats.map((stat) => (
-                  <div key={stat.label} className="panel px-4 py-3">
-                    <p className="text-xl font-extrabold text-white">{stat.value}</p>
-                    <p className="text-[11px] uppercase tracking-[0.14em] text-slate-400">{stat.label}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
+    <div className="container space-y-8 py-8 md:space-y-10">
+      <PageHero
+        eyebrow={homeContent.hero.eyebrow}
+        title={homeContent.hero.title}
+        description={homeContent.hero.description}
+        actions={homeContent.hero.actions}
+        metrics={homeContent.hero.metrics}
+      >
+        <div className="grid gap-3 md:grid-cols-3">
+          <div className="surface-card">
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-accent)]">For clients</p>
+            <p className="mt-3 text-sm text-[var(--color-text-secondary)]">
+              See who fits, what they have delivered, and how to move from discovery to shortlist with less guesswork.
+            </p>
           </div>
-        </div>
-      </section>
-
-      <section className="pb-16">
-        <div className="container">
-          <div className="grid md:grid-cols-3 gap-5">
-            <article className="glass-card rounded-2xl p-6">
-              <UserRoundCheck className="h-7 w-7 text-sky-300" />
-              <h2 className="mt-5 text-lg font-bold text-white">Public Expert Profiles</h2>
-              <p className="mt-2 text-sm text-slate-300">
-                Experts publish proven delivery history, services, and portfolio work so clients can evaluate fit quickly.
-              </p>
-            </article>
-            <article className="glass-card rounded-2xl p-6">
-              <BriefcaseBusiness className="h-7 w-7 text-orange-300" />
-              <h2 className="mt-5 text-lg font-bold text-white">Structured Job Posting</h2>
-              <p className="mt-2 text-sm text-slate-300">
-                Clients post fixed-price or hourly n8n projects with scope, integrations, budgets, and required skills.
-              </p>
-            </article>
-            <article className="glass-card rounded-2xl p-6">
-              <SearchCode className="h-7 w-7 text-emerald-300" />
-              <h2 className="mt-5 text-lg font-bold text-white">Actionable Pipeline</h2>
-              <p className="mt-2 text-sm text-slate-300">
-                Track invitations, applications, chat, started work, and reviews from active routes used daily.
-              </p>
-            </article>
+          <div className="surface-card">
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-accent-cool)]">For experts</p>
+            <p className="mt-3 text-sm text-[var(--color-text-secondary)]">
+              Publish stronger profile proof, respond to serious work, and position your practice beyond a generic freelancer card.
+            </p>
           </div>
-        </div>
-      </section>
-
-      <section className="pb-8">
-        <div className="container">
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-6 md:p-8">
-            <h2 className="text-2xl font-extrabold text-white">Built for real n8n delivery teams</h2>
-            <p className="mt-3 text-sm text-slate-300 max-w-3xl">
-              n8nExperts focuses on execution quality over marketplace noise: clear job briefs, transparent expert credentials,
-              direct invitation flow, and role-specific dashboards that reduce time-to-hire.
+          <div className="surface-card">
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-accent-soft)]">For both sides</p>
+            <p className="mt-3 text-sm text-[var(--color-text-secondary)]">
+              Operate through saved views, invitations, applications, and inbox workflows that keep the process understandable.
             </p>
           </div>
         </div>
-      </section>
+      </PageHero>
 
-      <section className="pb-10">
-        <div className="container">
-          <div className="panel p-6 md:p-8">
-            <h2 className="text-2xl font-extrabold text-white">How n8nExperts works</h2>
-            <div className="mt-5 grid gap-3 md:grid-cols-2">
-              {workflowSteps.map((step) => (
-                <article key={step.title} className="rounded-xl border border-white/10 bg-white/5 p-4">
-                  <h3 className="text-sm font-bold uppercase tracking-wider text-sky-200">{step.title}</h3>
-                  <p className="mt-2 text-sm text-slate-300">{step.description}</p>
-                </article>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="pb-16">
-        <div className="container">
-          <div className="grid gap-4 md:grid-cols-2">
-            {faqs.map((item) => (
-              <article key={item.q} className="glass-card rounded-2xl p-5">
-                <h3 className="text-base font-bold text-white">{item.q}</h3>
-                <p className="mt-2 text-sm text-slate-300">{item.a}</p>
+      <section className="section-shell">
+        <SectionHeading
+          eyebrow="Start here"
+          title="Three things the platform helps you do quickly."
+          description="Understand who fits, what the work is, and what to do next without digging through noise."
+        />
+        <div className="section-grid mt-8">
+          {homeContent.platformCards.map((card, index) => {
+            const Icon = [BriefcaseBusiness, UserRoundCheck, Workflow][index];
+            return (
+              <article key={card.title} className="surface-card">
+                <Icon className="h-6 w-6 text-[var(--color-accent-cool)]" />
+                {card.eyebrow && <p className="mt-5 text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-text-muted)]">{card.eyebrow}</p>}
+                <h3 className="mt-3 text-xl font-bold text-white">{card.title}</h3>
+                <p className="mt-3 text-sm leading-7 text-[var(--color-text-secondary)]">{card.description}</p>
               </article>
-            ))}
-          </div>
+            );
+          })}
         </div>
       </section>
+
+      <section className="section-shell">
+        <SectionHeading
+          eyebrow="Who it is for"
+          title="Choose the side that matches your goal."
+          description="Clients come here to hire. Experts come here to show their work and get hired."
+        />
+        <div className="mt-8 grid gap-4 lg:grid-cols-2">
+          {homeContent.audiences.map((audience, index) => (
+            <article key={audience.title} className="feature-panel">
+              <div className="inline-flex rounded-full border border-white/10 bg-white/6 p-3">
+                {index === 0 ? (
+                  <BriefcaseBusiness className="h-5 w-5 text-[var(--color-accent)]" />
+                ) : (
+                  <Sparkles className="h-5 w-5 text-[var(--color-accent-cool)]" />
+                )}
+              </div>
+              <h3 className="mt-5 text-2xl font-bold text-white">{audience.title}</h3>
+              <p className="mt-4 text-sm leading-7 text-[var(--color-text-secondary)]">{audience.description}</p>
+              <Link
+                to={index === 0 ? "/for-clients" : "/for-experts"}
+                className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-white transition hover:text-[var(--color-accent-cool)]"
+              >
+                <span>{index === 0 ? "See the client path" : "See the expert path"}</span>
+                <ArrowRightLeft className="h-4 w-4" />
+              </Link>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="section-shell">
+        <SectionHeading
+          eyebrow="How it works"
+          title="The flow is simple."
+          description="Post or find a job, compare fit, then move the conversation forward with less back-and-forth."
+        />
+        <div className="mt-8 grid gap-4 lg:grid-cols-2">
+          {homeContent.workflow.map((step, index) => (
+            <article key={step.title} className="timeline-card">
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-accent-cool)]">Stage {index + 1}</p>
+                  <h3 className="mt-3 text-xl font-bold text-white">{step.title}</h3>
+                </div>
+                <Workflow className="h-5 w-5 text-[var(--color-text-muted)]" />
+              </div>
+              <p className="mt-4 text-sm leading-7 text-[var(--color-text-secondary)]">{step.description}</p>
+              {step.outcome && <p className="mt-4 text-sm font-medium text-[var(--color-accent)]">{step.outcome}</p>}
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="section-shell">
+        <SectionHeading
+          eyebrow="Why it feels different"
+          title="The platform is built for clarity, not volume."
+          description="It gives both sides better signals before they commit time to a conversation."
+        />
+        <div className="mt-8 overflow-hidden rounded-[28px] border border-white/10">
+          <div className="grid grid-cols-[1.1fr_1fr_1fr] bg-white/6 px-6 py-4 text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-text-muted)]">
+            <span>Decision area</span>
+            <span>n8nExperts</span>
+            <span>Generic marketplace</span>
+          </div>
+          {homeContent.comparison.map((row) => (
+            <div key={row.title} className="grid grid-cols-1 gap-4 border-t border-white/10 px-6 py-5 md:grid-cols-[1.1fr_1fr_1fr]">
+              <div>
+                <p className="text-base font-semibold text-white">{row.title}</p>
+              </div>
+              <p className="text-sm leading-7 text-[var(--color-text-secondary)]">{row.n8nExperts}</p>
+              <p className="text-sm leading-7 text-[var(--color-text-muted)]">{row.generic}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="section-shell">
+        <SectionHeading
+          eyebrow="Trust and proof"
+          title="People should understand why a profile or brief is worth taking seriously."
+          description="That is why services, portfolio items, job details, and messaging flow are part of the same product."
+        />
+        <div className="section-grid mt-8">
+          {homeContent.proofCards.slice(0, 3).map((card, index) => {
+            const Icon = [ShieldCheck, SearchCode, MessagesSquare][index];
+            return (
+              <article key={card.title} className="surface-card">
+                <Icon className="h-6 w-6 text-[var(--color-accent)]" />
+                <h3 className="mt-5 text-xl font-bold text-white">{card.title}</h3>
+                <p className="mt-3 text-sm leading-7 text-[var(--color-text-secondary)]">{card.description}</p>
+              </article>
+            );
+          })}
+        </div>
+      </section>
+
+      <section className="section-shell">
+        <SectionHeading
+          eyebrow="FAQ"
+          title="A few questions people usually have first."
+          description="These answers should help someone understand the product quickly."
+        />
+        <div className="mt-8 grid gap-4 lg:grid-cols-2">
+          {homeContent.faqs.slice(0, 4).map((faq) => (
+            <article key={faq.question} className="surface-card">
+              <h3 className="text-lg font-bold text-white">{faq.question}</h3>
+              <p className="mt-3 text-sm leading-7 text-[var(--color-text-secondary)]">{faq.answer}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <ConversionRail
+        eyebrow="Get started"
+        title="Take the platform seriously because it is being built to explain serious automation work."
+        description="If you are hiring, start by exploring experts and project flow. If you are an expert, start by choosing your role and publishing stronger proof."
+        primaryAction={{ label: "Find Experts", href: "/find-experts" }}
+        secondaryAction={{ label: "Create Account", href: "/auth/role-select" }}
+        signals={["Balanced client and expert narrative", "Trust-first positioning", "Live workflow pages already active", "Built by n8nlab.io"]}
+      />
     </div>
   );
 }

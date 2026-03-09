@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Sheet, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { formatRelativeTime } from "@/lib/utils";
+import { AppPageHeader, ContextAside, DenseListCard, EmptyState, FilterToolbar, StatStrip } from "@/components/layout/PagePrimitives";
 
 export default function FindWork() {
   usePageMeta({
@@ -184,18 +185,43 @@ export default function FindWork() {
 
   return (
     <div className="container py-8">
-      <section className="page-hero panel p-6 md:p-8 mb-6">
-        <p className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.18em] font-bold text-emerald-300">
-          <Briefcase className="h-4 w-4" />
-          Expert Workspace
-        </p>
-        <h1 className="mt-3 text-3xl md:text-5xl font-extrabold text-white">Find and apply to n8n projects</h1>
-        <p className="mt-3 text-slate-300 max-w-2xl">
-          Review open client briefs, then submit focused proposals with rate and timeline.
-        </p>
-      </section>
+      <AppPageHeader
+        eyebrow={
+          <>
+            <Briefcase className="h-4 w-4" />
+            Expert workspace
+          </>
+        }
+        title="Find Work"
+        description="Browse open jobs, save the ones worth your time, and apply with a clear plan."
+      >
+        <StatStrip
+          items={[
+            { label: "Look for", value: "Good fit", hint: "Check the scope, systems, and outcome before you apply." },
+            { label: "Check", value: "Client signals", hint: "See whether the brief looks serious and specific." },
+            { label: "Do next", value: "Save or apply", hint: "Keep your short list small and intentional." },
+          ]}
+        />
+      </AppPageHeader>
 
-      <div className="panel p-4 md:p-5 mb-6">
+      <FilterToolbar
+        className="mt-6"
+        title="Filter jobs"
+        description="Use a few simple filters, then focus on the results."
+        actions={
+          user?.role === "expert" ? (
+            <>
+              <Button size="sm" variant="outline" onClick={saveCurrentSearch}>
+                <BookmarkPlus className="h-4 w-4 mr-1" />
+                Save search
+              </Button>
+              <Link to="/saved-searches" className="text-xs text-sky-300 hover:underline">
+                Manage saved searches
+              </Link>
+            </>
+          ) : null
+        }
+      >
         <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-5">
           <div className="relative xl:col-span-2">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
@@ -223,28 +249,35 @@ export default function FindWork() {
             </select>
           </div>
         </div>
-        {user?.role === "expert" && (
-          <div className="mt-3 flex items-center gap-3">
-            <Button size="sm" variant="outline" onClick={saveCurrentSearch}>
-              <BookmarkPlus className="h-4 w-4 mr-1" />
-              Save current search
-            </Button>
-            <Link to="/saved-searches" className="text-xs text-sky-300 hover:underline">
-              Manage saved searches
-            </Link>
-          </div>
-        )}
         {info && <p className="mt-2 text-xs text-emerald-300">{info}</p>}
-      </div>
+        <p className="mt-3 text-xs text-[var(--color-text-muted)]">
+          Strong applications usually reference the workflow goal, systems involved, delivery approach, and realistic duration.
+        </p>
+      </FilterToolbar>
 
       {error && <div className="rounded-lg border border-red-400/30 bg-red-500/10 p-3 text-sm text-red-200 mb-4">{error}</div>}
 
-      <div className="grid gap-4">
+      <div className="mt-6 grid gap-6 xl:grid-cols-[minmax(0,1fr)_320px]">
+        <div className="grid gap-4">
         {isLoading && <p className="text-slate-300">Loading jobs...</p>}
-        {!isLoading && jobs.length === 0 && <p className="text-slate-300">No open jobs found.</p>}
+        {!isLoading && jobs.length === 0 && (
+          <EmptyState
+            title="No jobs match these filters."
+            description="Try clearing one or two filters, or come back later when new jobs are posted."
+            action={
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setSearchParams(new URLSearchParams(), { replace: true })}
+              >
+                Clear filters
+              </Button>
+            }
+          />
+        )}
 
         {jobs.map((job) => (
-          <article key={job._id} className="panel p-5 hover:border-[var(--color-border-hover)] transition">
+          <DenseListCard key={job._id} className="hover:border-[var(--color-border-hover)] transition">
             <button type="button" onClick={() => {
               setSelectedJob(job);
               updateSearch({ jobId: job._id });
@@ -303,8 +336,27 @@ export default function FindWork() {
                 </div>
               </div>
             )}
-          </article>
+          </DenseListCard>
         ))}
+        </div>
+
+        <ContextAside
+          eyebrow="Proposal guidance"
+          title="Make the application specific."
+          description="Use a few clear sentences to explain why you are a good fit and how you would handle the work."
+          className="h-fit xl:sticky xl:top-24"
+        >
+          <div className="space-y-3 text-sm text-[var(--color-text-secondary)]">
+            <div className="rounded-2xl border border-white/8 bg-white/5 p-4">
+              <p className="font-semibold text-white">Before applying</p>
+              <p className="mt-2">Check whether the client brief is detailed enough to support a serious proposal.</p>
+            </div>
+            <div className="rounded-2xl border border-white/8 bg-white/5 p-4">
+              <p className="font-semibold text-white">In the proposal</p>
+              <p className="mt-2">Reference systems, approach, delivery timing, and anything that could shape risk or scope.</p>
+            </div>
+          </div>
+        </ContextAside>
       </div>
 
       <Sheet

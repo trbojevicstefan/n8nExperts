@@ -8,6 +8,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { usePageMeta } from "@/hooks/usePageMeta";
+import { AppPageHeader, EmptyState, FilterToolbar, StatStrip } from "@/components/layout/PagePrimitives";
 
 const pipelineStatuses = ["submitted", "shortlisted", "accepted", "rejected"] as const;
 type PipelineStatus = (typeof pipelineStatuses)[number];
@@ -50,6 +52,12 @@ export default function MyJobs() {
   const [selectedApplicationIds, setSelectedApplicationIds] = useState<string[]>([]);
   const [batchProcessing, setBatchProcessing] = useState(false);
   const initialJobIdFromQuery = searchParams.get("jobId");
+
+  usePageMeta({
+    title: "My Jobs | n8nExperts",
+    description: "Review posted jobs, track job states, manage applicants, and move accepted work through a cleaner client workflow.",
+    canonicalPath: "/my-jobs",
+  });
 
   const selectedJob = useMemo(() => jobs.find((job) => job._id === selectedJobId) || null, [jobs, selectedJobId]);
 
@@ -295,38 +303,28 @@ export default function MyJobs() {
 
   return (
     <div className="container py-8">
-      <section className="panel p-6 md:p-8 mb-6">
-        <h1 className="text-3xl md:text-4xl font-extrabold text-white">My Jobs</h1>
-        <p className="mt-2 text-slate-300">Review applicants in a status pipeline, add private notes, and run quick batch actions.</p>
-      </section>
+      <AppPageHeader
+        eyebrow="Client workflow"
+        title="My Jobs"
+        description="Keep job health, applicant review, and the transition into active work visible without mixing everything into one dense surface."
+      >
+        <StatStrip
+          items={[
+            { label: "Total jobs", value: jobSummary.total },
+            { label: "Open", value: jobSummary.open },
+            { label: "In progress", value: jobSummary.inProgress },
+          ]}
+        />
+      </AppPageHeader>
 
       {error && <div className="rounded-lg border border-red-400/30 bg-red-500/10 p-3 text-sm text-red-200 mb-5">{error}</div>}
 
-      <section className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4 mb-6">
-        <article className="panel p-4">
-          <p className="text-xs uppercase tracking-wider text-slate-400">Total Jobs</p>
-          <p className="mt-2 text-2xl font-extrabold text-white">{jobSummary.total}</p>
-        </article>
-        <article className="panel p-4">
-          <p className="text-xs uppercase tracking-wider text-slate-400">Open</p>
-          <p className="mt-2 text-2xl font-extrabold text-white">{jobSummary.open}</p>
-        </article>
-        <article className="panel p-4">
-          <p className="text-xs uppercase tracking-wider text-slate-400">In Progress</p>
-          <p className="mt-2 text-2xl font-extrabold text-white">{jobSummary.inProgress}</p>
-        </article>
-        <article className="panel p-4">
-          <p className="text-xs uppercase tracking-wider text-slate-400">Completed</p>
-          <p className="mt-2 text-2xl font-extrabold text-white">{jobSummary.completed}</p>
-        </article>
-      </section>
-
-      <div className="grid lg:grid-cols-3 gap-6">
+      <div className="grid lg:grid-cols-3 gap-6 mt-6">
         <aside className="panel p-5">
           <h2 className="text-sm uppercase tracking-[0.16em] text-sky-300 font-bold">Posted Jobs</h2>
           <div className="mt-4 space-y-2">
             {loading && <p className="text-sm text-slate-300">Loading jobs...</p>}
-            {!loading && jobs.length === 0 && <p className="text-sm text-slate-300">No jobs posted yet.</p>}
+            {!loading && jobs.length === 0 && <EmptyState title="No jobs posted yet." className="py-4" />}
             {jobs.map((job) => (
               <button
                 key={job._id}
@@ -368,7 +366,10 @@ export default function MyJobs() {
 
         <section className="panel p-5 lg:col-span-2">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <h2 className="text-xl font-bold text-white">{selectedJob ? selectedJob.title : "Applicant Pipeline"}</h2>
+            <div>
+              <h2 className="text-xl font-bold text-white">Applicant Pipeline</h2>
+              {selectedJob && <p className="mt-1 text-sm text-slate-400">Review the selected job and move applicants through the next decision.</p>}
+            </div>
             <Link to="/my-jobs/pipeline" className="text-xs font-semibold text-sky-300 hover:underline">
               Open cross-job pipeline
             </Link>
@@ -390,7 +391,7 @@ export default function MyJobs() {
           </div>
 
           {selectedJob && (
-            <div className="mt-4 space-y-4">
+            <FilterToolbar className="mt-4" title="Filter this job's applicant queue">
               <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
                 <div className="space-y-2 sm:col-span-2">
                   <Label htmlFor="app-search">Search applications</Label>
@@ -469,11 +470,11 @@ export default function MyJobs() {
                   Batch Reject
                 </Button>
               </div>
-            </div>
+            </FilterToolbar>
           )}
 
           <div className="mt-5 space-y-5">
-            {!selectedJob && <p className="text-sm text-slate-300">Select a job to review applications.</p>}
+            {!selectedJob && <EmptyState title="Select a job to review applications." className="py-4" />}
             {selectedJob && appLoading && <p className="text-sm text-slate-300">Loading applications...</p>}
 
             {selectedJob &&

@@ -66,8 +66,8 @@ This project shows off real-world features hiring managers look for: authenticat
 - Stripe for payments  
 
 **Deployment:**  
-- Front-end: Vercel or Netlify  
-- Back-end: Heroku, Railway, Render or Docker + any cloud
+- Render API + Cloudflare Pages frontend
+
+See `RENDER_DEPLOY.md` for the Render API setup and `CLOUDFLARE_PAGES_DEPLOY.md` for the frontend setup.
 
 ---
-

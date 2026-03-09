@@ -28,7 +28,16 @@ import type {
   WorkspaceThread,
 } from "@/types";
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || (import.meta.env.DEV ? "http://localhost:8800/api" : "/api");
+const normalizeOrigin = (value?: string) => value?.replace(/\/+$/, "");
+
+const apiOrigin = normalizeOrigin(import.meta.env.VITE_API_ORIGIN);
+const devApiOrigin =
+  import.meta.env.DEV && typeof window !== "undefined"
+    ? `${window.location.protocol}//${window.location.hostname}:8800`
+    : undefined;
+const API_BASE_URL =
+  import.meta.env.VITE_API_URL ||
+  (apiOrigin ? `${apiOrigin}/api` : devApiOrigin ? `${devApiOrigin}/api` : "/api");
 
 export const api = axios.create({
   baseURL: API_BASE_URL,

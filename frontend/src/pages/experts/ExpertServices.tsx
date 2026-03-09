@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { AppPageHeader, ContextAside, EmptyState, StatStrip } from "@/components/layout/PagePrimitives";
 
 const defaultForm = {
   title: "",
@@ -118,21 +119,23 @@ export default function ExpertServices() {
   return (
     <div className="px-4 py-8">
       <div className="container space-y-6">
-        <section className="page-hero panel relative overflow-hidden rounded-3xl px-6 py-8 md:px-8 md:py-10">
-          <div className="relative z-10">
-            <p className="inline-flex rounded-full border border-sky-300/20 bg-sky-300/10 px-4 py-1 text-xs font-bold uppercase tracking-[0.16em] text-sky-100">
-              Expert Services
-            </p>
-            <h1 className="mt-4 text-3xl font-extrabold text-white md:text-4xl">Create and publish your offers</h1>
-            <p className="mt-3 max-w-2xl text-sm text-slate-300 md:text-base">
-              Services appear on your public profile and can be used by clients to invite you into their jobs.
-            </p>
-          </div>
-        </section>
+        <AppPageHeader
+          eyebrow="Expert services"
+          title="Create and publish your offers"
+          description="Services should explain what you deliver quickly, price the work clearly, and support better invite and shortlist decisions."
+        >
+          <StatStrip
+            items={[
+              { label: "Published", value: services.length },
+              { label: "Editing", value: editingId ? "Yes" : "No" },
+              { label: "Goal", value: "Clarity", hint: "Make services easy to compare at a glance." },
+            ]}
+          />
+        </AppPageHeader>
 
         {error && <div className="rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-300">{error}</div>}
 
-        <div className="grid gap-6 lg:grid-cols-2">
+        <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_320px]">
           <Card className="rounded-2xl">
             <CardHeader>
               <CardTitle>{editingId ? "Edit Service" : "New Service"}</CardTitle>
@@ -140,27 +143,28 @@ export default function ExpertServices() {
             <CardContent>
               <form className="space-y-4" onSubmit={submit}>
                 <div className="space-y-2">
-                  <Label>Title</Label>
-                  <Input value={form.title} onChange={(e) => setForm((prev) => ({ ...prev, title: e.target.value }))} required />
+                  <Label htmlFor="service-title">Title</Label>
+                  <Input id="service-title" value={form.title} onChange={(e) => setForm((prev) => ({ ...prev, title: e.target.value }))} required />
                 </div>
                 <div className="space-y-2">
-                  <Label>Description</Label>
-                  <Textarea className="min-h-[120px]" value={form.desc} onChange={(e) => setForm((prev) => ({ ...prev, desc: e.target.value }))} required />
+                  <Label htmlFor="service-description">Description</Label>
+                  <Textarea id="service-description" className="min-h-[120px]" value={form.desc} onChange={(e) => setForm((prev) => ({ ...prev, desc: e.target.value }))} required />
                 </div>
                 <div className="grid gap-3 sm:grid-cols-2">
                   <div className="space-y-2">
-                    <Label>Short Title</Label>
-                    <Input value={form.shortTitle} onChange={(e) => setForm((prev) => ({ ...prev, shortTitle: e.target.value }))} required />
+                    <Label htmlFor="service-short-title">Short Title</Label>
+                    <Input id="service-short-title" value={form.shortTitle} onChange={(e) => setForm((prev) => ({ ...prev, shortTitle: e.target.value }))} required />
                   </div>
                   <div className="space-y-2">
-                    <Label>Short Description</Label>
-                    <Input value={form.shortDesc} onChange={(e) => setForm((prev) => ({ ...prev, shortDesc: e.target.value }))} required />
+                    <Label htmlFor="service-short-description">Short Description</Label>
+                    <Input id="service-short-description" value={form.shortDesc} onChange={(e) => setForm((prev) => ({ ...prev, shortDesc: e.target.value }))} required />
                   </div>
                 </div>
                 <div className="grid gap-3 sm:grid-cols-3">
                   <div className="space-y-2">
-                    <Label>Type</Label>
+                    <Label htmlFor="service-type">Type</Label>
                     <select
+                      id="service-type"
                       className="w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] px-4 py-3 text-sm text-white"
                       value={form.serviceType}
                       onChange={(e) => setForm((prev) => ({ ...prev, serviceType: e.target.value as "Fixed Price" | "Consultation" }))}
@@ -170,12 +174,13 @@ export default function ExpertServices() {
                     </select>
                   </div>
                   <div className="space-y-2">
-                    <Label>Price</Label>
-                    <Input type="number" min="1" value={form.price} onChange={(e) => setForm((prev) => ({ ...prev, price: e.target.value }))} required />
+                    <Label htmlFor="service-price">Price</Label>
+                    <Input id="service-price" type="number" min="1" value={form.price} onChange={(e) => setForm((prev) => ({ ...prev, price: e.target.value }))} required />
                   </div>
                   <div className="space-y-2">
-                    <Label>Delivery Days</Label>
+                    <Label htmlFor="service-delivery-days">Delivery Days</Label>
                     <Input
+                      id="service-delivery-days"
                       type="number"
                       min="1"
                       value={form.deliveryTime}
@@ -185,8 +190,8 @@ export default function ExpertServices() {
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label>Cover URL</Label>
-                  <Input value={form.cover} onChange={(e) => setForm((prev) => ({ ...prev, cover: e.target.value }))} required />
+                  <Label htmlFor="service-cover-url">Cover URL</Label>
+                  <Input id="service-cover-url" value={form.cover} onChange={(e) => setForm((prev) => ({ ...prev, cover: e.target.value }))} required />
                 </div>
                 <div className="flex gap-2">
                   <Button type="submit" disabled={saving} className="inline-flex items-center gap-2">
@@ -209,7 +214,7 @@ export default function ExpertServices() {
             </CardHeader>
             <CardContent className="space-y-3">
               {loading && <p className="text-sm text-[var(--color-text-muted)]">Loading services...</p>}
-              {!loading && services.length === 0 && <p className="text-sm text-[var(--color-text-muted)]">No services published yet.</p>}
+              {!loading && services.length === 0 && <EmptyState title="No services published yet." className="py-4" />}
               {services.map((service) => (
                 <article key={service._id} className="rounded-xl border border-white/10 bg-white/5 p-4">
                   <div className="flex items-center justify-between gap-3">
@@ -234,6 +239,23 @@ export default function ExpertServices() {
               ))}
             </CardContent>
           </Card>
+
+          <ContextAside
+            eyebrow="Service guidance"
+            title="Keep the offer easy to judge."
+            description="A strong service makes the scope, outcome, delivery time, and price understandable before the client opens a conversation."
+          >
+            <div className="space-y-3 text-sm text-[var(--color-text-secondary)]">
+              <div className="rounded-2xl border border-white/8 bg-white/5 p-4">
+                <p className="font-semibold text-white">Title + short description</p>
+                <p className="mt-2">These should communicate the main job to be done faster than the full description.</p>
+              </div>
+              <div className="rounded-2xl border border-white/8 bg-white/5 p-4">
+                <p className="font-semibold text-white">Price + delivery</p>
+                <p className="mt-2">Set clear expectations so clients can compare your service without contacting you first.</p>
+              </div>
+            </div>
+          </ContextAside>
         </div>
       </div>
     </div>
