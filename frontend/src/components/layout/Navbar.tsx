@@ -1,11 +1,11 @@
-import { Link, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { Bell, ChevronRight, LogOut, Menu, Network, X } from "lucide-react";
-import { useAuth } from "@/hooks/useAuth";
+import { Link, useLocation } from "react-router-dom";
+import { ChevronRight, LogOut, Menu, Network, X } from "lucide-react";
 import { Avatar } from "@/components/ui/avatar";
-import { invitationApi, notificationApi } from "@/lib/api";
 import { brandCopy, clientNavGroups, expertNavGroups, publicNavGroups } from "@/content/site";
-import type { NavItem } from "@/content/site";
+import type { NavGroup, NavItem } from "@/content/site";
+import { useAuth } from "@/hooks/useAuth";
+import { invitationApi } from "@/lib/api";
 import type { ShellMode } from "./Layout";
 
 const pathAliases: Record<string, string[]> = {
@@ -14,44 +14,57 @@ const pathAliases: Record<string, string[]> = {
   "/trust": ["/why-us"],
 };
 
+const publicPrimaryLinks: NavItem[] = [
+  { label: "How It Works", href: "/how-it-works", description: "See how hiring and applying works." },
+  { label: "For Clients", href: "/for-clients", description: "Hiring path and platform fit for clients." },
+  { label: "For Experts", href: "/for-experts", description: "Profile, services, and application path for experts." },
+  { label: "Browse Experts", href: "/find-experts", description: "See expert profiles and services." },
+];
+
+const authPageLinks: NavItem[] = [
+  { label: "How It Works", href: "/how-it-works", description: "See how hiring and applying works." },
+  { label: "Trust", href: "/trust", description: "Learn how the platform sets quality standards and credibility signals." },
+  { label: "Browse Experts", href: "/find-experts", description: "See expert profiles and services." },
+];
+
 export function Navbar({ mode = "public" }: { mode?: ShellMode }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
-  const [unreadNotifications, setUnreadNotifications] = useState(0);
   const [pendingInvitations, setPendingInvitations] = useState(0);
   const { user, logout } = useAuth();
   const location = useLocation();
 
   const navGroups = user ? (user.role === "expert" ? expertNavGroups : clientNavGroups) : publicNavGroups;
-  const userShortcuts: NavItem[] = user
+  const desktopLinks: NavItem[] = user
     ? user.role === "expert"
       ? [
+          { label: "Home", href: "/", description: "Return to the platform homepage." },
           { label: "Find Work", href: "/jobs", description: "Browse open jobs." },
           { label: "My Applications", href: "/my-applications", description: "See your application updates." },
+          { label: "Invitations", href: "/invitations", description: "Review direct client invites.", badge: "invitations" },
           { label: "Messages", href: "/inbox", description: "Read and send messages." },
-          { label: "My Profile", href: "/expert/setup", description: "Update your public expert profile." },
         ]
       : [
+          { label: "Home", href: "/", description: "Return to the platform homepage." },
+          { label: "Find Experts", href: "/find-experts", description: "Browse public expert profiles and services." },
           { label: "Post a Job", href: "/post-project", description: "Create a job post." },
           { label: "My Jobs", href: "/my-jobs", description: "Manage jobs and applicants." },
           { label: "Messages", href: "/inbox", description: "Read and send messages." },
-          { label: "Profile", href: "/client/profile", description: "Update your company profile." },
         ]
+    : mode === "auth"
+      ? authPageLinks
+      : publicPrimaryLinks;
+  const userMenuLinks: NavItem[] = user
+    ? user.role === "expert"
+      ? [
+          { label: "My Profile", href: "/expert/setup", description: "Update your public expert profile." },
+          { label: "Services", href: "/expert/services", description: "Create and edit service offers." },
+        ]
+      : [{ label: "Profile", href: "/client/profile", description: "Update your company profile." }]
     : [];
-  const authLinks: NavItem[] = [
-    { label: "Browse Experts", href: "/find-experts", description: "See expert profiles and services." },
-    { label: "Browse Jobs", href: "/jobs", description: "See open jobs on the platform." },
-    { label: "How It Works", href: "/how-it-works", description: "See how hiring and applying works." },
-  ];
-  const publicPrimaryLinks: NavItem[] = [
-    { label: "How It Works", href: "/how-it-works", description: "See how hiring and applying works." },
-    { label: "For Clients", href: "/for-clients", description: "Hiring path and platform fit for clients." },
-    { label: "For Experts", href: "/for-experts", description: "Profile, services, and application path for experts." },
-    { label: "Browse Experts", href: "/find-experts", description: "See expert profiles and services." },
-  ];
-  const desktopLinks = mode === "app" ? userShortcuts : authLinks;
-  const mobileMenuGroups = mode === "auth" ? [{ title: "Explore", items: authLinks }] : navGroups;
+  const mobileMenuGroups: NavGroup[] = user ? navGroups : mode === "auth" ? [{ title: "Explore", items: authPageLinks }] : publicNavGroups;
   const hasMobileMenu = mobileMenuGroups.some((group) => group.items.length > 0);
+  const showHeaderMenuButton = !user && hasMobileMenu;
 
   const isLinkActive = (href: string) => {
     const path = location.pathname;
@@ -61,12 +74,16 @@ export function Navbar({ mode = "public" }: { mode?: ShellMode }) {
   };
 
   useEffect(() => {
+    setMobileMenuOpen(false);
+    setUserMenuOpen(false);
+  }, [location.pathname]);
+
+  useEffect(() => {
     let isMounted = true;
 
-    const loadUnread = async () => {
+    const loadCounts = async () => {
       if (!user) {
         if (isMounted) {
-          setUnreadNotifications(0);
           setPendingInvitations(0);
         }
         return;
@@ -74,32 +91,26 @@ export function Navbar({ mode = "public" }: { mode?: ShellMode }) {
 
       try {
         if (user.role === "expert") {
-          const [notificationsResponse, invitationsResponse] = await Promise.all([
-            notificationApi.getUnreadCount(),
-            invitationApi.getMine({ role: "expert", status: "sent", limit: 1 }),
-          ]);
+          const invitationsResponse = await invitationApi.getMine({ role: "expert", status: "sent", limit: 1 });
+
           if (isMounted) {
-            setUnreadNotifications(notificationsResponse.data.unreadCount);
             setPendingInvitations(invitationsResponse.data.pagination?.total || invitationsResponse.data.invitations.length);
           }
           return;
         }
 
-        const response = await notificationApi.getUnreadCount();
         if (isMounted) {
-          setUnreadNotifications(response.data.unreadCount);
           setPendingInvitations(0);
         }
       } catch {
         if (isMounted) {
-          setUnreadNotifications(0);
           setPendingInvitations(0);
         }
       }
     };
 
-    loadUnread();
-    const intervalId = window.setInterval(loadUnread, 15000);
+    loadCounts();
+    const intervalId = window.setInterval(loadCounts, 15000);
 
     return () => {
       isMounted = false;
@@ -121,56 +132,25 @@ export function Navbar({ mode = "public" }: { mode?: ShellMode }) {
             </div>
           </Link>
 
-          {mode === "public" && (
-            <div className="hidden min-w-0 flex-1 items-center justify-center gap-4 md:flex">
-              <div className="public-nav-links">
-                {publicPrimaryLinks.map((link) => {
-                  const active = isLinkActive(link.href);
+          <div className="hidden min-w-0 flex-1 md:flex md:justify-center">
+            <div className={user ? "public-nav-links nav-links-platform" : "public-nav-links"}>
+              {desktopLinks.map((link) => {
+                const active = isLinkActive(link.href);
+                const showBadge = user?.role === "expert" && link.badge === "invitations" && pendingInvitations > 0;
 
-                  return (
-                    <Link key={link.href} to={link.href} className={active ? "nav-link nav-link-active" : "nav-link"}>
-                      <span>{link.label}</span>
-                    </Link>
-                  );
-                })}
-              </div>
+                return (
+                  <Link key={link.href} to={link.href} className={active ? "nav-link nav-link-active" : "nav-link"}>
+                    <span>{link.label}</span>
+                    {showBadge && <span className="nav-pill">{pendingInvitations}</span>}
+                  </Link>
+                );
+              })}
             </div>
-          )}
-
-          {(mode === "app" || mode === "auth") && (
-            <div className="hidden min-w-0 flex-1 md:flex">
-              <div className="workspace-shortcuts">
-                <span className="workspace-shortcuts-label">
-                  {mode === "app" ? "Start here" : "Explore"}
-                </span>
-                <div className="flex flex-wrap items-center gap-1">
-                  {desktopLinks.map((link) => {
-                    const active = isLinkActive(link.href);
-                    const showBadge = user?.role === "expert" && link.badge === "invitations" && pendingInvitations > 0;
-
-                    return (
-                      <Link key={link.href} to={link.href} className={active ? "nav-link nav-link-active" : "nav-link"}>
-                        <span>{link.label}</span>
-                        {showBadge && <span className="nav-pill">{pendingInvitations}</span>}
-                      </Link>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
-          )}
+          </div>
 
           <div className="ml-auto flex items-center gap-2 md:gap-3">
             {user ? (
               <>
-                <Link to="/notifications" className="icon-button relative" aria-label="Open notifications">
-                  <Bell className="h-4 w-4" />
-                  {unreadNotifications > 0 && (
-                    <span className="absolute -right-1 -top-1 rounded-full bg-[var(--color-primary)] px-1.5 py-0.5 text-[10px] font-bold text-white">
-                      {unreadNotifications > 99 ? "99+" : unreadNotifications}
-                    </span>
-                  )}
-                </Link>
                 <div className="relative">
                   <button type="button" onClick={() => setUserMenuOpen((prev) => !prev)} className="user-chip">
                     <Avatar src={user.img} fallback={user.username} size="sm" className="h-9 w-9 border border-white/10" />
@@ -189,7 +169,7 @@ export function Navbar({ mode = "public" }: { mode?: ShellMode }) {
                           <p className="mt-1 text-sm text-[var(--color-text-secondary)]">{user.email}</p>
                         </div>
                         <div className="mt-3 space-y-1">
-                          {userShortcuts.map((item) => (
+                          {userMenuLinks.map((item) => (
                             <Link
                               key={item.href}
                               to={item.href}
@@ -230,7 +210,7 @@ export function Navbar({ mode = "public" }: { mode?: ShellMode }) {
               </>
             )}
 
-            {hasMobileMenu && (
+            {showHeaderMenuButton && (
               <button className="icon-button md:hidden" onClick={() => setMobileMenuOpen((prev) => !prev)} aria-label="Toggle navigation">
                 {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
               </button>
@@ -238,7 +218,7 @@ export function Navbar({ mode = "public" }: { mode?: ShellMode }) {
           </div>
         </div>
 
-        {hasMobileMenu && mobileMenuOpen && (
+        {showHeaderMenuButton && mobileMenuOpen && (
           <div className="mt-4 border-t border-white/10 pt-4 md:hidden">
             <div className="space-y-4">
               {mobileMenuGroups.map((group) => (
@@ -247,7 +227,7 @@ export function Navbar({ mode = "public" }: { mode?: ShellMode }) {
                   <div className="mt-2 grid gap-2">
                     {group.items.map((link) => {
                       const active = isLinkActive(link.href);
-                      const showBadge = user?.role === "expert" && link.badge === "invitations" && pendingInvitations > 0;
+                      const showBadge = link.badge === "invitations" && pendingInvitations > 0;
 
                       return (
                         <Link
@@ -258,7 +238,7 @@ export function Navbar({ mode = "public" }: { mode?: ShellMode }) {
                         >
                           <div>
                             <p className="text-sm font-semibold text-white">{link.label}</p>
-                            {mode !== "app" && <p className="mt-1 text-xs text-[var(--color-text-muted)]">{link.description}</p>}
+                            <p className="mt-1 text-xs text-[var(--color-text-muted)]">{link.description}</p>
                           </div>
                           {showBadge && <span className="nav-pill">{pendingInvitations}</span>}
                         </Link>

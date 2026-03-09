@@ -3,9 +3,26 @@ import { ConversionRail } from "@/components/marketing/ConversionRail";
 import { PageHero } from "@/components/marketing/PageHero";
 import { SectionHeading } from "@/components/marketing/SectionHeading";
 import { trustContent } from "@/content/site";
+import { useAuth } from "@/hooks/useAuth";
 import { usePageMeta } from "@/hooks/usePageMeta";
 
 export default function Trust() {
+  const { user } = useAuth();
+  const heroActions = user
+    ? user.role === "expert"
+      ? [
+          { label: "Browse Jobs", href: "/jobs" },
+          { label: "Open Profile", href: "/expert/setup", variant: "secondary" as const },
+        ]
+      : [
+          { label: "Explore Experts", href: "/find-experts" },
+          { label: "Open My Jobs", href: "/my-jobs", variant: "secondary" as const },
+        ]
+    : [
+        { label: "Explore Experts", href: "/find-experts" },
+        { label: "How It Works", href: "/how-it-works", variant: "secondary" as const },
+      ];
+
   usePageMeta({
     title: "Trust | Quality signals and operating standards on n8nExperts",
     description:
@@ -14,15 +31,12 @@ export default function Trust() {
   });
 
   return (
-    <div className="container space-y-8 py-8 md:space-y-10">
+    <div className="container page-stack">
       <PageHero
         eyebrow={trustContent.hero.eyebrow}
         title={trustContent.hero.title}
         description={trustContent.hero.description}
-        actions={[
-          { label: "Explore Experts", href: "/find-experts" },
-          { label: "How It Works", href: "/how-it-works", variant: "secondary" },
-        ]}
+        actions={heroActions}
         metrics={[
           { value: "Proof surfaces", label: "Profiles, services, and portfolios support stronger evaluation." },
           { value: "Better operating context", label: "Client profiles, notes, statuses, and inbox routes reduce ambiguity." },
@@ -36,7 +50,7 @@ export default function Trust() {
           title="Trust is not a badge. It is the result of better product structure."
           description="The platform should help visitors understand why a claim is credible and why a project or expert looks worth engaging."
         />
-        <div className="section-grid mt-8">
+        <div className="section-grid mt-6">
           {trustContent.standards.map((standard, index) => {
             const Icon = [ShieldCheck, ClipboardCheck, Workflow, Building2][index];
             return (
@@ -56,7 +70,7 @@ export default function Trust() {
           title="The site should make the quality model understandable."
           description="That means stronger explanation across the public site and clearer guidance across active app routes."
         />
-        <div className="mt-8 grid gap-4 lg:grid-cols-2">
+        <div className="mt-6 grid gap-4 lg:grid-cols-2">
           {[
             "Clients should understand why a profile looks credible or incomplete.",
             "Experts should understand what makes a brief serious and why that matters for proposal quality.",
@@ -74,8 +88,14 @@ export default function Trust() {
         eyebrow="Trust in practice"
         title="The best trust signal is a product that explains itself clearly."
         description="If the standards resonate, explore the live platform routes and see how the trust model carries through public discovery, role setup, search, applications, and pipeline management."
-        primaryAction={{ label: "See Experts", href: "/find-experts" }}
-        secondaryAction={{ label: "Create Account", href: "/auth/role-select" }}
+        primaryAction={user?.role === "expert" ? { label: "Browse Jobs", href: "/jobs" } : { label: "See Experts", href: "/find-experts" }}
+        secondaryAction={
+          user
+            ? user.role === "expert"
+              ? { label: "Open Inbox", href: "/inbox" }
+              : { label: "Open My Jobs", href: "/my-jobs" }
+            : { label: "Create Account", href: "/auth/role-select" }
+        }
       />
     </div>
   );

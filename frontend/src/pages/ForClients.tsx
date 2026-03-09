@@ -1,11 +1,29 @@
 import { BriefcaseBusiness, ClipboardCheck, SearchCode, ShieldCheck } from "lucide-react";
 import { ConversionRail } from "@/components/marketing/ConversionRail";
 import { PageHero } from "@/components/marketing/PageHero";
+import { PageHeroShowcase } from "@/components/marketing/PageHeroShowcase";
 import { SectionHeading } from "@/components/marketing/SectionHeading";
 import { forClientsContent, homeContent } from "@/content/site";
+import { useAuth } from "@/hooks/useAuth";
 import { usePageMeta } from "@/hooks/usePageMeta";
 
 export default function ForClients() {
+  const { user } = useAuth();
+  const heroActions = user
+    ? user.role === "expert"
+      ? [
+          { label: "Browse Jobs", href: "/jobs" },
+          { label: "My Applications", href: "/my-applications", variant: "secondary" as const },
+        ]
+      : [
+          { label: "Find Experts", href: "/find-experts" },
+          { label: "Post Project", href: "/post-project", variant: "secondary" as const },
+        ]
+    : [
+        { label: "Find Experts", href: "/find-experts" },
+        { label: "Post Project", href: "/post-project", variant: "secondary" as const },
+      ];
+
   usePageMeta({
     title: "For Clients | Hire n8n specialists with more confidence",
     description:
@@ -14,15 +32,13 @@ export default function ForClients() {
   });
 
   return (
-    <div className="container space-y-8 py-8 md:space-y-10">
+    <div className="container page-stack">
       <PageHero
         eyebrow={forClientsContent.hero.eyebrow}
         title={forClientsContent.hero.title}
         description={forClientsContent.hero.description}
-        actions={[
-          { label: "Find Experts", href: "/find-experts" },
-          { label: "Post Project", href: "/post-project", variant: "secondary" },
-        ]}
+        actions={heroActions}
+        visual={<PageHeroShowcase variant="client" />}
         metrics={[
           { value: "Richer profiles", label: "Compare more than a headline and rate." },
           { value: "Better briefs", label: "Attract proposals with more context and less ambiguity." },
@@ -36,7 +52,7 @@ export default function ForClients() {
           title="The goal is to make hiring feel clearer."
           description="That matters most when the automation work touches multiple systems and handoffs."
         />
-        <div className="section-grid mt-8">
+        <div className="section-grid mt-6">
           {forClientsContent.benefits.map((benefit, index) => {
             const Icon = [SearchCode, ClipboardCheck, BriefcaseBusiness][index];
             return (
@@ -56,7 +72,7 @@ export default function ForClients() {
           title="A client should be able to judge fit quickly."
           description="The best decision usually comes from specialization, proof, pricing, and how clearly the expert responds."
         />
-        <div className="mt-8 grid gap-4 lg:grid-cols-2">
+        <div className="mt-6 grid gap-4 lg:grid-cols-2">
           {[
             "Does the profile explain the kind of n8n work this expert actually does well?",
             "Do service and portfolio surfaces show enough evidence to trust their positioning?",
@@ -77,7 +93,7 @@ export default function ForClients() {
           title="The hiring path should feel straightforward."
           description="Post the job, review proof, invite or shortlist, then move the conversation into messages."
         />
-        <div className="mt-8 grid gap-4 lg:grid-cols-2">
+        <div className="mt-6 grid gap-4 lg:grid-cols-2">
           {homeContent.workflow.map((step) => (
             <article key={step.title} className="timeline-card">
               <h3 className="text-xl font-bold text-white">{step.title}</h3>
@@ -92,8 +108,14 @@ export default function ForClients() {
         eyebrow="Client next step"
         title="If you are hiring, start where fit becomes visible."
         description="Explore expert profiles first if you want to understand market shape, or post a project if your brief is ready and you want to attract or invite specialists now."
-        primaryAction={{ label: "Explore Experts", href: "/find-experts" }}
-        secondaryAction={{ label: "Post Project", href: "/post-project" }}
+        primaryAction={user?.role === "expert" ? { label: "Browse Jobs", href: "/jobs" } : { label: "Explore Experts", href: "/find-experts" }}
+        secondaryAction={
+          user
+            ? user.role === "expert"
+              ? { label: "Open Inbox", href: "/inbox" }
+              : { label: "Post Project", href: "/post-project" }
+            : { label: "Post Project", href: "/post-project" }
+        }
       />
     </div>
   );

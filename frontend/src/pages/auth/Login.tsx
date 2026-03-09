@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ShieldCheck, Workflow } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
@@ -11,6 +11,9 @@ export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const { login, user } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const fromPath = (location.state as { from?: { pathname?: string } } | null)?.from?.pathname;
+  const nextPath = fromPath && !fromPath.startsWith("/auth") ? fromPath : "/";
 
   usePageMeta({
     title: "Log In | n8nExperts",
@@ -26,7 +29,7 @@ export default function Login() {
 
     try {
       await login(formData);
-      navigate("/");
+      navigate(nextPath, { replace: true });
     } catch (err: unknown) {
       const apiError = err as { response?: { data?: { message?: string } } };
       setError(apiError.response?.data?.message || "We could not sign you in. Please try again.");

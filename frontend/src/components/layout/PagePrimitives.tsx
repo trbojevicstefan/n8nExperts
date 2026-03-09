@@ -11,6 +11,7 @@ type PublicPageHeroProps = {
   actions?: LinkAction[];
   metrics?: Metric[];
   align?: "left" | "center";
+  visual?: ReactNode;
   children?: ReactNode;
   className?: string;
 };
@@ -72,6 +73,7 @@ export function PublicPageHero({
   actions,
   metrics,
   align = "left",
+  visual,
   children,
   className,
 }: PublicPageHeroProps) {
@@ -79,46 +81,52 @@ export function PublicPageHero({
     <section className={cn("public-page-hero", align === "center" && "text-center", className)}>
       <div className="hero-glow hero-glow-left" />
       <div className="hero-glow hero-glow-right" />
-      <div className="relative z-10">
-        {eyebrow && <p className="eyebrow">{eyebrow}</p>}
-        <h1
-          className={cn(
-            "mt-4 max-w-4xl text-4xl font-black leading-[1.02] text-white md:text-[3.6rem] xl:text-[4.5rem]",
-            align === "center" && "mx-auto"
-          )}
-        >
-          {title}
-        </h1>
-        {description && (
-          <p
-            className={cn(
-              "mt-4 max-w-2xl text-sm leading-7 text-[var(--color-text-secondary)] md:text-base",
-              align === "center" && "mx-auto"
-            )}
-          >
-            {description}
-          </p>
-        )}
-
-        {actions && actions.length > 0 && (
-          <div className={cn("mt-7 flex flex-wrap gap-3", align === "center" && "justify-center")}>
-            {actions.map((action) => (
-              <Link
-                key={`${action.href}-${action.label}`}
-                to={action.href}
+      <div className={cn("relative z-10", visual && "public-page-hero-layout")}>
+        <div className={cn(visual && "public-page-hero-grid")}>
+          <div className="public-page-hero-copy">
+            {eyebrow && <p className="eyebrow">{eyebrow}</p>}
+            <h1
+              className={cn(
+                "mt-4 max-w-4xl text-4xl font-black leading-[1.02] text-white md:text-[3.6rem] xl:text-[4.5rem]",
+                align === "center" && !visual && "mx-auto"
+              )}
+            >
+              {title}
+            </h1>
+            {description && (
+              <p
                 className={cn(
-                  "inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold transition-all",
-                  actionClasses[action.variant || "primary"]
+                  "mt-4 max-w-2xl text-sm leading-7 text-[var(--color-text-secondary)] md:text-base",
+                  align === "center" && !visual && "mx-auto"
                 )}
               >
-                <span>{action.label}</span>
-                {action.variant !== "ghost" && <ArrowRight className="h-4 w-4" />}
-              </Link>
-            ))}
-          </div>
-        )}
+                {description}
+              </p>
+            )}
 
-        {metrics && metrics.length > 0 && <StatStrip items={metrics.map((metric) => ({ label: metric.label, value: metric.value }))} className="mt-7" />}
+            {actions && actions.length > 0 && (
+              <div className={cn("mt-7 flex flex-wrap gap-3", align === "center" && !visual && "justify-center")}>
+                {actions.map((action) => (
+                  <Link
+                    key={`${action.href}-${action.label}`}
+                    to={action.href}
+                    className={cn(
+                      "inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold transition-all",
+                      actionClasses[action.variant || "primary"]
+                    )}
+                  >
+                    <span>{action.label}</span>
+                    {action.variant !== "ghost" && <ArrowRight className="h-4 w-4" />}
+                  </Link>
+                ))}
+              </div>
+            )}
+
+            {metrics && metrics.length > 0 && <StatStrip items={metrics.map((metric) => ({ label: metric.label, value: metric.value }))} className="mt-7" />}
+          </div>
+
+          {visual && <div className="public-page-hero-visual">{visual}</div>}
+        </div>
 
         {children && <div className="mt-7">{children}</div>}
       </div>

@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/hooks/useAuth";
 import { Outlet } from "react-router-dom";
 import { Navbar } from "./Navbar";
 import { Footer } from "./Footer";
@@ -15,23 +16,27 @@ function ShellLayout({
   showMobileNav?: boolean;
   footerVariant?: "full" | "compact" | "none";
 }) {
+  const { user } = useAuth();
+  const chromeMode: ShellMode = user && mode === "public" ? "app" : mode;
+  const resolvedFooterVariant = user && mode === "public" ? "compact" : footerVariant;
+
   return (
     <div className={cn("app-shell", `shell-${mode}`)}>
       <div className="shell-orb shell-orb-left" />
       <div className="shell-orb shell-orb-right" />
-      <Navbar mode={mode} />
+      <Navbar mode={chromeMode} />
       <main
         className={cn(
           "shell-main flex-1",
-          mode === "public" && "pt-24 pb-24 md:pb-10",
-          mode === "auth" && "pt-22 pb-10",
-          mode === "app" && "pt-20 pb-24 md:pb-10"
+          chromeMode === "public" && "pt-6 pb-22 md:pt-8 md:pb-10",
+          chromeMode === "auth" && "pt-6 pb-10 md:pt-8",
+          chromeMode === "app" && "pt-6 pb-22 md:pt-8 md:pb-10"
         )}
       >
         <Outlet />
       </main>
-      {footerVariant !== "none" && <Footer tone={footerVariant} />}
-      {showMobileNav && mode !== "auth" && <MobileNav />}
+      {resolvedFooterVariant !== "none" && <Footer tone={resolvedFooterVariant} />}
+      {showMobileNav && chromeMode !== "auth" && <MobileNav />}
     </div>
   );
 }

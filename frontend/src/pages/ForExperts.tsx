@@ -1,11 +1,29 @@
 import { Briefcase, Sparkles, UserRoundCheck, Workflow } from "lucide-react";
 import { ConversionRail } from "@/components/marketing/ConversionRail";
 import { PageHero } from "@/components/marketing/PageHero";
+import { PageHeroShowcase } from "@/components/marketing/PageHeroShowcase";
 import { SectionHeading } from "@/components/marketing/SectionHeading";
 import { forExpertsContent } from "@/content/site";
+import { useAuth } from "@/hooks/useAuth";
 import { usePageMeta } from "@/hooks/usePageMeta";
 
 export default function ForExperts() {
+  const { user } = useAuth();
+  const heroActions = user
+    ? user.role === "expert"
+      ? [
+          { label: "Browse Jobs", href: "/jobs" },
+          { label: "Open Profile", href: "/expert/setup", variant: "secondary" as const },
+        ]
+      : [
+          { label: "Find Experts", href: "/find-experts" },
+          { label: "Post Project", href: "/post-project", variant: "secondary" as const },
+        ]
+    : [
+        { label: "Choose Expert Role", href: "/auth/register?role=expert" },
+        { label: "Browse Jobs", href: "/jobs", variant: "secondary" as const },
+      ];
+
   usePageMeta({
     title: "For Experts | Showcase and win serious n8n work",
     description:
@@ -14,15 +32,13 @@ export default function ForExperts() {
   });
 
   return (
-    <div className="container space-y-8 py-8 md:space-y-10">
+    <div className="container page-stack">
       <PageHero
         eyebrow={forExpertsContent.hero.eyebrow}
         title={forExpertsContent.hero.title}
         description={forExpertsContent.hero.description}
-        actions={[
-          { label: "Choose Expert Role", href: "/auth/register?role=expert" },
-          { label: "Browse Jobs", href: "/jobs", variant: "secondary" },
-        ]}
+        actions={heroActions}
+        visual={<PageHeroShowcase variant="expert" />}
         metrics={[
           { value: "Profile depth", label: "Explain positioning, services, portfolio relevance, and availability." },
           { value: "Better opportunities", label: "Focus on real briefs and direct invitations instead of pure volume." },
@@ -36,7 +52,7 @@ export default function ForExperts() {
           title="This is for experts who want their work to make sense at a glance."
           description="The value is not only finding jobs. It is helping clients understand how you work and why they should trust you."
         />
-        <div className="section-grid mt-8">
+        <div className="section-grid mt-6">
           {forExpertsContent.benefits.map((benefit, index) => {
             const Icon = [UserRoundCheck, Briefcase, Workflow][index];
             return (
@@ -56,7 +72,7 @@ export default function ForExperts() {
           title="A good profile does more than list tools."
           description="It tells a client what you do best, what proof you have, and how to hire you."
         />
-        <div className="mt-8 grid gap-4 lg:grid-cols-2">
+        <div className="mt-6 grid gap-4 lg:grid-cols-2">
           {[
             "Headline and bio that explain the kind of automation outcomes you are best at.",
             "Portfolio entries that show problem, systems involved, and practical delivery context.",
@@ -77,7 +93,7 @@ export default function ForExperts() {
           title="Experts can both find work and be found."
           description="Browse jobs directly, or get invited through your profile and services."
         />
-        <div className="mt-8 grid gap-4 lg:grid-cols-3">
+        <div className="mt-6 grid gap-4 lg:grid-cols-3">
           {[
             {
               title: "Discover",
@@ -104,8 +120,8 @@ export default function ForExperts() {
         eyebrow="Expert next step"
         title="Start by publishing the kind of proof serious buyers can understand."
         description="Choose the expert role to create your account, then complete profile and service surfaces so clients can evaluate fit earlier and more confidently."
-        primaryAction={{ label: "Create Expert Account", href: "/auth/register?role=expert" }}
-        secondaryAction={{ label: "Browse Jobs", href: "/jobs" }}
+        primaryAction={user?.role === "client" ? { label: "Find Experts", href: "/find-experts" } : user ? { label: "Open Profile", href: "/expert/setup" } : { label: "Create Expert Account", href: "/auth/register?role=expert" }}
+        secondaryAction={user?.role === "client" ? { label: "Post Project", href: "/post-project" } : { label: "Browse Jobs", href: "/jobs" }}
       />
     </div>
   );

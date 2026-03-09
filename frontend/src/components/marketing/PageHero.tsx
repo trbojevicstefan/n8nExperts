@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { PublicPageHero } from "@/components/layout/PagePrimitives";
 import type { LinkAction, Metric } from "@/content/site";
 
@@ -8,7 +9,8 @@ type PageHeroProps = {
   actions?: LinkAction[];
   metrics?: Metric[];
   align?: "left" | "center";
-  children?: React.ReactNode;
+  visual?: ReactNode;
+  children?: ReactNode;
   className?: string;
 };
 
@@ -19,6 +21,7 @@ export function PageHero({
   actions,
   metrics,
   align = "left",
+  visual,
   children,
   className,
 }: PageHeroProps) {
@@ -30,6 +33,7 @@ export function PageHero({
       actions={actions}
       metrics={metrics}
       align={align}
+      visual={visual}
       className={className}
     >
       {children}

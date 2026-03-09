@@ -155,15 +155,15 @@ export const mobilePublicNav = [
 ];
 
 export const mobileClientNav = [
-  { label: "Post", href: "/post-project" },
+  { label: "Home", href: "/" },
   { label: "Jobs", href: "/my-jobs" },
   { label: "Messages", href: "/inbox" },
   { label: "Profile", href: "/client/profile" },
 ];
 
 export const mobileExpertNav = [
+  { label: "Home", href: "/" },
   { label: "Work", href: "/jobs" },
-  { label: "My Apps", href: "/my-applications" },
   { label: "Messages", href: "/inbox" },
   { label: "Profile", href: "/expert/setup" },
 ];

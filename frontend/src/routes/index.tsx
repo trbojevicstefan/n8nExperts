@@ -46,6 +46,7 @@ const router = createBrowserRouter([
     element: <PublicLayout />,
     children: [
       { path: "/", element: withSuspense(<Home />) },
+      { path: "/workspace", element: <Navigate to="/" replace /> },
       { path: "/how-it-works", element: withSuspense(<HowItWorks />) },
       { path: "/for-clients", element: withSuspense(<ForClients />) },
       { path: "/for-experts", element: withSuspense(<ForExperts />) },

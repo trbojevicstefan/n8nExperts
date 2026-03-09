@@ -1,11 +1,29 @@
 import { CheckCircle2, Compass, MessagesSquare, ShieldCheck, Workflow } from "lucide-react";
 import { ConversionRail } from "@/components/marketing/ConversionRail";
 import { PageHero } from "@/components/marketing/PageHero";
+import { PageHeroShowcase } from "@/components/marketing/PageHeroShowcase";
 import { SectionHeading } from "@/components/marketing/SectionHeading";
 import { homeContent, howItWorksContent } from "@/content/site";
+import { useAuth } from "@/hooks/useAuth";
 import { usePageMeta } from "@/hooks/usePageMeta";
 
 export default function HowItWorks() {
+  const { user } = useAuth();
+  const heroActions = user
+    ? user.role === "expert"
+      ? [
+          { label: "Browse Jobs", href: "/jobs" },
+          { label: "My Applications", href: "/my-applications", variant: "secondary" as const },
+        ]
+      : [
+          { label: "Find Experts", href: "/find-experts" },
+          { label: "My Jobs", href: "/my-jobs", variant: "secondary" as const },
+        ]
+    : [
+        { label: "Find Experts", href: "/find-experts" },
+        { label: "Find Jobs", href: "/jobs", variant: "secondary" as const },
+      ];
+
   usePageMeta({
     title: "How n8nExperts Works | Clearer hiring and delivery workflow",
     description:
@@ -14,15 +32,13 @@ export default function HowItWorks() {
   });
 
   return (
-    <div className="container space-y-8 py-8 md:space-y-10">
+    <div className="container page-stack">
       <PageHero
         eyebrow={howItWorksContent.hero.eyebrow}
         title={howItWorksContent.hero.title}
         description={howItWorksContent.hero.description}
-        actions={[
-          { label: "Find Experts", href: "/find-experts" },
-          { label: "Find Jobs", href: "/jobs", variant: "secondary" },
-        ]}
+        actions={heroActions}
+        visual={<PageHeroShowcase variant="workflow" />}
       />
 
       <section className="section-shell">
@@ -31,7 +47,7 @@ export default function HowItWorks() {
           title="The product is built around a few simple questions."
           description="Who fits, why trust them, what should happen next, and where does that next step live?"
         />
-        <div className="mt-8 grid gap-4 lg:grid-cols-4">
+        <div className="mt-6 grid gap-4 lg:grid-cols-4">
           {[
             { icon: Compass, title: "Who fits?", body: "Public profiles and filters support earlier fit evaluation." },
             { icon: ShieldCheck, title: "Why trust them?", body: "Portfolios, services, and profile detail make proof more visible." },
@@ -53,7 +69,7 @@ export default function HowItWorks() {
           title="The path is short."
           description="Understand the work, compare fit, then move into applications, invitations, and messages."
         />
-        <div className="mt-8 grid gap-4 lg:grid-cols-2">
+        <div className="mt-6 grid gap-4 lg:grid-cols-2">
           {homeContent.workflow.map((step, index) => (
             <article key={step.title} className="timeline-card">
               <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-accent)]">Step {index + 1}</p>
@@ -76,7 +92,7 @@ export default function HowItWorks() {
           title="Each side gets a clearer decision moment."
           description="The point is not only listing and messaging. It is helping people decide faster and with less confusion."
         />
-        <div className="mt-8 grid gap-4 lg:grid-cols-3">
+        <div className="mt-6 grid gap-4 lg:grid-cols-3">
           {howItWorksContent.decisionPoints.slice(0, 3).map((card) => (
             <article key={card.title} className="feature-panel">
               <h3 className="text-xl font-bold text-white">{card.title}</h3>
@@ -89,9 +105,15 @@ export default function HowItWorks() {
       <ConversionRail
         eyebrow="Next step"
         title="Move from explanation into action."
-        description="If the workflow makes sense, the fastest next move is to explore active profiles or start with a role-specific account."
-        primaryAction={{ label: "Explore Experts", href: "/find-experts" }}
-        secondaryAction={{ label: "Choose a Role", href: "/auth/role-select" }}
+        description="If the workflow makes sense, the next move should point directly into the live platform surface that matches your role."
+        primaryAction={user?.role === "expert" ? { label: "Browse Jobs", href: "/jobs" } : { label: "Explore Experts", href: "/find-experts" }}
+        secondaryAction={
+          user
+            ? user.role === "expert"
+              ? { label: "Open Profile", href: "/expert/setup" }
+              : { label: "Open My Jobs", href: "/my-jobs" }
+            : { label: "Choose a Role", href: "/auth/role-select" }
+        }
       />
     </div>
   );

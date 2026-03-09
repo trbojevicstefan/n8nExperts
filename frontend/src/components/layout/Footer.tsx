@@ -1,18 +1,38 @@
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { brandCopy, footerGroups } from "@/content/site";
+import { useAuth } from "@/hooks/useAuth";
 
 export function Footer({ tone = "full" }: { tone?: "full" | "compact" }) {
+  const { user } = useAuth();
+  const compactLinks = user
+    ? user.role === "expert"
+      ? [
+          { label: "Home", href: "/" },
+          { label: "Find Work", href: "/jobs" },
+          { label: "Applications", href: "/my-applications" },
+          { label: "Inbox", href: "/inbox" },
+        ]
+      : [
+          { label: "Home", href: "/" },
+          { label: "Find Experts", href: "/find-experts" },
+          { label: "My Jobs", href: "/my-jobs" },
+          { label: "Inbox", href: "/inbox" },
+        ]
+    : footerGroups[1].items.slice(0, 4);
+
   if (tone === "compact") {
     return (
       <footer className="footer-shell footer-shell-compact">
         <div className="container flex flex-col gap-4 py-6 text-sm md:flex-row md:items-center md:justify-between">
           <div>
             <p className="font-semibold text-white">{brandCopy.name}</p>
-            <p className="mt-1 text-[var(--color-text-muted)]">{brandCopy.operator}</p>
+            <p className="mt-1 text-[var(--color-text-muted)]">
+              {user ? "Platform routes, discovery, and messaging stay connected." : brandCopy.operator}
+            </p>
           </div>
           <div className="flex flex-wrap gap-x-4 gap-y-2 text-[var(--color-text-secondary)]">
-            {footerGroups[1].items.slice(0, 4).map((item) => (
+            {compactLinks.map((item) => (
               <Link key={item.href} to={item.href} className="transition hover:text-white">
                 {item.label}
               </Link>
