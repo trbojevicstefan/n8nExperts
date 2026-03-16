@@ -121,14 +121,13 @@ export function Navbar({ mode = "public" }: { mode?: ShellMode }) {
   return (
     <nav className="sticky top-0 z-50 px-3 py-3 md:px-4">
       <div className={`container nav-shell nav-shell-${mode}`}>
-        <div className="flex items-center gap-4">
-          <Link to="/" className="flex min-w-fit items-center gap-3" onClick={() => setMobileMenuOpen(false)}>
+        <div className="flex items-center gap-3 md:gap-4">
+          <Link to="/" className="flex min-w-fit items-center gap-2.5 md:gap-3" onClick={() => setMobileMenuOpen(false)}>
             <div className="brand-mark">
               <Network className="h-5 w-5 text-white" />
             </div>
             <div>
-              <p className="text-base font-black tracking-[-0.03em] text-white">{brandCopy.name}</p>
-              <p className="text-[11px] uppercase tracking-[0.22em] text-[var(--color-text-muted)]">{brandCopy.label}</p>
+              <p className="text-sm font-black leading-none tracking-[-0.03em] text-white sm:text-base">{brandCopy.name}</p>
             </div>
           </Link>
 
@@ -203,7 +202,7 @@ export function Navbar({ mode = "public" }: { mode?: ShellMode }) {
                 )}
                 <Link
                   to={mode === "auth" ? "/" : "/auth/role-select"}
-                  className="inline-flex items-center rounded-full bg-[var(--color-primary)] px-4 py-2.5 text-sm font-semibold text-white shadow-[0_18px_45px_var(--color-primary-glow)] transition hover:bg-[var(--color-primary-hover)]"
+                  className="inline-flex items-center whitespace-nowrap rounded-full bg-[var(--color-primary)] px-3 py-2 text-xs font-semibold text-white shadow-[0_14px_32px_var(--color-primary-glow)] transition hover:bg-[var(--color-primary-hover)] sm:px-4 sm:py-2.5 sm:text-sm sm:shadow-[0_18px_45px_var(--color-primary-glow)]"
                 >
                   {mode === "auth" ? "Back to site" : "Get started"}
                 </Link>
