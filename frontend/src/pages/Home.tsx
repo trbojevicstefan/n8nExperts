@@ -20,30 +20,30 @@ import { usePageMeta } from "@/hooks/usePageMeta";
 
 const heroInsightCards = [
   {
-    eyebrow: "Trust signals",
+    eyebrow: "Browse faster",
     title: "See fit before the first message",
-    description: "Profiles, services, and portfolio proof are designed to reduce guesswork before outreach starts.",
+    description: "Profiles, services, and work samples help clients judge fit before they start outreach.",
     icon: ShieldCheck,
     accent: "text-[var(--color-accent)]",
   },
   {
-    eyebrow: "Workflow visibility",
+    eyebrow: "Better job flow",
     title: "Move from brief to shortlist faster",
-    description: "Applications, invitations, and job states keep both sides oriented around the next clear action.",
+    description: "Applications, invitations, and job states keep the next action visible once hiring starts.",
     icon: Workflow,
     accent: "text-[var(--color-accent-cool)]",
   },
   {
-    eyebrow: "Conversation handoff",
-    title: "Keep context when the work gets serious",
-    description: "Messages, notes, and accepted work stay tied to the same hiring flow instead of scattering across tabs.",
+    eyebrow: "Keep context",
+    title: "Messages stay tied to the job",
+    description: "Notes, messages, and accepted work stay connected instead of getting scattered across tabs.",
     icon: MessagesSquare,
     accent: "text-[var(--color-success)]",
   },
   {
-    eyebrow: "Live surfaces",
-    title: "One product, not disconnected pages",
-    description: "Experts, jobs, applications, messages, and notes all stay in the same operating context once you sign in.",
+    eyebrow: "One place",
+    title: "Discovery and hiring live together",
+    description: "Experts, jobs, applications, and inbox routes stay in the same product once you sign in.",
     icon: BellDot,
     accent: "text-[var(--color-accent-soft)]",
   },
@@ -91,12 +91,12 @@ export default function Home() {
           ],
         }
     : {
-        title: "Take the platform seriously because it is being built to explain serious automation work.",
+        title: "Start with the side of the marketplace that matches your goal.",
         description:
-          "If you are hiring, start by exploring experts and project flow. If you are an expert, start by choosing your role and publishing stronger proof.",
-        primaryAction: { label: "Find Experts", href: "/find-experts" },
+          "If you are hiring, browse experts or post a project. If you are an expert, create your account and show the kind of work you want to be hired for.",
+        primaryAction: { label: "Browse Experts", href: "/find-experts" },
         secondaryAction: { label: "Create Account", href: "/auth/role-select" },
-        signals: ["Balanced client and expert narrative", "Trust-first positioning", "Live workflow pages already active", "Built by n8nlab.io"],
+        signals: ["Browse proof before outreach", "Post jobs with clearer context", "Show services and work samples", "Built by n8nlab.io"],
       };
 
   usePageMeta({
@@ -227,7 +227,7 @@ export default function Home() {
         <SectionHeading
           eyebrow="How it works"
           title="The flow is simple."
-          description="Post or find a job, compare fit, then move the conversation forward with less back-and-forth."
+          description="Post or find a job, compare fit, then move the conversation forward without extra guesswork."
         />
         <div className="mt-6 grid gap-4 lg:grid-cols-2">
           {homeContent.workflow.map((step, index) => (
@@ -249,8 +249,8 @@ export default function Home() {
       <section className="section-shell">
         <SectionHeading
           eyebrow="Why it feels different"
-          title="The platform is built for clarity, not volume."
-          description="It gives both sides better signals before they commit time to a conversation."
+          title="Built for fit, proof, and next steps."
+          description="It gives both sides better information before they commit time to a conversation."
         />
         <div className="mt-6 overflow-hidden rounded-[28px] border border-white/10">
           <div className="grid grid-cols-[1.1fr_1fr_1fr] bg-white/6 px-6 py-4 text-xs font-semibold uppercase tracking-[0.22em] text-[var(--color-text-muted)]">
@@ -272,9 +272,9 @@ export default function Home() {
 
       <section className="section-shell">
         <SectionHeading
-          eyebrow="Trust and proof"
-          title="People should understand why a profile or brief is worth taking seriously."
-          description="That is why services, portfolio items, job details, and messaging flow are part of the same product."
+          eyebrow="Proof and detail"
+          title="A profile or brief should make sense quickly."
+          description="That is why services, work samples, job details, and messaging flow live in the same product."
         />
         <div className="section-grid mt-6">
           {homeContent.proofCards.slice(0, 3).map((card, index) => {

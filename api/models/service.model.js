@@ -10,10 +10,14 @@ const ServiceSchema = new Schema(
         title: {
             type: String,
             required: true,
+            trim: true,
+            maxlength: 140,
         },
         desc: {
             type: String,
             required: true,
+            trim: true,
+            maxlength: 5000,
         },
         totalStars: {
             type: Number,
@@ -48,19 +52,31 @@ const ServiceSchema = new Schema(
         },
         cover: {
             type: String,
-            required: true,
+            required: false,
+            trim: true,
+            maxlength: 500,
         },
         images: {
             type: [String],
             required: false,
         },
+        bestFor: {
+            type: String,
+            required: false,
+            trim: true,
+            maxlength: 300,
+        },
         shortTitle: {
             type: String,
-            required: true,
+            required: false,
+            trim: true,
+            maxlength: 120,
         },
         shortDesc: {
             type: String,
-            required: true,
+            required: false,
+            trim: true,
+            maxlength: 300,
         },
         deliveryTime: {
             type: Number, // Days for fixed price projects
@@ -72,7 +88,11 @@ const ServiceSchema = new Schema(
             default: 2,
         },
         features: {
-            type: [String],
+            type: [{
+                type: String,
+                trim: true,
+                maxlength: 160,
+            }],
             required: false,
         },
         sales: {

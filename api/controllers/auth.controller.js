@@ -1,5 +1,6 @@
 import User from "../models/user.model.js";
 import createError from "../utils/createError.js";
+import { createValidationError } from "../utils/validationErrors.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
@@ -52,11 +53,20 @@ const authCookieOptions = () => ({
 // REGISTER CONTROLLER
 export const register = async (req, res, next) => {
   try {
-    const { username, email, password, country } = req.body;
+    const username = typeof req.body.username === "string" ? req.body.username.trim() : "";
+    const email = typeof req.body.email === "string" ? req.body.email.trim() : "";
+    const password = req.body.password;
+    const country = typeof req.body.country === "string" ? req.body.country.trim() : "";
     const normalizedRole = resolveRole(req.body);
 
     if (!username || !email || !password) {
-      return next(createError(400, "username, email and password are required."));
+      return next(
+        createValidationError([
+          ...(!username ? [{ field: "username", message: "username is required." }] : []),
+          ...(!email ? [{ field: "email", message: "email is required." }] : []),
+          ...(!password ? [{ field: "password", message: "password is required." }] : []),
+        ])
+      );
     }
 
     // Check if user already exists
@@ -65,7 +75,22 @@ export const register = async (req, res, next) => {
     });
 
     if (existingUser) {
-      return next(createError(400, "User with this email or username already exists!"));
+      const duplicateErrors = [
+        ...(existingUser.email === email ? [{ field: "email", message: "An account with this email already exists." }] : []),
+        ...(existingUser.username === username ? [{ field: "username", message: "That username is already taken." }] : []),
+      ];
+
+      return next(
+        createValidationError(
+          duplicateErrors.length > 0 ? duplicateErrors : [{ message: "User with this email or username already exists." }],
+          {
+            message:
+              duplicateErrors.length > 1
+                ? "This email and username are already in use."
+                : duplicateErrors[0]?.message || "User with this email or username already exists.",
+          }
+        )
+      );
     }
 
     const hash = bcrypt.hashSync(password, 10);
@@ -96,22 +121,37 @@ export const register = async (req, res, next) => {
 // LOGIN CONTROLLER
 export const login = async (req, res, next) => {
   try {
+    const loginIdentifier = typeof req.body.username === "string" ? req.body.username.trim() : "";
+    const password = typeof req.body.password === "string" ? req.body.password : "";
+    const invalidCredentialsError = () =>
+      createValidationError(
+        [
+          { field: "username", message: "Check your username or email and password." },
+          { field: "password", message: "Check your username or email and password." },
+        ],
+        { message: "Check your username or email and password." }
+      );
+
     const user = await User.findOne({
       $or: [
-        { username: req.body.username },
-        { email: req.body.username }
+        { username: loginIdentifier },
+        { email: loginIdentifier }
       ]
     });
 
-    if (!user) return next(createError(404, "User not found!"));
+    if (!user) return next(invalidCredentialsError());
 
     if (!user.password) {
-      return next(createError(400, "Please sign in with Google for this account."));
+      return next(
+        createValidationError(
+          [{ field: "password", message: "This account uses Google sign-in. Choose Google to continue." }],
+          { message: "This account uses Google sign-in. Choose Google to continue." }
+        )
+      );
     }
 
-    const isCorrect = bcrypt.compareSync(req.body.password, user.password);
-    if (!isCorrect)
-      return next(createError(400, "Wrong password or username!"));
+    const isCorrect = bcrypt.compareSync(password, user.password);
+    if (!isCorrect) return next(invalidCredentialsError());
 
     const token = signSessionToken(user);
 

@@ -1,16 +1,31 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { Building2, Calendar, Globe2, MapPin } from "lucide-react";
+import { Building2, Calendar, Globe2, MapPin, Users } from "lucide-react";
 import { clientApi } from "@/lib/api";
+import {
+  briefExpertTypeLabels,
+  communicationPreferenceLabels,
+  documentationExpectationLabels,
+  engagementPreferenceLabels,
+} from "@/lib/hiring-signals";
 import type { ClientProfilePublic } from "@/types";
 import { Avatar } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
 export default function ClientPublicProfile() {
   const { clientId } = useParams();
   const [profile, setProfile] = useState<ClientProfilePublic | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  usePageMeta({
+    title: profile ? `${profile.client.companyName || profile.client.username} | n8nExperts` : "Client Profile | n8nExperts",
+    description: profile
+      ? profile.client.desc || profile.client.teamDescription || "Review this client profile, hiring context, and activity signals."
+      : "Review this client profile, hiring context, and activity signals.",
+    canonicalPath: clientId ? `/clients/${clientId}` : undefined,
+  });
 
   useEffect(() => {
     const run = async () => {
@@ -95,6 +110,61 @@ export default function ClientPublicProfile() {
                 {item}
               </Badge>
             ))}
+          </div>
+        )}
+
+        {client.hiringContext && (
+          <div className="mt-6 rounded-2xl border border-white/10 bg-white/5 p-5">
+            <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-sky-300">
+              <Users className="h-4 w-4" />
+              Hiring context
+            </p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {client.hiringContext.expertTypeNeeded && (
+                <Badge variant="secondary">{briefExpertTypeLabels[client.hiringContext.expertTypeNeeded]}</Badge>
+              )}
+              {client.hiringContext.communicationPreference && (
+                <Badge variant="secondary">{communicationPreferenceLabels[client.hiringContext.communicationPreference]}</Badge>
+              )}
+              {client.hiringContext.documentationExpectation && (
+                <Badge variant="secondary">
+                  {documentationExpectationLabels[client.hiringContext.documentationExpectation]}
+                </Badge>
+              )}
+              {client.hiringContext.engagementPreference && (
+                <Badge variant="secondary">{engagementPreferenceLabels[client.hiringContext.engagementPreference]}</Badge>
+              )}
+            </div>
+            <div className="mt-4 grid gap-4 md:grid-cols-2">
+              {client.hiringContext.automationGoal && (
+                <div>
+                  <p className="text-xs uppercase tracking-[0.16em] text-slate-500">Automation goal</p>
+                  <p className="mt-2 text-sm text-slate-200">{client.hiringContext.automationGoal}</p>
+                </div>
+              )}
+              {client.hiringContext.successDefinition && (
+                <div>
+                  <p className="text-xs uppercase tracking-[0.16em] text-slate-500">Success definition</p>
+                  <p className="mt-2 text-sm text-slate-200">{client.hiringContext.successDefinition}</p>
+                </div>
+              )}
+              {client.hiringContext.timezoneOverlap && (
+                <div>
+                  <p className="text-xs uppercase tracking-[0.16em] text-slate-500">Timezone overlap</p>
+                  <p className="mt-2 text-sm text-slate-200">{client.hiringContext.timezoneOverlap}</p>
+                </div>
+              )}
+              {(client.hiringContext.currentPainPoints || []).length > 0 && (
+                <div>
+                  <p className="text-xs uppercase tracking-[0.16em] text-slate-500">Current pain points</p>
+                  <ul className="mt-2 space-y-2 text-sm text-slate-200">
+                    {client.hiringContext.currentPainPoints?.map((item) => (
+                      <li key={item}>- {item}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
           </div>
         )}
       </section>

@@ -78,8 +78,8 @@ export function Footer({ tone = "full" }: { tone?: "full" | "compact" }) {
         </div>
 
         <div className="mt-10 flex flex-col gap-3 border-t border-white/10 pt-6 text-sm text-[var(--color-text-muted)] md:flex-row md:items-center md:justify-between">
-          <p>(c) {new Date().getFullYear()} n8nExperts. Built for automation teams that need more trust and context.</p>
-          <p>Public discovery, hiring workflow, and role-based workspace routes are live.</p>
+          <p>(c) {new Date().getFullYear()} n8nExperts. Built for teams hiring n8n experts and experts looking for serious work.</p>
+          <p>Browse experts, compare jobs, and move into the right workflow without losing context.</p>
         </div>
       </div>
     </footer>

@@ -1,11 +1,16 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { MoreVertical, Paperclip, Search, Send, X } from "lucide-react";
+import { Link } from "react-router-dom";
+import { BriefcaseBusiness, MoreVertical, Paperclip, Search, Send, X } from "lucide-react";
 import { chatApi } from "@/lib/api";
 import { useAuth } from "@/hooks/useAuth";
+import { usePageMeta } from "@/hooks/usePageMeta";
 import type { WorkspaceMessage, WorkspaceThread } from "@/types";
 import { Avatar } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { AppPageHeader, EmptyState, StatStrip } from "@/components/layout/PagePrimitives";
+import { formatRelativeTime } from "@/lib/utils";
 
 const buildAttachmentFromUrl = (value: string) => {
   const trimmed = value.trim();
@@ -24,6 +29,24 @@ const buildAttachmentFromUrl = (value: string) => {
   }
 };
 
+const threadContextVariant = (thread: WorkspaceThread) => {
+  if (thread.applicationId) return "success" as const;
+  if (thread.invitationId) return "warning" as const;
+  return "outline" as const;
+};
+
+const threadContextLabel = (thread: WorkspaceThread) => {
+  if (thread.applicationId) return "Application context";
+  if (thread.invitationId) return "Invitation context";
+  return "Job context";
+};
+
+const jobStatusVariant = (status?: string) => {
+  if (status === "completed") return "success" as const;
+  if (status === "in_progress") return "warning" as const;
+  return "outline" as const;
+};
+
 export default function Inbox() {
   const { user } = useAuth();
   const [threads, setThreads] = useState<WorkspaceThread[]>([]);
@@ -40,6 +63,13 @@ export default function Inbox() {
   const [error, setError] = useState("");
   const [sending, setSending] = useState(false);
 
+  usePageMeta({
+    title: "Inbox | n8nExperts",
+    description: "Job-scoped chat with application and invitation context for active workspace conversations.",
+    canonicalPath: "/inbox",
+    noIndex: true,
+  });
+
   const selectedThread = useMemo(() => threads.find((thread) => thread._id === selectedThreadId) || null, [threads, selectedThreadId]);
 
   const loadThreads = useCallback(async () => {
@@ -50,6 +80,9 @@ export default function Inbox() {
       setThreads(response.data.threads);
       if (!selectedThreadId && response.data.threads.length > 0) {
         setSelectedThreadId(response.data.threads[0]._id);
+      }
+      if (selectedThreadId && response.data.threads.every((thread) => thread._id !== selectedThreadId)) {
+        setSelectedThreadId(response.data.threads[0]?._id || null);
       }
     } catch (err: unknown) {
       const apiError = err as { response?: { data?: { message?: string } } };
@@ -178,32 +211,46 @@ export default function Inbox() {
     setPendingAttachments((prev) => prev.filter((item) => item.url !== url));
   };
 
+  const selectedJob = selectedThread && typeof selectedThread.jobId !== "string" ? selectedThread.jobId : null;
+  const unreadTotal = threads.reduce((sum, thread) => sum + unreadCountForThread(thread), 0);
+
   return (
     <div className="container py-8">
-      <section className="panel p-6 md:p-8 mb-6">
-        <h1 className="text-3xl md:text-4xl font-extrabold text-white">Inbox</h1>
-        <p className="mt-2 text-slate-300">Job-scoped chat with thread search, message search, and attachment links.</p>
-      </section>
+      <AppPageHeader
+        eyebrow="Workspace inbox"
+        title="Inbox"
+        description="Job-scoped chat with clearer application or invitation context so each thread tells you what work it belongs to."
+      >
+        <StatStrip
+          items={[
+            { label: "Threads", value: threads.length },
+            { label: "Unread", value: unreadTotal, hint: "Unread count from your side of each thread." },
+            { label: "Selected", value: selectedThread ? threadContextLabel(selectedThread) : "None" },
+          ]}
+        />
+      </AppPageHeader>
 
-      {error && <div className="rounded-lg border border-red-400/30 bg-red-500/10 p-3 text-sm text-red-200 mb-4">{error}</div>}
+      {error && <div className="rounded-lg border border-red-400/30 bg-red-500/10 p-3 text-sm text-red-200 mt-6">{error}</div>}
 
-      <div className="grid lg:grid-cols-[340px_1fr] gap-6">
+      <div className="grid lg:grid-cols-[340px_1fr] gap-6 mt-6">
         <aside className="panel p-4 space-y-2 h-[calc(100vh-16rem)] overflow-y-auto">
           <div className="relative mb-2">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
-            <Input
-              className="pl-10"
-              value={threadSearch}
-              onChange={(event) => setThreadSearch(event.target.value)}
-              placeholder="Search threads"
-            />
+            <Input className="pl-10" value={threadSearch} onChange={(event) => setThreadSearch(event.target.value)} placeholder="Search threads" />
           </div>
           {loadingThreads && <p className="text-sm text-slate-300">Loading threads...</p>}
-          {!loadingThreads && threads.length === 0 && <p className="text-sm text-slate-300">No threads yet.</p>}
+          {!loadingThreads && threads.length === 0 && (
+            <EmptyState
+              title="No threads yet."
+              description="Threads appear after an invitation or application creates a real job-scoped conversation."
+              className="py-8"
+            />
+          )}
           {threads.map((thread) => {
             const peer = getPeer(thread);
             const job = typeof thread.jobId === "string" ? null : thread.jobId;
             const unread = unreadCountForThread(thread);
+
             return (
               <button
                 key={thread._id}
@@ -215,33 +262,75 @@ export default function Inbox() {
                 <div className="flex items-center justify-between gap-2">
                   <div className="flex items-center gap-2">
                     <Avatar src={peer?.img} fallback={peer?.username || "U"} className="h-8 w-8" />
-                    <p className="text-sm font-semibold text-white">{peer?.username || "Participant"}</p>
+                    <div>
+                      <p className="text-sm font-semibold text-white">{peer?.username || "Participant"}</p>
+                      <p className="mt-1 text-[11px] text-slate-400 line-clamp-1">{job?.title || "Job thread"}</p>
+                    </div>
                   </div>
                   {unread > 0 && <span className="rounded-full bg-primary px-2 py-0.5 text-xs font-bold text-white">{unread}</span>}
                 </div>
-                <p className="mt-1 text-xs text-slate-400 line-clamp-1">{job?.title || "Job Thread"}</p>
-                <p className="mt-2 text-xs text-slate-300 line-clamp-1">{thread.lastMessage || "No messages yet."}</p>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  <Badge variant={threadContextVariant(thread)}>{threadContextLabel(thread)}</Badge>
+                  {job?.status && <Badge variant={jobStatusVariant(job.status)}>{job.status}</Badge>}
+                  <Badge variant="outline">{formatRelativeTime(thread.updatedAt)}</Badge>
+                </div>
+                <p className="mt-2 text-xs text-slate-300 line-clamp-2">{thread.lastMessage || "No messages yet."}</p>
               </button>
             );
           })}
         </aside>
 
         <section className="panel p-4 flex flex-col h-[calc(100vh-16rem)]">
-          {!selectedThread && <p className="text-sm text-slate-300">Select a thread to start chatting.</p>}
+          {!selectedThread && (
+            <EmptyState
+              title="Select a thread to start chatting."
+              description="Once you pick a thread, the header will show the related job, current context, and next route back into the workspace."
+              className="py-12"
+            />
+          )}
           {selectedThread && (
             <>
               <div className="rounded-lg border border-white/10 bg-white/5 p-3">
                 <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <p className="text-sm font-semibold text-white">
-                      {(() => {
-                        const peer = getPeer(selectedThread);
-                        return peer?.username || "Thread";
-                      })()}
-                    </p>
-                    <p className="text-xs text-slate-400 mt-1">
-                      {typeof selectedThread.jobId === "string" ? "Job" : selectedThread.jobId.title}
-                    </p>
+                  <div className="space-y-3">
+                    <div>
+                      <p className="text-sm font-semibold text-white">
+                        {(() => {
+                          const peer = getPeer(selectedThread);
+                          return peer?.username || "Thread";
+                        })()}
+                      </p>
+                      <div className="mt-2 flex flex-wrap gap-2">
+                        <Badge variant={threadContextVariant(selectedThread)}>{threadContextLabel(selectedThread)}</Badge>
+                        {selectedJob?.status && <Badge variant={jobStatusVariant(selectedJob.status)}>{selectedJob.status}</Badge>}
+                      </div>
+                    </div>
+                    <div className="rounded-xl border border-white/10 bg-black/10 p-3 text-sm text-slate-300">
+                      <p className="inline-flex items-center gap-2 font-semibold text-white">
+                        <BriefcaseBusiness className="h-4 w-4" />
+                        {selectedJob?.title || "Job"}
+                      </p>
+                      <p className="mt-2 text-xs text-slate-400">
+                        {selectedThread.applicationId
+                          ? "This thread is attached to an application, so proposal context already exists in the workspace."
+                          : selectedThread.invitationId
+                            ? "This thread was opened from an invitation context."
+                            : "This thread is tied to a specific job even if the application metadata is light."}
+                      </p>
+                      <div className="mt-3 flex flex-wrap gap-3 text-xs">
+                        {selectedJob?._id && (
+                          <Link
+                            to={user?.role === "expert" ? `/jobs?jobId=${selectedJob._id}` : `/my-jobs?jobId=${selectedJob._id}`}
+                            className="text-sky-300 hover:underline"
+                          >
+                            Open job
+                          </Link>
+                        )}
+                        <Link to={user?.role === "expert" ? "/my-applications" : "/my-jobs"} className="text-sky-300 hover:underline">
+                          Open {user?.role === "expert" ? "my applications" : "my jobs"}
+                        </Link>
+                      </div>
+                    </div>
                   </div>
                   <div className="relative">
                     <Button size="sm" variant="outline" onClick={() => setShowThreadTools((prev) => !prev)}>
@@ -272,7 +361,13 @@ export default function Inbox() {
 
               <div className="mt-4 flex-1 overflow-y-auto space-y-3 pr-1">
                 {loadingMessages && <p className="text-sm text-slate-300">Loading messages...</p>}
-                {!loadingMessages && messages.length === 0 && <p className="text-sm text-slate-300">No messages yet.</p>}
+                {!loadingMessages && messages.length === 0 && (
+                  <EmptyState
+                    title="No messages yet."
+                    description="Send the first reply when you are ready to move the job conversation forward."
+                    className="py-10"
+                  />
+                )}
                 {messages.map((message) => {
                   const sender = typeof message.senderId === "string" ? null : message.senderId;
                   const mine = (typeof message.senderId === "string" ? message.senderId : message.senderId._id) === user?._id;
@@ -310,11 +405,11 @@ export default function Inbox() {
               <div className="mt-3 flex gap-2">
                 <Input
                   value={attachmentUrl}
-                  onChange={(e) => setAttachmentUrl(e.target.value)}
+                  onChange={(event) => setAttachmentUrl(event.target.value)}
                   placeholder="Attachment URL (optional)"
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      e.preventDefault();
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter") {
+                      event.preventDefault();
                       addAttachment();
                     }
                   }}
@@ -348,11 +443,11 @@ export default function Inbox() {
               <div className="mt-4 flex gap-2">
                 <Input
                   value={messageText}
-                  onChange={(e) => setMessageText(e.target.value)}
+                  onChange={(event) => setMessageText(event.target.value)}
                   placeholder="Type a message"
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      e.preventDefault();
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter") {
+                      event.preventDefault();
                       sendMessage();
                     }
                   }}

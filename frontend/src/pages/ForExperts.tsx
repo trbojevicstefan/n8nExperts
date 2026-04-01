@@ -49,8 +49,8 @@ export default function ForExperts() {
       <section className="section-shell">
         <SectionHeading
           eyebrow="Why experts join"
-          title="This is for experts who want their work to make sense at a glance."
-          description="The value is not only finding jobs. It is helping clients understand how you work and why they should trust you."
+          title="This is for experts who want their work to make sense quickly."
+          description="The value is not only finding jobs. It is helping clients understand what you build and why they should trust you."
         />
         <div className="section-grid mt-6">
           {forExpertsContent.benefits.map((benefit, index) => {
@@ -70,12 +70,12 @@ export default function ForExperts() {
         <SectionHeading
           eyebrow="What strong experts should show"
           title="A good profile does more than list tools."
-          description="It tells a client what you do best, what proof you have, and how to hire you."
+          description="It tells a client what you do best, what proof you have, and how to hire you without extra back-and-forth."
         />
         <div className="mt-6 grid gap-4 lg:grid-cols-2">
           {[
             "Headline and bio that explain the kind of automation outcomes you are best at.",
-            "Portfolio entries that show problem, systems involved, and practical delivery context.",
+            "Work samples that show the problem, systems involved, and delivery context.",
             "Services that make common entry points or scoped offers easier for clients to understand.",
             "Availability, pricing, and engagement preferences that reduce avoidable back-and-forth.",
           ].map((item) => (
@@ -119,7 +119,7 @@ export default function ForExperts() {
       <ConversionRail
         eyebrow="Expert next step"
         title="Start by publishing the kind of proof serious buyers can understand."
-        description="Choose the expert role to create your account, then complete profile and service surfaces so clients can evaluate fit earlier and more confidently."
+        description="Choose the expert role to create your account, then complete your profile and services so clients can understand your fit earlier."
         primaryAction={user?.role === "client" ? { label: "Find Experts", href: "/find-experts" } : user ? { label: "Open Profile", href: "/expert/setup" } : { label: "Create Expert Account", href: "/auth/register?role=expert" }}
         secondaryAction={user?.role === "client" ? { label: "Post Project", href: "/post-project" } : { label: "Browse Jobs", href: "/jobs" }}
       />

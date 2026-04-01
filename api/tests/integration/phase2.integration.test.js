@@ -208,6 +208,153 @@ test("client public profile exposes trust metrics and hides private fields", asy
   assert.equal(meResponse.body.email, "client.public@example.com");
 });
 
+test("structured job brief and client hiring context round-trip through the api", async () => {
+  const clientCookie = await registerAndGetCookie({
+    username: "client_structured",
+    email: "client.structured@example.com",
+    role: "client",
+  });
+
+  const profileUpdateResponse = await request(app)
+    .patch("/api/clients/me/profile")
+    .set("Cookie", clientCookie)
+    .send({
+      companyName: "Acme Ops",
+      hiringContext: {
+        automationGoal: "Reduce manual support routing and improve visibility.",
+        currentPainPoints: ["Manual queue handoff", "No failure alerts"],
+        expertTypeNeeded: "builder",
+        successDefinition: "Tickets route automatically with a clear owner and recovery notes.",
+        communicationPreference: "async_updates",
+        timezoneOverlap: "At least 3 weekday overlap hours",
+        documentationExpectation: "standard",
+        engagementPreference: "ongoing",
+      },
+    });
+
+  assert.equal(profileUpdateResponse.status, 200);
+  assert.equal(profileUpdateResponse.body.hiringContext.automationGoal, "Reduce manual support routing and improve visibility.");
+  assert.deepEqual(profileUpdateResponse.body.hiringContext.currentPainPoints, ["Manual queue handoff", "No failure alerts"]);
+
+  const jobResponse = await request(app)
+    .post("/api/jobs")
+    .set("Cookie", clientCookie)
+    .send({
+      title: "Structured job brief for support triage overhaul",
+      description: "Need a stronger brief payload with outcome, systems, and delivery context for specialist matching.",
+      budgetType: "fixed",
+      budgetAmount: 2400,
+      visibility: "public",
+      skills: ["n8n", "Slack", "HubSpot"],
+      brief: {
+        outcome: "Automatically route support tickets and assign owners within two minutes.",
+        systems: ["n8n", "HubSpot"],
+        integrations: ["Slack", "Zendesk API"],
+        constraints: ["Cannot change CRM object model", "Needs audit logging"],
+        deliverables: ["Production workflow", "Rollback notes", "Operator runbook"],
+        timeline: "Pilot before May 15 and full rollout by month end.",
+        successCriteria: ["Routing runs within two minutes", "Ops can recover failures with docs"],
+        hiringPreferences: {
+          expertTypeNeeded: "builder",
+          handoffExpectation: "documentation_and_training",
+        },
+      },
+    });
+
+  assert.equal(jobResponse.status, 201);
+  assert.equal(jobResponse.body.brief.outcome, "Automatically route support tickets and assign owners within two minutes.");
+  assert.equal(jobResponse.body.brief.hiringPreferences.handoffExpectation, "documentation_and_training");
+
+  const singleJobResponse = await request(app).get(`/api/jobs/${jobResponse.body._id}`);
+  assert.equal(singleJobResponse.status, 200);
+  assert.equal(singleJobResponse.body.brief.systems.length, 2);
+  assert.equal(singleJobResponse.body.brief.deliverables.length, 3);
+
+  const publicProfileResponse = await request(app).get(`/api/clients/${profileUpdateResponse.body._id}/public`);
+  assert.equal(publicProfileResponse.status, 200);
+  assert.equal(publicProfileResponse.body.client.hiringContext.expertTypeNeeded, "builder");
+  assert.equal(publicProfileResponse.body.client.hiringContext.communicationPreference, "async_updates");
+});
+
+test("validation responses include structured field errors for flat and nested payloads", async () => {
+  const invalidRegisterResponse = await request(app).post("/api/auth/register").send({
+    username: "ab",
+    email: "a@",
+    password: "",
+    role: "expert",
+  });
+
+  assert.equal(invalidRegisterResponse.status, 400);
+  assert.equal(typeof invalidRegisterResponse.body.message, "string");
+  assert.ok(Array.isArray(invalidRegisterResponse.body.errors));
+  assert.ok(invalidRegisterResponse.body.errors.some((item) => item.field === "username"));
+  assert.ok(invalidRegisterResponse.body.errors.some((item) => item.field === "email"));
+  assert.ok(invalidRegisterResponse.body.errors.some((item) => item.field === "password"));
+
+  const clientCookie = await registerAndGetCookie({
+    username: "client_validation",
+    email: "client.validation@example.com",
+    role: "client",
+  });
+
+  const invalidJobResponse = await request(app)
+    .post("/api/jobs")
+    .set("Cookie", clientCookie)
+    .send({
+      title: "Invalid nested brief payload",
+      description: "This request intentionally sends invalid nested fields so the API returns structured validation details.",
+      budgetType: "fixed",
+      budgetAmount: 1200,
+      skills: ["n8n"],
+      brief: {
+        systems: [42],
+        hiringPreferences: {
+          expertTypeNeeded: "invalid",
+        },
+      },
+    });
+
+  assert.equal(invalidJobResponse.status, 400);
+  assert.ok(Array.isArray(invalidJobResponse.body.errors));
+  assert.ok(invalidJobResponse.body.errors.some((item) => item.field === "brief.systems[0]"));
+  assert.ok(
+    invalidJobResponse.body.errors.some((item) => item.field === "brief.hiringPreferences.expertTypeNeeded")
+  );
+});
+
+test("service creation derives short copy and allows missing cover", async () => {
+  const expertCookie = await registerAndGetCookie({
+    username: "expert_service_defaults",
+    email: "expert.service.defaults@example.com",
+    role: "expert",
+  });
+
+  const response = await request(app)
+    .post("/api/services")
+    .set("Cookie", expertCookie)
+    .send({
+      title: "Audit an existing n8n workflow for reliability and handoff gaps",
+      desc: "Included:\n- Workflow review with issue list\n- Failure-risk notes\n- Prioritized fixes\n\nBest for:\nTeams with brittle live automations that need a second opinion before another rebuild.",
+      bestFor: "Teams with brittle live automations that need a second opinion before another rebuild.",
+      features: ["Workflow review with issue list", "Failure-risk notes", "Prioritized fixes"],
+      serviceType: "Fixed Price",
+      price: 350,
+      deliveryTime: 3,
+      revisionNumber: 1,
+    });
+
+  assert.equal(response.status, 201);
+  assert.equal(response.body.cover, undefined);
+  assert.equal(response.body.shortTitle, "Audit an existing n8n workflow for reliability and handoff gaps");
+  assert.equal(response.body.shortDesc, "Teams with brittle live automations that need a second opinion before another rebuild.");
+  assert.deepEqual(response.body.features, ["Workflow review with issue list", "Failure-risk notes", "Prioritized fixes"]);
+
+  const savedService = await Service.findById(response.body._id).lean();
+  assert.ok(savedService);
+  assert.equal(savedService.cover, undefined);
+  assert.equal(savedService.shortDesc, "Teams with brittle live automations that need a second opinion before another rebuild.");
+});
+
 test("saved items and recommendation endpoints work for client/expert roles", async () => {
   const clientCookie = await registerAndGetCookie({
     username: "client_saved",

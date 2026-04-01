@@ -25,6 +25,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const login = async ({ username, password }: { username: string; password: string }) => {
     const response = await authApi.login({ username, password });
     setUser(response.data);
+    return response.data;
   };
 
   const register = async (data: {
@@ -36,6 +37,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }) => {
     const response = await authApi.register(data);
     setUser(response.data.user);
+    return response.data.user;
   };
 
   const logout = async () => {

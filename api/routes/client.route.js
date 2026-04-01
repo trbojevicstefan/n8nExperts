@@ -21,7 +21,25 @@ router.patch(
     location: { type: "string", required: false, maxLength: 120 },
     teamDescription: { type: "string", required: false, maxLength: 2000 },
     logoUrl: { type: "string", required: false, maxLength: 500 },
-    projectPreferences: { type: "array", required: false },
+    projectPreferences: { type: "array", required: false, maxItems: 12, of: { type: "string", maxLength: 120 } },
+    hiringContext: {
+      type: "object",
+      required: false,
+      schema: {
+        automationGoal: { type: "string", required: false, maxLength: 500 },
+        currentPainPoints: { type: "array", required: false, of: { type: "string", maxLength: 160 }, maxItems: 10 },
+        expertTypeNeeded: { type: "string", required: false, enum: ["builder", "consultant", "maintainer"] },
+        successDefinition: { type: "string", required: false, maxLength: 500 },
+        communicationPreference: {
+          type: "string",
+          required: false,
+          enum: ["async_updates", "weekly_live", "shared_channel", "mixed"],
+        },
+        timezoneOverlap: { type: "string", required: false, maxLength: 120 },
+        documentationExpectation: { type: "string", required: false, enum: ["light", "standard", "runbook"] },
+        engagementPreference: { type: "string", required: false, enum: ["one_off", "ongoing", "fractional"] },
+      },
+    },
   }),
   updateMyClientProfile
 );

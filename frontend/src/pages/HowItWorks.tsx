@@ -44,15 +44,15 @@ export default function HowItWorks() {
       <section className="section-shell">
         <SectionHeading
           eyebrow="Core idea"
-          title="The product is built around a few simple questions."
-          description="Who fits, why trust them, what should happen next, and where does that next step live?"
+          title="The product answers a few basic questions quickly."
+          description="Who fits, what proof matters, what happens next, and where that next step lives."
         />
         <div className="mt-6 grid gap-4 lg:grid-cols-4">
           {[
-            { icon: Compass, title: "Who fits?", body: "Public profiles and filters support earlier fit evaluation." },
-            { icon: ShieldCheck, title: "Why trust them?", body: "Portfolios, services, and profile detail make proof more visible." },
-            { icon: MessagesSquare, title: "What happens next?", body: "Invites, applications, and inbox routes create an obvious next move." },
-            { icon: Workflow, title: "How is it managed?", body: "Job, pipeline, and saved-view surfaces keep the process operational." },
+            { icon: Compass, title: "Who fits?", body: "Public profiles and filters make it easier to narrow the field early." },
+            { icon: ShieldCheck, title: "What proof is there?", body: "Services, work samples, and profile detail make claims easier to verify." },
+            { icon: MessagesSquare, title: "What happens next?", body: "Invites, applications, and inbox routes point to the next action fast." },
+            { icon: Workflow, title: "Where does it live?", body: "Jobs, notes, pipeline, and saved views keep the process organized." },
           ].map((item) => (
             <article key={item.title} className="surface-card">
               <item.icon className="h-6 w-6 text-[var(--color-accent-cool)]" />
@@ -89,8 +89,8 @@ export default function HowItWorks() {
       <section className="section-shell">
         <SectionHeading
           eyebrow="Why it helps"
-          title="Each side gets a clearer decision moment."
-          description="The point is not only listing and messaging. It is helping people decide faster and with less confusion."
+          title="Each side gets a clearer decision point."
+          description="The goal is not only listings and chat. It is helping people decide faster and with less confusion."
         />
         <div className="mt-6 grid gap-4 lg:grid-cols-3">
           {howItWorksContent.decisionPoints.slice(0, 3).map((card) => (
@@ -105,7 +105,7 @@ export default function HowItWorks() {
       <ConversionRail
         eyebrow="Next step"
         title="Move from explanation into action."
-        description="If the workflow makes sense, the next move should point directly into the live platform surface that matches your role."
+        description="If the workflow makes sense, the next move should send you straight into the live surface that matches your role."
         primaryAction={user?.role === "expert" ? { label: "Browse Jobs", href: "/jobs" } : { label: "Explore Experts", href: "/find-experts" }}
         secondaryAction={
           user

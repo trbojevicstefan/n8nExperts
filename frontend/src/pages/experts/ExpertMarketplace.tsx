@@ -16,6 +16,7 @@ export default function ExpertMarketplace() {
     title: "Find n8n Experts | n8nExperts",
     description:
       "Search n8n experts by skills, rates, and specialization. Review public portfolios and invite experts directly to client jobs.",
+    canonicalPath: "/find-experts",
   });
 
   const { user } = useAuth();

@@ -1,5 +1,7 @@
 import Service from "../models/service.model.js";
 import createError from "../utils/createError.js";
+import { normalizeServicePayload } from "../utils/servicePresentation.js";
+import { createValidationError } from "../utils/validationErrors.js";
 
 // Create a new service (experts only)
 export const createService = async (req, res, next) => {
@@ -7,15 +9,17 @@ export const createService = async (req, res, next) => {
         return next(createError(403, "Only n8n Experts can create services!"));
     }
 
-    const required = ["title", "desc", "price", "cover", "shortTitle", "shortDesc", "deliveryTime", "serviceType"];
-    const missing = required.filter((field) => req.body[field] === undefined || req.body[field] === null || req.body[field] === "");
+    const normalizedPayload = normalizeServicePayload(req.body);
+    const required = ["title", "desc", "price", "deliveryTime", "serviceType"];
+    const missing = required.filter((field) => normalizedPayload[field] === undefined || normalizedPayload[field] === null || normalizedPayload[field] === "");
     if (missing.length > 0) {
-        return next(createError(400, `Missing required fields: ${missing.join(", ")}`));
+        return next(createValidationError(missing.map((field) => ({ field, message: `${field} is required.` }))));
     }
 
     const newService = new Service({
         userId: req.userId,
         ...req.body,
+        ...normalizedPayload,
         category: "n8n Automation", // Always hardcoded
     });
 
@@ -79,6 +83,7 @@ export const getServices = async (req, res, next) => {
                 { title: { $regex: q.search, $options: "i" } },
                 { shortTitle: { $regex: q.search, $options: "i" } },
                 { desc: { $regex: q.search, $options: "i" } },
+                { bestFor: { $regex: q.search, $options: "i" } },
                 { tags: { $in: [new RegExp(q.search, 'i')] } },
             ]
         }),
@@ -135,9 +140,11 @@ export const updateService = async (req, res, next) => {
         // Prevent changing category
         delete req.body.category;
 
+        const normalizedPayload = normalizeServicePayload(req.body, service.toObject());
+
         const updatedService = await Service.findByIdAndUpdate(
             req.params.id,
-            { $set: req.body },
+            { $set: { ...req.body, ...normalizedPayload } },
             { new: true }
         );
 

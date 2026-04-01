@@ -68,6 +68,8 @@
   color-scheme: dark;
   --max-width-main: 1560px;
   --max-width-copy: 68ch;
+  --chrome-offset: 5.5rem;
+  --chrome-sticky-offset: 6.5rem;
 }
 
 *,
@@ -463,6 +465,7 @@ a {
     linear-gradient(140deg, rgba(8, 11, 19, 0.95), rgba(14, 20, 31, 0.86)),
     radial-gradient(circle at top left, rgba(132, 216, 255, 0.08), transparent 35%);
   box-shadow: 0 18px 44px rgba(0, 0, 0, 0.22);
+  scroll-margin-top: var(--chrome-sticky-offset);
 }
 
 @media (min-width: 768px) {

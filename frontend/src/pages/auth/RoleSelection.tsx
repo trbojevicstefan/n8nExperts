@@ -1,9 +1,10 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { ArrowRight, BriefcaseBusiness, ShieldCheck, UserRoundCog } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { usePageMeta } from "@/hooks/usePageMeta";
 import { ContextAside } from "@/components/layout/PagePrimitives";
+import { buildLoginPath, buildRegisterPath, readAuthIntent } from "@/lib/auth-intent";
 
 type Role = "client" | "expert" | null;
 
@@ -26,6 +27,10 @@ const roleCards = [
 
 export default function RoleSelection() {
   const [selectedRole, setSelectedRole] = useState<Role>(null);
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const intent = readAuthIntent(searchParams);
+  const continueLabel = selectedRole ? `Continue as ${selectedRole}` : "Choose a role to continue";
 
   usePageMeta({
     title: "Choose Your Role | n8nExperts",
@@ -40,9 +45,9 @@ export default function RoleSelection() {
         <div className="glass rounded-3xl p-7 md:p-8">
           <div className="relative z-10">
             <p className="eyebrow">Account setup</p>
-            <h1 className="mt-4 max-w-3xl text-4xl font-extrabold leading-tight text-white md:text-5xl">What do you want to do here?</h1>
+            <h1 className="mt-4 max-w-3xl text-4xl font-extrabold leading-tight text-white md:text-5xl">Choose how you want to use n8nExperts.</h1>
             <p className="mt-3 max-w-2xl text-sm text-[var(--color-text-secondary)] md:text-base">
-              Pick the side of the platform that matches your goal right now. You can create an account in one step after this.
+              Pick the side that matches your next step right now. You can create the right account in one more step.
             </p>
           </div>
 
@@ -89,9 +94,10 @@ export default function RoleSelection() {
         </div>
 
         <div className="relative z-10 flex flex-col gap-3 sm:flex-row sm:items-center">
-          <Link
-            to={selectedRole ? `/auth/register?role=${selectedRole}` : "#"}
-            onClick={(e) => !selectedRole && e.preventDefault()}
+          <button
+            type="button"
+            disabled={!selectedRole}
+            onClick={() => selectedRole && navigate(buildRegisterPath(selectedRole, intent))}
             className={cn(
               "inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-bold transition",
               selectedRole
@@ -99,12 +105,15 @@ export default function RoleSelection() {
                 : "cursor-not-allowed bg-white/10 text-slate-400"
             )}
           >
-            Continue
+            {continueLabel}
             <ArrowRight className="h-4 w-4" />
-          </Link>
-          <Link to="/auth/login" className="text-sm font-semibold text-[var(--color-text-secondary)] hover:text-white">
+          </button>
+          <Link to={buildLoginPath(intent)} className="text-sm font-semibold text-[var(--color-text-secondary)] hover:text-white">
             I already have an account
           </Link>
+          <p className="text-sm text-[var(--color-text-secondary)]">
+            {selectedRole ? `Next: create a ${selectedRole} account.` : "Choose client or expert to unlock the next step."}
+          </p>
         </div>
 
         <ContextAside

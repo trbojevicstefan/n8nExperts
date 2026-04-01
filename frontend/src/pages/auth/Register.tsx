@@ -3,13 +3,19 @@ import { ArrowRight, BriefcaseBusiness, UserRoundCog } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { usePageMeta } from "@/hooks/usePageMeta";
+import { cn } from "@/lib/utils";
 import type { Role } from "@/types";
 import { ContextAside } from "@/components/layout/PagePrimitives";
+import { errorFieldClassName, FieldErrorText, FormBanner } from "@/components/forms/FormFeedback";
+import { createLocalFormFeedback, getFieldFeedback, getFormFeedback } from "@/lib/form-feedback";
+import { buildLoginPath, readAuthIntent, resolvePostAuthPath } from "@/lib/auth-intent";
+import type { FormFeedbackState } from "@/types";
 
 export default function Register() {
   const [searchParams] = useSearchParams();
   const initialRole: Role = searchParams.get("role") === "expert" ? "expert" : "client";
   const [role, setRole] = useState<Role>(initialRole);
+  const intent = readAuthIntent(searchParams);
   const [formData, setFormData] = useState({
     username: "",
     email: "",
@@ -17,31 +23,38 @@ export default function Register() {
     confirmPassword: "",
     country: "US",
   });
-  const [error, setError] = useState("");
+  const [feedback, setFeedback] = useState<FormFeedbackState | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const { register } = useAuth();
   const navigate = useNavigate();
 
   usePageMeta({
-    title: "Create Account | n8nExperts",
-    description: "Create your n8nExperts account as a client hiring automation talent or an expert publishing stronger proof and services.",
+    title: `${role === "expert" ? "Create Expert Account" : "Create Client Account"} | n8nExperts`,
+    description:
+      role === "expert"
+        ? "Create your expert account to publish proof, set up your profile, and apply to n8n work."
+        : "Create your client account to post projects, compare experts, and manage applicants.",
     canonicalPath: "/auth/register",
     noIndex: true,
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
+    setFeedback(null);
 
     if (formData.password !== formData.confirmPassword) {
-      setError("Passwords do not match.");
+      setFeedback(
+        createLocalFormFeedback("Passwords do not match.", [
+          { field: "confirmPassword", message: "Passwords do not match." },
+        ])
+      );
       return;
     }
 
     setIsLoading(true);
     try {
-      await register({
+      const createdUser = await register({
         username: formData.username.trim(),
         email: formData.email.trim(),
         password: formData.password,
@@ -49,21 +62,44 @@ export default function Register() {
         role,
       });
 
-      navigate(role === "expert" ? "/expert/setup" : "/my-jobs");
+      const destination = resolvePostAuthPath(createdUser.role, intent, "register");
+      const flashText = intent.redirectPath
+        ? "Account created. You are back at the workflow step you wanted to open."
+        : createdUser.role === "expert"
+          ? "Expert account created. Start with your basics, then add one proof item to reach a usable profile."
+          : "Client account created. Start with a project brief so experts can judge the scope quickly.";
+
+      navigate(destination, {
+        replace: true,
+        state: {
+          flash: {
+            tone: "success",
+            text: flashText,
+          },
+        },
+      });
     } catch (err: unknown) {
-      const apiError = err as { response?: { data?: { message?: string } } };
-      setError(apiError.response?.data?.message || "We could not create the account. Please try again.");
+      setFeedback(getFormFeedback(err, "We could not create the account. Please try again."));
     } finally {
       setIsLoading(false);
     }
   };
 
+  const usernameError = getFieldFeedback(feedback, "username");
+  const emailError = getFieldFeedback(feedback, "email");
+  const passwordError = getFieldFeedback(feedback, "password");
+  const confirmPasswordError = getFieldFeedback(feedback, "confirmPassword");
+
   return (
     <div className="min-h-[calc(100vh-4rem)] px-4 py-10">
       <div className="container grid gap-6 lg:grid-cols-[0.95fr_0.8fr]">
         <section className="glass rounded-3xl p-7 md:p-8">
-          <h2 className="text-2xl font-extrabold text-white">Create your n8nExperts account</h2>
-          <p className="mt-2 text-sm text-slate-300">Choose what you want to do first, then create your account.</p>
+          <h2 className="text-2xl font-extrabold text-white">{role === "expert" ? "Create expert account" : "Create client account"}</h2>
+          <p className="mt-2 text-sm text-slate-300">
+            {role === "expert"
+              ? "Set up your profile, show proof of your work, and start applying to jobs."
+              : "Post projects, compare experts, and manage applicants from one workflow."}
+          </p>
 
           <div className="mt-5 grid gap-3 sm:grid-cols-2">
             <button
@@ -102,46 +138,86 @@ export default function Register() {
             <div>
               <label className="text-xs font-bold uppercase tracking-[0.16em] text-slate-400">Username</label>
               <input
-                className="mt-1.5 w-full rounded-xl border border-white/10 bg-white/5 px-3.5 py-2.5 text-white outline-none transition focus:border-primary/70 focus:ring-1 focus:ring-primary/60"
+                className={cn(
+                  "mt-1.5 w-full rounded-xl border border-white/10 bg-white/5 px-3.5 py-2.5 text-white outline-none transition focus:border-primary/70 focus:ring-1 focus:ring-primary/60",
+                  usernameError && errorFieldClassName
+                )}
                 value={formData.username}
-                onChange={(e) => setFormData((prev) => ({ ...prev, username: e.target.value }))}
+                onChange={(e) => {
+                  setFormData((prev) => ({ ...prev, username: e.target.value }));
+                  if (feedback) {
+                    setFeedback(null);
+                  }
+                }}
+                aria-invalid={Boolean(usernameError)}
                 required
               />
+              <FieldErrorText message={usernameError} className="mt-2" />
             </div>
             <div>
               <label className="text-xs font-bold uppercase tracking-[0.16em] text-slate-400">Email</label>
               <input
                 type="email"
-                className="mt-1.5 w-full rounded-xl border border-white/10 bg-white/5 px-3.5 py-2.5 text-white outline-none transition focus:border-primary/70 focus:ring-1 focus:ring-primary/60"
+                className={cn(
+                  "mt-1.5 w-full rounded-xl border border-white/10 bg-white/5 px-3.5 py-2.5 text-white outline-none transition focus:border-primary/70 focus:ring-1 focus:ring-primary/60",
+                  emailError && errorFieldClassName
+                )}
                 value={formData.email}
-                onChange={(e) => setFormData((prev) => ({ ...prev, email: e.target.value }))}
+                onChange={(e) => {
+                  setFormData((prev) => ({ ...prev, email: e.target.value }));
+                  if (feedback) {
+                    setFeedback(null);
+                  }
+                }}
+                aria-invalid={Boolean(emailError)}
                 required
               />
+              <FieldErrorText message={emailError} className="mt-2" />
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
                 <label className="text-xs font-bold uppercase tracking-[0.16em] text-slate-400">Password</label>
                 <input
                   type="password"
-                  className="mt-1.5 w-full rounded-xl border border-white/10 bg-white/5 px-3.5 py-2.5 text-white outline-none transition focus:border-primary/70 focus:ring-1 focus:ring-primary/60"
+                  className={cn(
+                    "mt-1.5 w-full rounded-xl border border-white/10 bg-white/5 px-3.5 py-2.5 text-white outline-none transition focus:border-primary/70 focus:ring-1 focus:ring-primary/60",
+                    passwordError && errorFieldClassName
+                  )}
                   value={formData.password}
-                  onChange={(e) => setFormData((prev) => ({ ...prev, password: e.target.value }))}
+                  onChange={(e) => {
+                    setFormData((prev) => ({ ...prev, password: e.target.value }));
+                    if (feedback) {
+                      setFeedback(null);
+                    }
+                  }}
+                  aria-invalid={Boolean(passwordError)}
                   required
                 />
+                <FieldErrorText message={passwordError} className="mt-2" />
               </div>
               <div>
                 <label className="text-xs font-bold uppercase tracking-[0.16em] text-slate-400">Confirm Password</label>
                 <input
                   type="password"
-                  className="mt-1.5 w-full rounded-xl border border-white/10 bg-white/5 px-3.5 py-2.5 text-white outline-none transition focus:border-primary/70 focus:ring-1 focus:ring-primary/60"
+                  className={cn(
+                    "mt-1.5 w-full rounded-xl border border-white/10 bg-white/5 px-3.5 py-2.5 text-white outline-none transition focus:border-primary/70 focus:ring-1 focus:ring-primary/60",
+                    confirmPasswordError && errorFieldClassName
+                  )}
                   value={formData.confirmPassword}
-                  onChange={(e) => setFormData((prev) => ({ ...prev, confirmPassword: e.target.value }))}
+                  onChange={(e) => {
+                    setFormData((prev) => ({ ...prev, confirmPassword: e.target.value }));
+                    if (feedback) {
+                      setFeedback(null);
+                    }
+                  }}
+                  aria-invalid={Boolean(confirmPasswordError)}
                   required
                 />
+                <FieldErrorText message={confirmPasswordError} className="mt-2" />
               </div>
             </div>
 
-            {error && <div className="rounded-xl border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-300">{error}</div>}
+            <FormBanner message={feedback?.summary} />
 
             <button
               type="submit"
@@ -155,12 +231,18 @@ export default function Register() {
 
           <div className="mt-6 rounded-2xl border border-white/8 bg-white/5 p-4 text-sm text-[var(--color-text-secondary)]">
             <p className="font-semibold text-white">After signup</p>
-            <p className="mt-2">{role === "expert" ? "You will land on your profile setup page and fill in the basics first." : "You will land in your job dashboard and can post a job right away."}</p>
+            <p className="mt-2">
+              {intent.redirectPath
+                ? `After signup, we will return you to ${intent.redirectPath}.`
+                : role === "expert"
+                  ? "You will land on your profile setup page and fill in the basics first."
+                  : "You will land in the post-project flow and can publish your brief right away."}
+            </p>
           </div>
 
           <p className="mt-5 text-sm text-slate-300">
             Already have an account?
-            <Link to="/auth/login" className="ml-1.5 font-semibold text-primary hover:underline">
+            <Link to={buildLoginPath(intent)} className="ml-1.5 font-semibold text-primary hover:underline">
               Log in
             </Link>
           </p>

@@ -9,6 +9,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { usePageMeta } from "@/hooks/usePageMeta";
+import { useRouteFlash } from "@/hooks/useRouteFlash";
+import { JobBriefDetails, JobBriefSignals } from "@/components/jobs/JobBriefView";
 import { AppPageHeader, EmptyState, FilterToolbar, StatStrip } from "@/components/layout/PagePrimitives";
 
 const pipelineStatuses = ["submitted", "shortlisted", "accepted", "rejected"] as const;
@@ -37,6 +39,7 @@ const isPipelineStatus = (value: string | null): value is PipelineStatus =>
 const isPipelineFilter = (value: string | null): value is PipelineFilter => value === "all" || isPipelineStatus(value);
 
 export default function MyJobs() {
+  const flash = useRouteFlash();
   const [searchParams, setSearchParams] = useSearchParams();
   const [jobs, setJobs] = useState<Job[]>([]);
   const [selectedJobId, setSelectedJobId] = useState<string | null>(null);
@@ -57,6 +60,7 @@ export default function MyJobs() {
     title: "My Jobs | n8nExperts",
     description: "Review posted jobs, track job states, manage applicants, and move accepted work through a cleaner client workflow.",
     canonicalPath: "/my-jobs",
+    noIndex: true,
   });
 
   const selectedJob = useMemo(() => jobs.find((job) => job._id === selectedJobId) || null, [jobs, selectedJobId]);
@@ -317,6 +321,20 @@ export default function MyJobs() {
         />
       </AppPageHeader>
 
+      {flash && (
+        <div
+          className={`rounded-lg px-3 py-2 text-sm mb-5 ${
+            flash.tone === "success"
+              ? "border border-emerald-500/20 bg-emerald-500/10 text-emerald-200"
+              : flash.tone === "error"
+                ? "border border-red-500/20 bg-red-500/10 text-red-200"
+                : "border border-sky-500/20 bg-sky-500/10 text-sky-200"
+          }`}
+        >
+          {flash.text}
+        </div>
+      )}
+
       {error && <div className="rounded-lg border border-red-400/30 bg-red-500/10 p-3 text-sm text-red-200 mb-5">{error}</div>}
 
       <div className="grid lg:grid-cols-3 gap-6 mt-6">
@@ -389,6 +407,15 @@ export default function MyJobs() {
               </div>
             )}
           </div>
+
+          {selectedJob && (
+            <div className="mt-4 rounded-2xl border border-white/10 bg-white/5 p-4">
+              <p className="text-xs uppercase tracking-[0.16em] text-slate-500">Overview</p>
+              <p className="mt-2 text-sm text-slate-200">{selectedJob.description}</p>
+              <JobBriefSignals job={selectedJob} className="mt-3" />
+              {selectedJob.brief && <JobBriefDetails brief={selectedJob.brief} className="mt-4" />}
+            </div>
+          )}
 
           {selectedJob && (
             <FilterToolbar className="mt-4" title="Filter this job's applicant queue">

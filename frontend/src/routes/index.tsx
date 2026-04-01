@@ -9,6 +9,7 @@ const ForClients = lazy(() => import("@/pages/ForClients"));
 const ForExperts = lazy(() => import("@/pages/ForExperts"));
 const Trust = lazy(() => import("@/pages/Trust"));
 const RoleSelection = lazy(() => import("@/pages/auth/RoleSelection"));
+const AccessRequired = lazy(() => import("@/pages/auth/AccessRequired"));
 const Login = lazy(() => import("@/pages/auth/Login"));
 const Register = lazy(() => import("@/pages/auth/Register"));
 const ExpertWizard = lazy(() => import("@/pages/onboarding/ExpertWizard"));
@@ -67,37 +68,38 @@ const router = createBrowserRouter([
       { path: "/auth/login", element: withSuspense(<Login />) },
       { path: "/auth/register", element: withSuspense(<Register />) },
       { path: "/auth/role-select", element: withSuspense(<RoleSelection />) },
+      { path: "/auth/access-required", element: withSuspense(<AccessRequired />) },
     ],
   },
   {
-    element: <RequireAuth />,
+    element: <AppLayout />,
     children: [
       {
-        element: <AppLayout />,
+        element: <RequireAuth />,
         children: [
           { path: "/inbox", element: withSuspense(<Inbox />) },
           { path: "/notifications", element: withSuspense(<NotificationsPage />) },
           { path: "/saved-searches", element: withSuspense(<SavedSearches />) },
-          {
-            element: <RequireRole role="client" />,
-            children: [
-              { path: "/post-project", element: withSuspense(<PostProject />) },
-              { path: "/my-jobs", element: withSuspense(<MyJobs />) },
-              { path: "/my-jobs/pipeline", element: withSuspense(<ApplicantPipeline />) },
-              { path: "/client/profile", element: withSuspense(<ClientProfileEdit />) },
-              { path: "/saved-experts", element: withSuspense(<SavedExperts />) },
-            ],
-          },
-          {
-            element: <RequireRole role="expert" />,
-            children: [
-              { path: "/my-applications", element: withSuspense(<MyApplications />) },
-              { path: "/saved-jobs", element: withSuspense(<SavedJobs />) },
-              { path: "/invitations", element: withSuspense(<Invitations />) },
-              { path: "/expert/services", element: withSuspense(<ExpertServices />) },
-              { path: "/expert/setup", element: withSuspense(<ExpertWizard />) },
-            ],
-          },
+        ],
+      },
+      {
+        element: <RequireRole role="client" />,
+        children: [
+          { path: "/post-project", element: withSuspense(<PostProject />) },
+          { path: "/my-jobs", element: withSuspense(<MyJobs />) },
+          { path: "/my-jobs/pipeline", element: withSuspense(<ApplicantPipeline />) },
+          { path: "/client/profile", element: withSuspense(<ClientProfileEdit />) },
+          { path: "/saved-experts", element: withSuspense(<SavedExperts />) },
+        ],
+      },
+      {
+        element: <RequireRole role="expert" />,
+        children: [
+          { path: "/my-applications", element: withSuspense(<MyApplications />) },
+          { path: "/saved-jobs", element: withSuspense(<SavedJobs />) },
+          { path: "/invitations", element: withSuspense(<Invitations />) },
+          { path: "/expert/services", element: withSuspense(<ExpertServices />) },
+          { path: "/expert/setup", element: withSuspense(<ExpertWizard />) },
         ],
       },
     ],

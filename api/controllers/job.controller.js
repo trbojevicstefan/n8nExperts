@@ -4,6 +4,7 @@ import JobApplication from "../models/jobApplication.model.js";
 import Invitation from "../models/invitation.model.js";
 import User from "../models/user.model.js";
 import createError from "../utils/createError.js";
+import { normalizeJobBrief } from "../utils/jobBrief.js";
 import { createNotification } from "../services/notification.service.js";
 import { refreshClientMetrics } from "../services/clientMetrics.service.js";
 import { ensureWorkspaceThread } from "../services/thread.service.js";
@@ -114,6 +115,7 @@ export const createJob = async (req, res, next) => {
       budgetAmount: req.body.budgetAmount,
       skills: Array.isArray(req.body.skills) ? req.body.skills : [],
       attachments: Array.isArray(req.body.attachments) ? req.body.attachments : [],
+      brief: normalizeJobBrief(req.body.brief),
       visibility: req.body.visibility || "public",
       status: "open",
     });
@@ -233,6 +235,9 @@ export const updateJob = async (req, res, next) => {
         updates[field] = req.body[field];
       }
     });
+    if (req.body.brief !== undefined) {
+      updates.brief = normalizeJobBrief(req.body.brief);
+    }
 
     const updated = await Job.findByIdAndUpdate(job._id, { $set: updates }, { new: true });
     res.status(200).json(updated);

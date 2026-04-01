@@ -5,8 +5,8 @@ export interface AuthContextType {
     user: User | null
     isLoading: boolean
     isAuthenticated: boolean
-    login: (data: { username: string; password: string }) => Promise<void>
-    register: (data: { username: string; email: string; password: string; country?: string; role: Role }) => Promise<void>
+    login: (data: { username: string; password: string }) => Promise<User>
+    register: (data: { username: string; email: string; password: string; country?: string; role: Role }) => Promise<User>
     logout: () => Promise<void>
     refreshSession: () => Promise<void>
 }

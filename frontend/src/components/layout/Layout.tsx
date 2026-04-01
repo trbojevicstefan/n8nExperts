@@ -1,11 +1,22 @@
+import { useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
-import { Outlet } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 import { Navbar } from "./Navbar";
 import { Footer } from "./Footer";
 import { MobileNav } from "./MobileNav";
 
 export type ShellMode = "public" | "auth" | "app";
+
+function ensureRobotsMeta(content: string) {
+  let element = document.head.querySelector('meta[name="robots"]') as HTMLMetaElement | null;
+  if (!element) {
+    element = document.createElement("meta");
+    element.setAttribute("name", "robots");
+    document.head.appendChild(element);
+  }
+  element.setAttribute("content", content);
+}
 
 function ShellLayout({
   mode,
@@ -17,8 +28,15 @@ function ShellLayout({
   footerVariant?: "full" | "compact" | "none";
 }) {
   const { user } = useAuth();
+  const location = useLocation();
   const chromeMode: ShellMode = user && mode === "public" ? "app" : mode;
   const resolvedFooterVariant = user && mode === "public" ? "compact" : footerVariant;
+
+  useEffect(() => {
+    if (chromeMode === "app" || chromeMode === "auth") {
+      ensureRobotsMeta("noindex,nofollow");
+    }
+  }, [chromeMode, location.pathname]);
 
   return (
     <div className={cn("app-shell", `shell-${mode}`)}>
@@ -28,9 +46,9 @@ function ShellLayout({
       <main
         className={cn(
           "shell-main flex-1",
-          chromeMode === "public" && "pt-6 pb-22 md:pt-8 md:pb-10",
-          chromeMode === "auth" && "pt-6 pb-10 md:pt-8",
-          chromeMode === "app" && "pt-6 pb-22 md:pt-8 md:pb-10"
+          chromeMode === "public" && "pt-8 pb-22 md:pt-10 md:pb-10",
+          chromeMode === "auth" && "pt-8 pb-10 md:pt-10",
+          chromeMode === "app" && "pt-8 pb-22 md:pt-10 md:pb-10"
         )}
       >
         <Outlet />

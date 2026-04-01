@@ -25,6 +25,7 @@ import chatRoute from "./routes/chat.route.js";
 import savedRoute from "./routes/saved.route.js";
 import recommendationRoute from "./routes/recommendation.route.js";
 import gigRoute from "./routes/gig.route.js";
+import { normalizeValidationErrors, summarizeValidationErrors } from "./utils/validationErrors.js";
 
 dotenv.config();
 
@@ -181,12 +182,38 @@ export const createApp = () => {
   app.use("/api/gigs", gigRoute);
 
   app.use((err, _req, res, _next) => {
-    const errorStatus = err.status || 500;
-    const errorMessage = err.message || "Something went wrong!";
+    const duplicateKeyErrors =
+      err?.code === 11000 && err?.keyPattern
+        ? Object.keys(err.keyPattern).map((field) => ({
+            field,
+            message:
+              field === "email"
+                ? "An account with this email already exists."
+                : field === "username"
+                  ? "That username is already taken."
+                  : `${field} must be unique.`,
+          }))
+        : [];
+    const mongooseValidationErrors =
+      err?.name === "ValidationError" && err?.errors
+        ? Object.values(err.errors).map((detail) => ({
+            field: detail.path,
+            message: detail.message,
+          }))
+        : err?.name === "CastError" && err?.path
+          ? [{ field: err.path, message: `${err.path} is invalid.` }]
+          : [];
+    const errors = normalizeValidationErrors(err.errors?.length > 0 ? err.errors : [...duplicateKeyErrors, ...mongooseValidationErrors]);
+    const errorStatus = err.status || (errors.length > 0 ? 400 : 500);
+    const errorMessage =
+      errors.length > 0
+        ? summarizeValidationErrors(errors, err.message || "Please review the highlighted fields and try again.")
+        : err.message || "Something went wrong!";
     return res.status(errorStatus).json({
       success: false,
       status: errorStatus,
       message: errorMessage,
+      ...(errors.length > 0 ? { errors } : {}),
       stack: process.env.NODE_ENV === "development" ? err.stack : undefined,
     });
   });

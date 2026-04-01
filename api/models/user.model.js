@@ -1,6 +1,48 @@
 import mongoose from "mongoose";
 const { Schema } = mongoose;
 
+const ClientHiringContextSchema = new Schema(
+  {
+    automationGoal: {
+      type: String,
+      trim: true,
+      maxlength: 500,
+    },
+    currentPainPoints: [{
+      type: String,
+      trim: true,
+      maxlength: 160,
+    }],
+    expertTypeNeeded: {
+      type: String,
+      enum: ["builder", "consultant", "maintainer"],
+    },
+    successDefinition: {
+      type: String,
+      trim: true,
+      maxlength: 500,
+    },
+    communicationPreference: {
+      type: String,
+      enum: ["async_updates", "weekly_live", "shared_channel", "mixed"],
+    },
+    timezoneOverlap: {
+      type: String,
+      trim: true,
+      maxlength: 120,
+    },
+    documentationExpectation: {
+      type: String,
+      enum: ["light", "standard", "runbook"],
+    },
+    engagementPreference: {
+      type: String,
+      enum: ["one_off", "ongoing", "fractional"],
+    },
+  },
+  { _id: false }
+);
+
 const userSchema = new Schema({
   username: {
     type: String,
@@ -223,6 +265,10 @@ const userSchema = new Schema({
     trim: true,
     maxlength: 120,
   }],
+  hiringContext: {
+    type: ClientHiringContextSchema,
+    default: undefined,
+  },
 
   // Pricing
   hourlyRate: {

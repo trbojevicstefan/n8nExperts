@@ -47,7 +47,7 @@ export default function Trust() {
       <section className="section-shell">
         <SectionHeading
           eyebrow="Standards"
-          title="Trust is not a badge. It is the result of better product structure."
+          title="Trust is not a badge. It is what the product makes easy to verify."
           description="The platform should help visitors understand why a claim is credible and why a project or expert looks worth engaging."
         />
         <div className="section-grid mt-6">
@@ -67,7 +67,7 @@ export default function Trust() {
       <section className="section-shell">
         <SectionHeading
           eyebrow="What users should be able to trust"
-          title="The site should make the quality model understandable."
+          title="The site should make the quality model easy to read."
           description="That means stronger explanation across the public site and clearer guidance across active app routes."
         />
         <div className="mt-6 grid gap-4 lg:grid-cols-2">
@@ -87,7 +87,7 @@ export default function Trust() {
       <ConversionRail
         eyebrow="Trust in practice"
         title="The best trust signal is a product that explains itself clearly."
-        description="If the standards resonate, explore the live platform routes and see how the trust model carries through public discovery, role setup, search, applications, and pipeline management."
+        description="If the standards resonate, explore the live platform routes and see how proof, fit, and workflow carry through discovery, search, applications, and pipeline management."
         primaryAction={user?.role === "expert" ? { label: "Browse Jobs", href: "/jobs" } : { label: "See Experts", href: "/find-experts" }}
         secondaryAction={
           user

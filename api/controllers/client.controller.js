@@ -1,8 +1,11 @@
 import User from "../models/user.model.js";
 import { refreshClientMetrics } from "../services/clientMetrics.service.js";
+import { normalizeClientHiringContext } from "../utils/clientHiringContext.js";
 import createError from "../utils/createError.js";
 
-const safeClientProjection = "_id username img desc country companyName companyWebsite companySize industry foundedYear location teamDescription logoUrl projectPreferences createdAt updatedAt";
+const safeClientProjection =
+  "_id username img desc country companyName companyWebsite companySize industry foundedYear location teamDescription logoUrl projectPreferences hiringContext createdAt updatedAt";
+const safeClientLookupProjection = `${safeClientProjection} role isExpert isSeller`;
 
 const parseArray = (value) => {
   if (Array.isArray(value)) {
@@ -41,6 +44,7 @@ export const updateMyClientProfile = async (req, res, next) => {
       "teamDescription",
       "logoUrl",
       "projectPreferences",
+      "hiringContext",
     ];
 
     const updates = {};
@@ -52,6 +56,9 @@ export const updateMyClientProfile = async (req, res, next) => {
 
     if (updates.projectPreferences !== undefined) {
       updates.projectPreferences = parseArray(updates.projectPreferences);
+    }
+    if (updates.hiringContext !== undefined) {
+      updates.hiringContext = normalizeClientHiringContext(updates.hiringContext);
     }
 
     updates.role = "client";
@@ -83,7 +90,7 @@ export const updateMyClientProfile = async (req, res, next) => {
 
 export const getPublicClientProfile = async (req, res, next) => {
   try {
-    const client = await User.findById(req.params.clientId).select(safeClientProjection).lean();
+    const client = await User.findById(req.params.clientId).select(safeClientLookupProjection).lean();
     if (!client) {
       return next(createError(404, "Client not found!"));
     }
@@ -96,7 +103,7 @@ export const getPublicClientProfile = async (req, res, next) => {
     const metrics = await refreshClientMetrics(client._id);
 
     return res.status(200).json({
-      client,
+      client: Object.fromEntries(Object.entries(client).filter(([key]) => !["role", "isExpert", "isSeller"].includes(key))),
       trustMetrics: {
         jobsPosted: metrics.jobsPosted,
         jobsCompleted: metrics.jobsCompleted,

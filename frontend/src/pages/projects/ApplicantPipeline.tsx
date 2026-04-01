@@ -85,6 +85,7 @@ export default function ApplicantPipeline() {
     title: "Applicant Pipeline | n8nExperts",
     description: "Operate the applicant queue across all jobs with filters, saved views, notes, status grouping, and bulk actions.",
     canonicalPath: "/my-jobs/pipeline",
+    noIndex: true,
   });
 
   const statusFilter: PipelineFilter = isPipelineFilter(searchParams.get("status")) ? (searchParams.get("status") as PipelineFilter) : "all";

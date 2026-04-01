@@ -48,53 +48,38 @@ export const brandCopy = {
   name: "n8nExperts",
   label: "Automation talent platform",
   summary:
-    "A trust-first marketplace for teams hiring n8n specialists and experts building serious automation practices.",
+    "A marketplace for teams hiring n8n experts and experts looking for serious automation work.",
   operator: "Built and operated by n8nlab.io",
 };
 
 export const publicNavGroups: NavGroup[] = [
   {
-    title: "Platform",
+    title: "Explore",
     items: [
       {
         label: "How It Works",
         href: "/how-it-works",
-        description: "See the hiring and delivery flow from first brief to active work.",
+        description: "See how clients hire and experts get hired.",
       },
-      {
-        label: "Trust",
-        href: "/trust",
-        description: "Learn how the platform sets quality standards and credibility signals.",
-      },
-    ],
-  },
-  {
-    title: "Audience",
-    items: [
       {
         label: "For Clients",
         href: "/for-clients",
-        description: "Why automation teams hire through n8nExperts.",
+        description: "See how hiring teams use the marketplace.",
       },
       {
         label: "For Experts",
         href: "/for-experts",
-        description: "Why experienced builders join and publish proof here.",
+        description: "See how experts show proof and win work.",
       },
-    ],
-  },
-  {
-    title: "Explore",
-    items: [
       {
-        label: "Find Experts",
+        label: "Browse Experts",
         href: "/find-experts",
-        description: "Browse public expert profiles, portfolios, and services.",
+        description: "Compare public expert profiles, services, and proof.",
       },
       {
         label: "Find Jobs",
         href: "/jobs",
-        description: "Review open automation briefs and application-ready roles.",
+        description: "Browse open automation briefs and job opportunities.",
       },
     ],
   },
@@ -181,19 +166,19 @@ export const footerGroups = [
   {
     title: "Explore",
     items: [
-      { label: "Find Experts", href: "/find-experts" },
+      { label: "Browse Experts", href: "/find-experts" },
       { label: "Find Jobs", href: "/jobs" },
-      { label: "Post Project", href: "/post-project" },
-      { label: "Role Selection", href: "/auth/role-select" },
+      { label: "Home", href: "/" },
+      { label: "How It Works", href: "/how-it-works" },
     ],
   },
   {
-    title: "Workspace",
+    title: "Start",
     items: [
       { label: "Log In", href: "/auth/login" },
       { label: "Create Account", href: "/auth/role-select" },
-      { label: "Saved Searches", href: "/saved-searches" },
-      { label: "Inbox", href: "/inbox" },
+      { label: "For Clients", href: "/for-clients" },
+      { label: "For Experts", href: "/for-experts" },
     ],
   },
 ];
@@ -201,103 +186,103 @@ export const footerGroups = [
 export const homeContent = {
   hero: {
     eyebrow: "Automation talent platform",
-    title: "A clearer way to hire, trust, and scale n8n delivery.",
+    title: "Hire n8n experts with less guessing.",
     description:
-      "n8nExperts helps clients understand who can deliver, how hiring works, and what strong automation execution should look like before a project even starts.",
+      "Browse real specialists, compare proof, and post projects that get better applications. Experts can show services, work samples, and availability in one place.",
     actions: [
-      { label: "Find Experts", href: "/find-experts", variant: "primary" as const },
-      { label: "How It Works", href: "/how-it-works", variant: "secondary" as const },
+      { label: "Browse Experts", href: "/find-experts", variant: "primary" as const },
+      { label: "Find Jobs", href: "/jobs", variant: "secondary" as const },
     ],
     metrics: [
-      { value: "Profiles + Proof", label: "Public portfolios, services, and trust signals" },
-      { value: "Structured Hiring", label: "Clear briefs, invitations, and application flow" },
-      { value: "Workspace Ready", label: "Inbox, pipeline, and profile systems already live" },
+      { value: "Proof that matters", label: "Profiles, services, and work samples clients can scan fast." },
+      { value: "Better job briefs", label: "Clearer project context leads to better applications." },
+      { value: "Hiring in one place", label: "Inbox, pipeline, and profile tools stay tied to the same work." },
     ],
   },
   platformCards: [
     {
       eyebrow: "For hiring teams",
-      title: "Understand fit before outreach",
-      description: "See specialist profiles, portfolio evidence, services, and client-facing trust signals in one place.",
+      title: "See fit before you reach out",
+      description: "Compare proof, services, rates, and availability before you waste time on the wrong shortlist.",
     },
     {
       eyebrow: "For experts",
-      title: "Show credibility beyond a short bio",
-      description: "Package your expertise with practical proof so clients can understand how you work, not just what you claim.",
+      title: "Show what you actually build",
+      description: "Turn your work into a profile clients can understand at a glance instead of hiding it in a short bio.",
     },
     {
       eyebrow: "For both sides",
-      title: "Move through a clearer workflow",
-      description: "From job brief to shortlist to active conversation, the product keeps decisions visible and action-oriented.",
+      title: "Move faster once there is a fit",
+      description: "From job post to shortlist to messages, the next step stays obvious instead of scattered across tabs.",
     },
   ] satisfies ContentCard[],
   audiences: [
     {
       title: "Clients hiring automation talent",
       description:
-        "Use n8nExperts when you want to compare specialists, post clearer briefs, invite directly, and manage applicants with less marketplace noise.",
+        "Use n8nExperts to browse specialists, post better briefs, invite directly, and compare applicants without generic marketplace noise.",
     },
     {
       title: "Experts building serious n8n practices",
       description:
-        "Use n8nExperts when you need a profile that can explain your work quality, preferred project shape, and delivery credibility in a buyer-friendly way.",
+        "Use n8nExperts to show proof, publish services, and apply to jobs that already look worth your time.",
     },
   ] satisfies ContentCard[],
   workflow: [
     {
       title: "1. Define the project clearly",
-      description: "Clients publish outcomes, connected systems, constraints, budget model, and what success should look like.",
-      outcome: "Better briefs attract better proposals.",
+      description: "Clients describe the outcome, tools involved, budget, and the details experts need to write a serious proposal.",
+      outcome: "A clearer brief attracts better applications.",
     },
     {
       title: "2. Compare fit using real signals",
-      description: "Clients review profile depth, portfolio outcomes, services, rates, and platform trust indicators before reaching out.",
-      outcome: "Selection quality improves before the first message.",
+      description: "Clients review proof, services, rates, and profile detail before they send a message or invitation.",
+      outcome: "You spend less time guessing who is a fit.",
     },
     {
       title: "3. Invite or apply with context",
-      description: "Experts apply to open jobs and can also respond to direct invitations with delivery framing and estimated timelines.",
-      outcome: "Both sides start with better context, not cold guesswork.",
+      description: "Experts can apply to open jobs or respond to invitations with a delivery plan, timing, and relevant examples.",
+      outcome: "Both sides start with context instead of cold outreach.",
     },
     {
       title: "4. Manage decisions and delivery",
-      description: "Jobs, applications, notes, saved views, and inbox conversations stay organized across the active workflow.",
-      outcome: "Hiring stays operational instead of fragmented.",
+      description: "Jobs, applications, notes, saved views, and messages stay connected once the hiring process is live.",
+      outcome: "Hiring stays organized after the first reply arrives.",
     },
   ] satisfies WorkflowStep[],
   comparison: [
     {
       title: "Automation-specific context",
-      n8nExperts: "Profiles and briefs are shaped around real n8n delivery, integrations, services, and workflow proof.",
-      generic: "General freelance marketplaces flatten specialist context into generic skills and bios.",
+      n8nExperts: "Profiles and briefs are shaped around real n8n work, integrations, delivery proof, and scoped services.",
+      generic: "General freelance marketplaces flatten specialist work into generic tags and short bios.",
     },
     {
-      title: "Clarity before conversation",
-      n8nExperts: "Clients see stronger structure around rates, expertise, portfolios, and project expectations.",
-      generic: "The first message often has to compensate for weak listing structure and unclear proof.",
+      title: "Faster fit checks",
+      n8nExperts: "Clients can compare rates, proof, availability, and response quality before they start a conversation.",
+      generic: "The first message often has to uncover basic fit that should already be visible.",
     },
     {
-      title: "Hiring operations",
-      n8nExperts: "Applications, notes, invitations, and pipeline views support practical decision-making.",
-      generic: "Operational visibility is usually thinner or spread across multiple surfaces.",
+      title: "Hiring workflow",
+      n8nExperts: "Applications, notes, invitations, and inbox routes stay tied to the same job flow.",
+      generic: "Hiring work often ends up split across disconnected pages and tools.",
     },
   ] satisfies ComparisonRow[],
   proofCards: [
     {
-      title: "Expert proof, not just claims",
-      description: "Profiles can show services, portfolio entries, pricing, skills, industries, and availability signals that make evaluation faster.",
+      title: "Proof before promises",
+      description: "Profiles show services, work samples, pricing, skills, and availability so clients can judge substance quickly.",
     },
     {
       title: "Better project briefs",
-      description: "Client workflows encourage clearer scope, systems, and success criteria so experts can respond with more confidence.",
+      description: "Client flows push for clearer scope, systems, and success criteria so experts can write stronger responses.",
     },
     {
-      title: "Operator credibility",
-      description: "The platform is operated by n8nlab.io and positioned around execution quality, not random marketplace volume.",
+      title: "Built around real execution",
+      description: "The platform is run by n8nlab.io and aimed at serious automation work, not random volume.",
     },
     {
-      title: "Trust-building product surfaces",
-      description: "Client public profiles, saved searches, invitation flows, and applicant notes support better judgment over time.",
+      title: "Useful hiring surfaces",
+      description: "Client profiles, saved searches, invitations, and applicant notes help decisions stay organized as hiring moves forward.",
     },
   ] satisfies ContentCard[],
   useCases: [
@@ -324,7 +309,7 @@ export const homeContent = {
     {
       question: "What exactly does n8nExperts help with today?",
       answer:
-        "It supports expert discovery, job posting, invitations, applications, saved views, client/expert profiles, and inbox-driven project conversations around n8n work.",
+        "It supports expert discovery, job posting, invitations, applications, saved views, public profiles, and job-linked inbox conversations around n8n work.",
     },
     {
       question: "Is this only for clients?",
@@ -334,12 +319,12 @@ export const homeContent = {
     {
       question: "Does the platform try to be everything at once?",
       answer:
-        "No. The current focus is quality of matching, clarity of proof, and better operational flow around hiring and delivery handoff.",
+        "No. The focus is better matching, clearer proof, and a cleaner workflow around hiring and project handoff.",
     },
     {
-      question: "Why invest this much in explanation and trust?",
+      question: "Why spend so much time on proof and structure?",
       answer:
-        "Because automation buyers often need help understanding what good delivery looks like before they can confidently choose an expert.",
+        "Because automation buyers need to understand what good delivery looks like before they can confidently choose an expert.",
     },
   ] satisfies FAQItem[],
 };
@@ -347,22 +332,22 @@ export const homeContent = {
 export const howItWorksContent = {
   hero: {
     eyebrow: "How n8nExperts works",
-    title: "The marketplace is designed to make judgment easier before work begins.",
+    title: "A simpler path from brief to shortlist to real work.",
     description:
-      "Every major surface aims to reduce ambiguity: who is qualified, what the project needs, how people connect, and where decisions happen next.",
+      "The product helps clients write clearer briefs, compare proof faster, and move serious conversations into the right workflow.",
   },
   decisionPoints: [
     {
-      title: "Clients decide who to trust",
-      description: "Public profiles, services, portfolio work, and trust cues are designed to help clients qualify fit earlier.",
+      title: "Clients compare fit faster",
+      description: "Profiles, services, and work samples help clients decide who looks worth contacting.",
     },
     {
-      title: "Experts decide which work is worth pursuing",
-      description: "Job discovery, saved searches, and invitation flows help experts focus on serious opportunities.",
+      title: "Experts spot better briefs",
+      description: "Job discovery, saved searches, and invitations help experts focus on work that looks real and specific.",
     },
     {
-      title: "Both sides move into clear next actions",
-      description: "Applications, invites, notes, status changes, and inbox routes keep momentum visible.",
+      title: "Both sides see the next step",
+      description: "Applications, invitations, notes, status changes, and inbox routes keep the workflow moving.",
     },
   ] satisfies ContentCard[],
 };
@@ -370,22 +355,22 @@ export const howItWorksContent = {
 export const forClientsContent = {
   hero: {
     eyebrow: "For clients",
-    title: "Hire n8n specialists through a platform built for clarity, not marketplace noise.",
+    title: "Find someone who actually knows n8n.",
     description:
-      "n8nExperts helps teams compare real fit, publish stronger briefs, and operate a cleaner hiring pipeline for automation work.",
+      "Browse proof, compare rates and fit, and post projects that get better applications than a generic freelance listing.",
   },
   benefits: [
     {
-      title: "Evaluate experts with more context",
-      description: "Profiles can show pricing, services, portfolio work, industries, and client-facing proof instead of a short bio and generic promises.",
+      title: "Compare more than a headline",
+      description: "Profiles can show pricing, services, work samples, industries, and availability instead of a short bio and generic promises.",
     },
     {
-      title: "Create better briefs",
-      description: "Posting flows encourage you to define outcomes, integrations, and budget model so proposals are more accurate.",
+      title: "Post a better brief",
+      description: "The posting flow pushes you to define outcome, systems, and budget so experts can respond more accurately.",
     },
     {
-      title: "Run a real decision pipeline",
-      description: "Applications, saved views, notes, statuses, and inbox threads keep hiring operational after the first response arrives.",
+      title: "Keep hiring organized",
+      description: "Applications, saved views, notes, statuses, and inbox threads keep the shortlist usable after the first response arrives.",
     },
   ] satisfies ContentCard[],
 };
@@ -393,22 +378,22 @@ export const forClientsContent = {
 export const forExpertsContent = {
   hero: {
     eyebrow: "For experts",
-    title: "Present your n8n practice in a way serious clients can actually understand.",
+    title: "Show what you build and get found for the right work.",
     description:
-      "The platform gives experts room to package portfolio proof, services, availability, and preferred work shape so they are easier to trust and shortlist.",
+      "Build a profile clients can read quickly, publish clear services, and apply to jobs that already have enough detail to be worth your time.",
   },
   benefits: [
     {
-      title: "Show stronger proof",
-      description: "Profile and setup flows support richer details around expertise, services, portfolio work, and practical delivery positioning.",
+      title: "Make your work easier to trust",
+      description: "Profile and setup flows give you room to show expertise, services, work samples, and practical delivery context.",
     },
     {
-      title: "Choose better opportunities",
-      description: "Open jobs, saved views, and invitation workflows help you focus on briefs that are worth a considered proposal.",
+      title: "Spend time on better opportunities",
+      description: "Open jobs, saved views, and invitations help you focus on briefs that look serious enough for a considered proposal.",
     },
     {
-      title: "Track work stages clearly",
-      description: "Applications, invitations, inbox, and accepted-work views make it easier to see what needs action next.",
+      title: "See what needs action next",
+      description: "Applications, invitations, inbox, and accepted-work views make it easier to track what changed and where to respond.",
     },
   ] satisfies ContentCard[],
 };
@@ -416,26 +401,26 @@ export const forExpertsContent = {
 export const trustContent = {
   hero: {
     eyebrow: "Trust and standards",
-    title: "n8nExperts is being shaped around credibility, signal quality, and cleaner operational judgment.",
+    title: "Trust comes from proof, not platform slogans.",
     description:
-      "Trust comes from better product structure: richer expert proof, clearer client context, stronger workflow guidance, and visible operating standards.",
+      "The product is trying to make fit, proof, and next steps easier to read so clients and experts can make better decisions faster.",
   },
   standards: [
     {
-      title: "Expert credibility standards",
-      description: "Profiles should communicate depth, service fit, portfolio relevance, and rate context clearly enough for clients to evaluate them seriously.",
+      title: "Expert proof should be easy to read",
+      description: "Profiles should show depth, service fit, work relevance, and rate context clearly enough for clients to judge them seriously.",
     },
     {
-      title: "Client brief quality standards",
+      title: "Client briefs should be specific",
       description: "Projects should explain systems, outcomes, and budget expectations well enough for experts to respond intelligently.",
     },
     {
-      title: "Operational visibility standards",
-      description: "Applications, saved views, statuses, and conversation surfaces should help both sides know what is happening now and what comes next.",
+      title: "The workflow should stay legible",
+      description: "Applications, saved views, statuses, and inbox surfaces should make it obvious what is happening now and what comes next.",
     },
     {
       title: "Platform stewardship",
-      description: "n8nlab.io operates the platform with a practical focus on useful workflows rather than bloated marketplace features.",
+      description: "n8nlab.io operates the platform with a practical focus on useful hiring workflows instead of bloated marketplace features.",
     },
   ] satisfies ContentCard[],
 };

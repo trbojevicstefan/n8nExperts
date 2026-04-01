@@ -49,8 +49,8 @@ export default function ForClients() {
       <section className="section-shell">
         <SectionHeading
           eyebrow="Why clients use it"
-          title="The goal is to make hiring feel clearer."
-          description="That matters most when the automation work touches multiple systems and handoffs."
+          title="The goal is better hiring decisions."
+          description="That matters most when the automation work touches multiple systems, handoffs, and edge cases."
         />
         <div className="section-grid mt-6">
           {forClientsContent.benefits.map((benefit, index) => {
@@ -70,14 +70,14 @@ export default function ForClients() {
         <SectionHeading
           eyebrow="What to evaluate"
           title="A client should be able to judge fit quickly."
-          description="The best decision usually comes from specialization, proof, pricing, and how clearly the expert responds."
+          description="The best decision usually comes from specialization, proof, pricing, and how clearly the expert responds to the brief."
         />
         <div className="mt-6 grid gap-4 lg:grid-cols-2">
           {[
-            "Does the profile explain the kind of n8n work this expert actually does well?",
-            "Do service and portfolio surfaces show enough evidence to trust their positioning?",
+            "Does the profile explain the kind of n8n work this expert actually does best?",
+            "Do services and work samples show enough evidence to trust their positioning?",
             "Is the pricing context compatible with the size and complexity of the work?",
-            "Does the expert respond to the brief as a delivery problem, not just a keyword match?",
+            "Does the expert respond to the brief like a delivery problem instead of a keyword match?",
           ].map((item) => (
             <article key={item} className="feature-panel">
               <ShieldCheck className="h-5 w-5 text-[var(--color-accent)]" />
@@ -107,7 +107,7 @@ export default function ForClients() {
       <ConversionRail
         eyebrow="Client next step"
         title="If you are hiring, start where fit becomes visible."
-        description="Explore expert profiles first if you want to understand market shape, or post a project if your brief is ready and you want to attract or invite specialists now."
+        description="Explore expert profiles first if you want to compare the field, or post a project if your brief is ready and you want to attract specialists now."
         primaryAction={user?.role === "expert" ? { label: "Browse Jobs", href: "/jobs" } : { label: "Explore Experts", href: "/find-experts" }}
         secondaryAction={
           user

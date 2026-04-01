@@ -25,13 +25,19 @@ router.patch(
     headline: { type: "string", required: false, maxLength: 120 },
     desc: { type: "string", required: false, maxLength: 2000 },
     hourlyRate: { type: "number", required: false, min: 0 },
+    skills: { type: "array", required: false, maxItems: 25, of: { type: "string", maxLength: 64 } },
     availability: { type: "string", required: false, enum: ["available", "busy", "unavailable"] },
     yearsExperience: { type: "number", required: false, min: 0, max: 60 },
-    languages: { type: "array", required: false },
+    languages: { type: "array", required: false, maxItems: 15, of: { type: "string", maxLength: 40 } },
     timezone: { type: "string", required: false, maxLength: 80 },
-    industries: { type: "array", required: false },
-    certifications: { type: "array", required: false },
-    preferredEngagements: { type: "array", required: false },
+    industries: { type: "array", required: false, maxItems: 15, of: { type: "string", maxLength: 80 } },
+    certifications: { type: "array", required: false, maxItems: 20, of: { type: "string", maxLength: 120 } },
+    preferredEngagements: {
+      type: "array",
+      required: false,
+      maxItems: 3,
+      of: { type: "string", enum: ["fixed", "hourly", "consulting"] },
+    },
     minimumProjectBudget: { type: "number", required: false, min: 0 },
     availabilityHoursPerWeek: { type: "number", required: false, min: 0, max: 168 },
     responseSLAHours: { type: "number", required: false, min: 0, max: 336 },
@@ -48,7 +54,7 @@ router.post(
     summary: { type: "string", required: true, minLength: 20, maxLength: 2000 },
     link: { type: "string", required: false, maxLength: 500 },
     imageUrl: { type: "string", required: false, maxLength: 500 },
-    tags: { type: "array", required: false },
+    tags: { type: "array", required: false, maxItems: 10, of: { type: "string", maxLength: 40 } },
   }),
   createPortfolioItem
 );
@@ -61,7 +67,7 @@ router.patch(
     summary: { type: "string", required: false, minLength: 20, maxLength: 2000 },
     link: { type: "string", required: false, maxLength: 500 },
     imageUrl: { type: "string", required: false, maxLength: 500 },
-    tags: { type: "array", required: false },
+    tags: { type: "array", required: false, maxItems: 10, of: { type: "string", maxLength: 40 } },
   }),
   updatePortfolioItem
 );

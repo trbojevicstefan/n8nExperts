@@ -1,4 +1,54 @@
 export type Role = "client" | "expert";
+export type BriefExpertType = "builder" | "consultant" | "maintainer";
+export type BriefHandoffExpectation = "none" | "documentation" | "training" | "documentation_and_training";
+export type ClientCommunicationPreference = "async_updates" | "weekly_live" | "shared_channel" | "mixed";
+export type ClientDocumentationExpectation = "light" | "standard" | "runbook";
+export type ClientEngagementPreference = "one_off" | "ongoing" | "fractional";
+
+export interface ApiValidationError {
+  field?: string;
+  message: string;
+}
+
+export interface ApiErrorResponse {
+  success?: boolean;
+  status?: number;
+  message?: string;
+  errors?: ApiValidationError[];
+}
+
+export interface FormFeedbackState {
+  summary: string;
+  fieldErrors: Record<string, string>;
+  details: ApiValidationError[];
+}
+
+export interface JobBriefHiringPreferences {
+  expertTypeNeeded?: BriefExpertType;
+  handoffExpectation?: BriefHandoffExpectation;
+}
+
+export interface JobBrief {
+  outcome?: string;
+  systems?: string[];
+  integrations?: string[];
+  constraints?: string[];
+  deliverables?: string[];
+  timeline?: string;
+  successCriteria?: string[];
+  hiringPreferences?: JobBriefHiringPreferences;
+}
+
+export interface ClientHiringContext {
+  automationGoal?: string;
+  currentPainPoints?: string[];
+  expertTypeNeeded?: BriefExpertType;
+  successDefinition?: string;
+  communicationPreference?: ClientCommunicationPreference;
+  timezoneOverlap?: string;
+  documentationExpectation?: ClientDocumentationExpectation;
+  engagementPreference?: ClientEngagementPreference;
+}
 
 export interface User {
   _id: string;
@@ -25,6 +75,7 @@ export interface User {
   teamDescription?: string;
   logoUrl?: string;
   projectPreferences?: string[];
+  hiringContext?: ClientHiringContext;
   jobsPostedCount?: number;
   jobsCompletedCount?: number;
   hiresCount?: number;
@@ -81,10 +132,11 @@ export interface Service {
   desc: string;
   serviceType: "Fixed Price" | "Consultation";
   price: number;
-  cover: string;
+  cover?: string;
   images?: string[];
-  shortTitle: string;
-  shortDesc: string;
+  bestFor?: string;
+  shortTitle?: string;
+  shortDesc?: string;
   deliveryTime: number;
   revisionNumber: number;
   features?: string[];
@@ -117,6 +169,7 @@ export interface Job {
   budgetAmount: number;
   skills: string[];
   attachments: string[];
+  brief?: JobBrief;
   visibility: "public" | "invite_only";
   status: "open" | "in_progress" | "completed" | "closed" | "cancelled";
   acceptedApplicationId?: string | null;
@@ -348,6 +401,7 @@ export interface ClientProfilePublic {
     | "teamDescription"
     | "logoUrl"
     | "projectPreferences"
+    | "hiringContext"
     | "createdAt"
     | "updatedAt"
   >;

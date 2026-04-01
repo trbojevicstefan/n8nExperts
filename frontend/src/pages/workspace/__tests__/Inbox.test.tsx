@@ -86,6 +86,7 @@ describe("Inbox", () => {
 
     const expertLabels = await screen.findAllByText("Expert One");
     expect(expertLabels.length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/application context/i).length).toBeGreaterThan(0);
 
     await user.type(screen.getByPlaceholderText("Search threads"), "workflow");
 

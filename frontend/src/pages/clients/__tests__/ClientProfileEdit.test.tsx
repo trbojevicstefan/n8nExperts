@@ -67,19 +67,31 @@ describe("ClientProfileEdit", () => {
       </MemoryRouter>
     );
 
-    await user.type(screen.getByLabelText("Company Name"), "Acme Labs");
-    await user.type(screen.getByLabelText("Project Preferences (comma separated)"), "AI workflows, CRM automation");
-    await user.click(screen.getByRole("button", { name: "Save Client Profile" }));
+    await user.type(screen.getByLabelText(/company name/i), "Acme Labs");
+    await user.type(screen.getByLabelText(/automation goal/i), "Reduce manual triage work");
+    await user.type(screen.getByLabelText(/current pain points/i), "Manual queue handoff\nNo failure alerts");
+    await user.type(screen.getByLabelText(/common project themes/i), "AI workflows, CRM automation");
+    await user.selectOptions(screen.getByLabelText(/communication preference/i), "async_updates");
+    await user.click(screen.getByRole("button", { name: /save client profile/i }));
 
     await waitFor(() => {
       expect(mockedClientApi.updateMyProfile).toHaveBeenCalledWith(
         expect.objectContaining({
           companyName: "Acme Labs",
           projectPreferences: ["AI workflows", "CRM automation"],
+          hiringContext: expect.objectContaining({
+            automationGoal: "Reduce manual triage work",
+            currentPainPoints: ["Manual queue handoff", "No failure alerts"],
+            communicationPreference: "async_updates",
+          }),
         })
       );
     });
 
-    expect(await screen.findByText("Client profile updated.")).toBeInTheDocument();
+    expect(
+      await screen.findByText(
+        "Client profile saved. Experts can now read your company context, hiring goals, and working style in one pass."
+      )
+    ).toBeInTheDocument();
   });
 });

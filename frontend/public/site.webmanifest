@@ -1,0 +1,17 @@
+{
+  "name": "n8nExperts",
+  "short_name": "n8nExperts",
+  "description": "Marketplace for serious n8n experts, projects, and hiring workflows.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#060910",
+  "theme_color": "#060910",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

@@ -29,8 +29,33 @@ router.post(
     budgetType: { type: "string", required: true, enum: ["hourly", "fixed"] },
     budgetAmount: { type: "number", required: true, min: 1 },
     visibility: { type: "string", required: false, enum: ["public", "invite_only"] },
-    skills: { type: "array", required: false },
-    attachments: { type: "array", required: false },
+    skills: { type: "array", required: false, maxItems: 25, of: { type: "string", maxLength: 64 } },
+    attachments: { type: "array", required: false, maxItems: 10, of: { type: "string", maxLength: 500 } },
+    brief: {
+      type: "object",
+      required: false,
+      schema: {
+        outcome: { type: "string", required: false, maxLength: 500 },
+        systems: { type: "array", required: false, of: { type: "string", maxLength: 80 }, maxItems: 12 },
+        integrations: { type: "array", required: false, of: { type: "string", maxLength: 80 }, maxItems: 12 },
+        constraints: { type: "array", required: false, of: { type: "string", maxLength: 180 }, maxItems: 12 },
+        deliverables: { type: "array", required: false, of: { type: "string", maxLength: 180 }, maxItems: 12 },
+        timeline: { type: "string", required: false, maxLength: 240 },
+        successCriteria: { type: "array", required: false, of: { type: "string", maxLength: 180 }, maxItems: 12 },
+        hiringPreferences: {
+          type: "object",
+          required: false,
+          schema: {
+            expertTypeNeeded: { type: "string", required: false, enum: ["builder", "consultant", "maintainer"] },
+            handoffExpectation: {
+              type: "string",
+              required: false,
+              enum: ["none", "documentation", "training", "documentation_and_training"],
+            },
+          },
+        },
+      },
+    },
   }),
   createJob
 );
@@ -44,8 +69,33 @@ router.patch(
     budgetType: { type: "string", required: false, enum: ["hourly", "fixed"] },
     budgetAmount: { type: "number", required: false, min: 1 },
     visibility: { type: "string", required: false, enum: ["public", "invite_only"] },
-    skills: { type: "array", required: false },
-    attachments: { type: "array", required: false },
+    skills: { type: "array", required: false, maxItems: 25, of: { type: "string", maxLength: 64 } },
+    attachments: { type: "array", required: false, maxItems: 10, of: { type: "string", maxLength: 500 } },
+    brief: {
+      type: "object",
+      required: false,
+      schema: {
+        outcome: { type: "string", required: false, maxLength: 500 },
+        systems: { type: "array", required: false, of: { type: "string", maxLength: 80 }, maxItems: 12 },
+        integrations: { type: "array", required: false, of: { type: "string", maxLength: 80 }, maxItems: 12 },
+        constraints: { type: "array", required: false, of: { type: "string", maxLength: 180 }, maxItems: 12 },
+        deliverables: { type: "array", required: false, of: { type: "string", maxLength: 180 }, maxItems: 12 },
+        timeline: { type: "string", required: false, maxLength: 240 },
+        successCriteria: { type: "array", required: false, of: { type: "string", maxLength: 180 }, maxItems: 12 },
+        hiringPreferences: {
+          type: "object",
+          required: false,
+          schema: {
+            expertTypeNeeded: { type: "string", required: false, enum: ["builder", "consultant", "maintainer"] },
+            handoffExpectation: {
+              type: "string",
+              required: false,
+              enum: ["none", "documentation", "training", "documentation_and_training"],
+            },
+          },
+        },
+      },
+    },
   }),
   updateJob
 );

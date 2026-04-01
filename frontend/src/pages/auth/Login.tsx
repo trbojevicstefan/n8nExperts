@@ -1,19 +1,24 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { ShieldCheck, Workflow } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { usePageMeta } from "@/hooks/usePageMeta";
+import { cn } from "@/lib/utils";
 import { ContextAside } from "@/components/layout/PagePrimitives";
+import { errorFieldClassName, FieldErrorText, FormBanner } from "@/components/forms/FormFeedback";
+import { getFieldFeedback, getFormFeedback } from "@/lib/form-feedback";
+import { buildRegisterPath, readAuthIntent, resolvePostAuthPath } from "@/lib/auth-intent";
+import type { FormFeedbackState } from "@/types";
 
 export default function Login() {
   const [formData, setFormData] = useState({ username: "", password: "" });
-  const [error, setError] = useState("");
+  const [feedback, setFeedback] = useState<FormFeedbackState | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const { login, user } = useAuth();
   const navigate = useNavigate();
-  const location = useLocation();
-  const fromPath = (location.state as { from?: { pathname?: string } } | null)?.from?.pathname;
-  const nextPath = fromPath && !fromPath.startsWith("/auth") ? fromPath : "/";
+  const [searchParams] = useSearchParams();
+  const intent = readAuthIntent(searchParams);
+  const createAccountHref = intent.requiredRole ? buildRegisterPath(intent.requiredRole, intent) : "/auth/role-select";
 
   usePageMeta({
     title: "Log In | n8nExperts",
@@ -24,19 +29,21 @@ export default function Login() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
+    setFeedback(null);
     setIsLoading(true);
 
     try {
-      await login(formData);
-      navigate(nextPath, { replace: true });
+      const signedInUser = await login(formData);
+      navigate(resolvePostAuthPath(signedInUser.role, intent, "login"), { replace: true });
     } catch (err: unknown) {
-      const apiError = err as { response?: { data?: { message?: string } } };
-      setError(apiError.response?.data?.message || "We could not sign you in. Please try again.");
+      setFeedback(getFormFeedback(err, "We could not sign you in. Please try again."));
     } finally {
       setIsLoading(false);
     }
   };
+
+  const usernameError = getFieldFeedback(feedback, "username");
+  const passwordError = getFieldFeedback(feedback, "password");
 
   return (
     <div className="min-h-[calc(100vh-4rem)] px-4 py-10">
@@ -44,31 +51,51 @@ export default function Login() {
         <section className="glass rounded-3xl p-7 md:p-8">
           <h2 className="text-2xl font-extrabold text-white">Sign in</h2>
           <p className="mt-2 text-sm text-slate-300">
-            {user ? `Signed in as ${user.username}` : "Pick up where you left off."}
+            {user ? `Signed in as ${user.username}` : "Get back to your jobs, applicants, messages, or profile updates."}
           </p>
 
           <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
             <div>
               <label className="text-xs font-bold uppercase tracking-[0.16em] text-slate-400">Username or Email</label>
               <input
-                className="mt-1.5 w-full rounded-xl border border-white/10 bg-white/5 px-3.5 py-2.5 text-white outline-none transition focus:border-primary/70 focus:ring-1 focus:ring-primary/60"
+                className={cn(
+                  "mt-1.5 w-full rounded-xl border border-white/10 bg-white/5 px-3.5 py-2.5 text-white outline-none transition focus:border-primary/70 focus:ring-1 focus:ring-primary/60",
+                  usernameError && errorFieldClassName
+                )}
                 value={formData.username}
-                onChange={(e) => setFormData((prev) => ({ ...prev, username: e.target.value }))}
+                onChange={(e) => {
+                  setFormData((prev) => ({ ...prev, username: e.target.value }));
+                  if (feedback) {
+                    setFeedback(null);
+                  }
+                }}
+                aria-invalid={Boolean(usernameError)}
                 required
               />
+              <FieldErrorText message={usernameError} className="mt-2" />
             </div>
             <div>
               <label className="text-xs font-bold uppercase tracking-[0.16em] text-slate-400">Password</label>
               <input
                 type="password"
-                className="mt-1.5 w-full rounded-xl border border-white/10 bg-white/5 px-3.5 py-2.5 text-white outline-none transition focus:border-primary/70 focus:ring-1 focus:ring-primary/60"
+                className={cn(
+                  "mt-1.5 w-full rounded-xl border border-white/10 bg-white/5 px-3.5 py-2.5 text-white outline-none transition focus:border-primary/70 focus:ring-1 focus:ring-primary/60",
+                  passwordError && errorFieldClassName
+                )}
                 value={formData.password}
-                onChange={(e) => setFormData((prev) => ({ ...prev, password: e.target.value }))}
+                onChange={(e) => {
+                  setFormData((prev) => ({ ...prev, password: e.target.value }));
+                  if (feedback) {
+                    setFeedback(null);
+                  }
+                }}
+                aria-invalid={Boolean(passwordError)}
                 required
               />
+              <FieldErrorText message={passwordError} className="mt-2" />
             </div>
 
-            {error && <div className="rounded-xl border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-300">{error}</div>}
+            <FormBanner message={feedback?.summary} />
 
             <button
               type="submit"
@@ -82,12 +109,16 @@ export default function Login() {
 
           <div className="mt-6 rounded-2xl border border-white/8 bg-white/5 p-4 text-sm text-[var(--color-text-secondary)]">
             <p className="font-semibold text-white">What happens next</p>
-            <p className="mt-2">Clients go back to jobs and hiring. Experts go back to applications, messages, and profile updates.</p>
+            <p className="mt-2">
+              {intent.redirectPath
+                ? `After sign in, we will return you to ${intent.redirectPath}.`
+                : "Clients go back to jobs and hiring. Experts go back to applications, messages, and profile updates."}
+            </p>
           </div>
 
           <p className="mt-5 text-sm text-slate-300">
             Don&apos;t have an account?
-            <Link to="/auth/role-select" className="ml-1.5 font-semibold text-primary hover:underline">
+            <Link to={createAccountHref} className="ml-1.5 font-semibold text-primary hover:underline">
               Create one
             </Link>
           </p>
@@ -96,7 +127,7 @@ export default function Login() {
         <ContextAside
           eyebrow="Welcome back"
           title="Sign in and get back to work."
-          description="This page should feel direct. Sign in, land in your workspace, and keep going without extra steps."
+          description="This page should feel direct. Sign in, land in the right workspace, and keep going without extra steps."
           className="self-start"
         >
           <div className="space-y-3">

@@ -15,24 +15,29 @@ const pathAliases: Record<string, string[]> = {
 };
 
 const publicPrimaryLinks: NavItem[] = [
+  { label: "Browse Experts", href: "/find-experts", description: "See expert profiles and services." },
+  { label: "Find Jobs", href: "/jobs", description: "Browse open n8n jobs." },
   { label: "How It Works", href: "/how-it-works", description: "See how hiring and applying works." },
   { label: "For Clients", href: "/for-clients", description: "Hiring path and platform fit for clients." },
   { label: "For Experts", href: "/for-experts", description: "Profile, services, and application path for experts." },
-  { label: "Browse Experts", href: "/find-experts", description: "See expert profiles and services." },
 ];
 
 const authPageLinks: NavItem[] = [
-  { label: "How It Works", href: "/how-it-works", description: "See how hiring and applying works." },
-  { label: "Trust", href: "/trust", description: "Learn how the platform sets quality standards and credibility signals." },
   { label: "Browse Experts", href: "/find-experts", description: "See expert profiles and services." },
+  { label: "Find Jobs", href: "/jobs", description: "Browse open n8n jobs." },
+  { label: "How It Works", href: "/how-it-works", description: "See how hiring and applying works." },
+  { label: "For Clients", href: "/for-clients", description: "Hiring path and platform fit for clients." },
+  { label: "For Experts", href: "/for-experts", description: "Profile, services, and application path for experts." },
 ];
 
 export function Navbar({ mode = "public" }: { mode?: ShellMode }) {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [mobileMenuPath, setMobileMenuPath] = useState<string | null>(null);
+  const [userMenuPath, setUserMenuPath] = useState<string | null>(null);
   const [pendingInvitations, setPendingInvitations] = useState(0);
   const { user, logout } = useAuth();
   const location = useLocation();
+  const mobileMenuOpen = mobileMenuPath === location.pathname;
+  const userMenuOpen = userMenuPath === location.pathname;
 
   const navGroups = user ? (user.role === "expert" ? expertNavGroups : clientNavGroups) : publicNavGroups;
   const desktopLinks: NavItem[] = user
@@ -72,11 +77,6 @@ export function Navbar({ mode = "public" }: { mode?: ShellMode }) {
     if (href !== "/" && path.startsWith(`${href}/`)) return true;
     return (pathAliases[href] || []).some((alias) => path === alias || path.startsWith(alias));
   };
-
-  useEffect(() => {
-    setMobileMenuOpen(false);
-    setUserMenuOpen(false);
-  }, [location.pathname]);
 
   useEffect(() => {
     let isMounted = true;
@@ -122,7 +122,7 @@ export function Navbar({ mode = "public" }: { mode?: ShellMode }) {
     <nav className="sticky top-0 z-50 px-3 py-3 md:px-4">
       <div className={`container nav-shell nav-shell-${mode}`}>
         <div className="flex items-center gap-3 md:gap-4">
-          <Link to="/" className="flex min-w-fit items-center gap-2.5 md:gap-3" onClick={() => setMobileMenuOpen(false)}>
+          <Link to="/" className="flex min-w-fit items-center gap-2.5 md:gap-3" onClick={() => setMobileMenuPath(null)}>
             <div className="brand-mark">
               <Network className="h-5 w-5 text-white" />
             </div>
@@ -151,7 +151,11 @@ export function Navbar({ mode = "public" }: { mode?: ShellMode }) {
             {user ? (
               <>
                 <div className="relative">
-                  <button type="button" onClick={() => setUserMenuOpen((prev) => !prev)} className="user-chip">
+                  <button
+                    type="button"
+                    onClick={() => setUserMenuPath((prev) => (prev === location.pathname ? null : location.pathname))}
+                    className="user-chip"
+                  >
                     <Avatar src={user.img} fallback={user.username} size="sm" className="h-9 w-9 border border-white/10" />
                     <div className="hidden text-left lg:block">
                       <p className="text-sm font-semibold leading-none text-white">{user.username}</p>
@@ -161,7 +165,7 @@ export function Navbar({ mode = "public" }: { mode?: ShellMode }) {
 
                   {userMenuOpen && (
                     <>
-                      <div className="fixed inset-0 z-10" onClick={() => setUserMenuOpen(false)} />
+                      <div className="fixed inset-0 z-10" onClick={() => setUserMenuPath(null)} />
                       <div className="absolute right-0 z-20 mt-3 w-72 rounded-[26px] border border-white/10 bg-[rgba(11,15,26,0.96)] p-3 shadow-2xl backdrop-blur-xl">
                         <div className="rounded-2xl border border-white/8 bg-white/5 p-4">
                           <p className="text-sm font-semibold text-white">{user.username}</p>
@@ -172,7 +176,7 @@ export function Navbar({ mode = "public" }: { mode?: ShellMode }) {
                             <Link
                               key={item.href}
                               to={item.href}
-                              onClick={() => setUserMenuOpen(false)}
+                              onClick={() => setUserMenuPath(null)}
                               className="flex items-center justify-between rounded-2xl px-3 py-3 text-sm text-[var(--color-text-secondary)] transition hover:bg-white/6 hover:text-white"
                             >
                               <span>{item.label}</span>
@@ -210,7 +214,11 @@ export function Navbar({ mode = "public" }: { mode?: ShellMode }) {
             )}
 
             {showHeaderMenuButton && (
-              <button className="icon-button md:hidden" onClick={() => setMobileMenuOpen((prev) => !prev)} aria-label="Toggle navigation">
+              <button
+                className="icon-button md:hidden"
+                onClick={() => setMobileMenuPath((prev) => (prev === location.pathname ? null : location.pathname))}
+                aria-label="Toggle navigation"
+              >
                 {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
               </button>
             )}
@@ -232,7 +240,7 @@ export function Navbar({ mode = "public" }: { mode?: ShellMode }) {
                         <Link
                           key={link.href}
                           to={link.href}
-                          onClick={() => setMobileMenuOpen(false)}
+                          onClick={() => setMobileMenuPath(null)}
                           className={active ? "mobile-nav-link mobile-nav-link-active" : "mobile-nav-link"}
                         >
                           <div>

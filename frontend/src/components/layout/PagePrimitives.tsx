@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -49,6 +49,7 @@ type ContextAsideProps = {
   description?: string;
   children?: ReactNode;
   className?: string;
+  style?: CSSProperties;
 };
 
 type EmptyStateProps = {
@@ -189,9 +190,9 @@ export function DenseListCard({ className, children }: DenseListCardProps) {
   return <article className={cn("dense-list-card", className)}>{children}</article>;
 }
 
-export function ContextAside({ eyebrow, title, description, children, className }: ContextAsideProps) {
+export function ContextAside({ eyebrow, title, description, children, className, style }: ContextAsideProps) {
   return (
-    <aside className={cn("context-aside", className)}>
+    <aside className={cn("context-aside", className)} style={style}>
       {eyebrow && <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--color-accent-cool)]">{eyebrow}</p>}
       <h2 className="mt-3 text-xl font-bold text-white">{title}</h2>
       {description && <p className="mt-3 text-sm leading-7 text-[var(--color-text-secondary)]">{description}</p>}

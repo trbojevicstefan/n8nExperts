@@ -2,6 +2,45 @@ import mongoose from "mongoose";
 
 const { Schema } = mongoose;
 
+const stringListField = (maxLength) => [
+  {
+    type: String,
+    trim: true,
+    maxlength: maxLength,
+  },
+];
+
+const JobBriefSchema = new Schema(
+  {
+    outcome: {
+      type: String,
+      trim: true,
+      maxlength: 500,
+    },
+    systems: stringListField(80),
+    integrations: stringListField(80),
+    constraints: stringListField(180),
+    deliverables: stringListField(180),
+    timeline: {
+      type: String,
+      trim: true,
+      maxlength: 240,
+    },
+    successCriteria: stringListField(180),
+    hiringPreferences: {
+      expertTypeNeeded: {
+        type: String,
+        enum: ["builder", "consultant", "maintainer"],
+      },
+      handoffExpectation: {
+        type: String,
+        enum: ["none", "documentation", "training", "documentation_and_training"],
+      },
+    },
+  },
+  { _id: false }
+);
+
 const JobSchema = new Schema(
   {
     clientId: {
@@ -47,6 +86,10 @@ const JobSchema = new Schema(
         type: String,
       },
     ],
+    brief: {
+      type: JobBriefSchema,
+      default: undefined,
+    },
     visibility: {
       type: String,
       enum: ["public", "invite_only"],
@@ -73,6 +116,15 @@ const JobSchema = new Schema(
 );
 
 JobSchema.index({ createdAt: -1 });
-JobSchema.index({ title: "text", description: "text", skills: "text" });
+JobSchema.index({
+  title: "text",
+  description: "text",
+  skills: "text",
+  "brief.outcome": "text",
+  "brief.systems": "text",
+  "brief.integrations": "text",
+  "brief.deliverables": "text",
+  "brief.successCriteria": "text",
+});
 
 export default mongoose.model("Job", JobSchema);
