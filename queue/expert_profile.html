@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Public Expert Profile | n8nExperts</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f42559",
+                        "background-light": "#f8f5f6",
+                        "background-dark": "#0a0a0b",
+                        "card-dark": "#161618",
+                        "accent-blue": "#3b82f6"
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .grid-bg {
+            background-image: radial-gradient(rgba(244, 37, 89, 0.1) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+        .text-gradient {
+            background: linear-gradient(to right, #f42559, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .profile-glow {
+            box-shadow: 0 0 20px rgba(244, 37, 89, 0.4);
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-gray-900 dark:text-gray-100 selection:bg-primary selection:text-white">
+<!-- Grid Background Layer -->
+<div class="fixed inset-0 grid-bg pointer-events-none opacity-50"></div>
+<div class="relative flex min-h-screen flex-col overflow-x-hidden">
+<!-- Navigation Bar -->
+<header class="sticky top-0 z-50 glass-panel border-b border-white/10 px-6 py-3">
+<div class="max-w-7xl mx-auto flex items-center justify-between">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-2 text-white">
+<div class="size-8 bg-primary rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-xl">account_tree</span>
+</div>
+<h2 class="text-xl font-extrabold leading-tight tracking-tight">n8nExperts</h2>
+</div>
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-gray-400 hover:text-white text-sm font-medium transition-colors" href="#">Browse Experts</a>
+<a class="text-gray-400 hover:text-white text-sm font-medium transition-colors" href="#">How it Works</a>
+<a class="text-gray-400 hover:text-white text-sm font-medium transition-colors" href="#">Resources</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="hidden sm:flex items-center bg-white/5 rounded-lg px-3 py-1.5 border border-white/10">
+<span class="material-symbols-outlined text-gray-400 text-lg mr-2">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm text-white placeholder:text-gray-500 w-48" placeholder="Search experts..." type="text"/>
+</div>
+<button class="bg-primary hover:bg-primary/90 text-white text-sm font-bold py-2 px-5 rounded-lg transition-all">Sign In</button>
+</div>
+</div>
+</header>
+<main class="relative flex-1 py-8 px-6">
+<div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Main Content (Left) -->
+<div class="lg:col-span-8 flex flex-col gap-8">
+<!-- Profile Header Section -->
+<div class="flex flex-col md:flex-row gap-6 items-start md:items-center">
+<div class="relative">
+<div class="size-32 rounded-2xl p-1 bg-gradient-to-tr from-primary via-accent-blue to-primary profile-glow">
+<div class="w-full h-full rounded-xl bg-center bg-no-repeat bg-cover" data-alt="Portrait of a smiling professional male engineer" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDbNknQGLPeBl2K218fc5mQP9802nkxtWGeRiWB0XnhcvAJCc9xvchcx2bN9x0UUz2VpO_gBnnILHi-eQ9TYxgT1XjJLCF-zU7G76gkqTNATIT9uaay3C4RYYguvwxAmjtOZYKAEbQm-Q3-OwJs8rnPH6VNGeP2YKLuwzKbNkfDfFT_BmLKs1zhDeRfqi82DgLDEf7CiQvCznvxZLdNvppcRDWN77nNMkYk9rKHiTAVlNZOQ0xYmxSRKz9zjNR4Kuzci47YMf6kgM-W')"></div>
+</div>
+<div class="absolute -bottom-2 -right-2 size-8 bg-green-500 border-4 border-background-dark rounded-full"></div>
+</div>
+<div class="flex-1">
+<div class="flex flex-wrap items-center gap-3">
+<h1 class="text-3xl font-extrabold tracking-tight">Alex Rivera</h1>
+<span class="material-symbols-outlined text-accent-blue fill-accent-blue text-2xl">verified</span>
+<div class="flex items-center gap-1.5 bg-primary/20 text-primary border border-primary/30 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
+<span class="material-symbols-outlined text-sm">workspace_premium</span>
+                                    Top Rated
+                                </div>
+</div>
+<p class="text-lg text-gray-300 font-medium mt-1">Lead Automation Engineer • <span class="text-gray-500">New York, USA</span></p>
+<div class="flex flex-wrap gap-x-6 gap-y-2 mt-3 text-sm text-gray-500">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm">calendar_today</span>
+                                    Member since 2021
+                                </div>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm">task_alt</span>
+                                    124 Jobs Completed
+                                </div>
+</div>
+</div>
+</div>
+<!-- Stats Bar (Glassmorphic) -->
+<div class="glass-panel rounded-2xl p-6 flex flex-wrap justify-between gap-6 shadow-xl">
+<div class="flex flex-col gap-1">
+<span class="text-gray-500 text-xs font-bold uppercase tracking-widest">Rating</span>
+<div class="flex items-center gap-2">
+<span class="text-2xl font-black text-gradient">4.9/5</span>
+<div class="flex text-primary">
+<span class="material-symbols-outlined text-xs fill-primary">star</span>
+</div>
+</div>
+</div>
+<div class="w-px h-12 bg-white/10 hidden md:block"></div>
+<div class="flex flex-col gap-1">
+<span class="text-gray-500 text-xs font-bold uppercase tracking-widest">Job Success</span>
+<span class="text-2xl font-black text-gradient">100%</span>
+</div>
+<div class="w-px h-12 bg-white/10 hidden md:block"></div>
+<div class="flex flex-col gap-1">
+<span class="text-gray-500 text-xs font-bold uppercase tracking-widest">Total Earnings</span>
+<span class="text-2xl font-black text-gradient">$50k+</span>
+</div>
+<div class="w-px h-12 bg-white/10 hidden md:block"></div>
+<div class="flex flex-col gap-1">
+<span class="text-gray-500 text-xs font-bold uppercase tracking-widest">Response Time</span>
+<span class="text-2xl font-black text-gradient">&lt; 2h</span>
+</div>
+</div>
+<!-- Main Tabs Section -->
+<div class="mt-4">
+<div class="flex border-b border-white/10 px-2 gap-8 mb-8 overflow-x-auto whitespace-nowrap">
+<button class="flex flex-col items-center border-b-2 border-primary text-white pb-3 pt-2 px-1">
+<span class="text-sm font-bold tracking-wide">About Expert</span>
+</button>
+<button class="flex flex-col items-center border-b-2 border-transparent text-gray-500 hover:text-gray-300 pb-3 pt-2 px-1 transition-all">
+<span class="text-sm font-bold tracking-wide">Portfolio</span>
+</button>
+<button class="flex flex-col items-center border-b-2 border-transparent text-gray-500 hover:text-gray-300 pb-3 pt-2 px-1 transition-all">
+<span class="text-sm font-bold tracking-wide">Reviews (84)</span>
+</button>
+</div>
+<!-- Tab: About Expert -->
+<div class="space-y-6">
+<div class="prose prose-invert max-w-none">
+<p class="text-gray-300 leading-relaxed text-lg">
+                                    Specializing in complex <span class="text-primary font-bold underline decoration-primary/30">n8n workflow automation</span>, I help businesses scale by connecting disparate APIs and optimizing logic flows. With over 5 years of experience in backend engineering, I focus on creating resilient, error-resistant automations that save hundreds of hours monthly.
+                                </p>
+<p class="text-gray-300 leading-relaxed text-lg mt-4">
+                                    I don't just build workflows; I design systems. Whether it's integrating your CRM with proprietary internal tools or building high-volume data pipelines, I ensure every node is optimized for performance and maintainability.
+                                </p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8">
+<div class="bg-white/5 border border-white/10 rounded-xl p-4">
+<h4 class="font-bold text-white mb-2 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">terminal</span> Skills
+                                    </h4>
+<div class="flex flex-wrap gap-2">
+<span class="bg-white/10 px-3 py-1 rounded-full text-xs font-semibold">n8n</span>
+<span class="bg-white/10 px-3 py-1 rounded-full text-xs font-semibold">REST APIs</span>
+<span class="bg-white/10 px-3 py-1 rounded-full text-xs font-semibold">JavaScript</span>
+<span class="bg-white/10 px-3 py-1 rounded-full text-xs font-semibold">PostgreSQL</span>
+<span class="bg-white/10 px-3 py-1 rounded-full text-xs font-semibold">Docker</span>
+<span class="bg-white/10 px-3 py-1 rounded-full text-xs font-semibold">Python</span>
+</div>
+</div>
+<div class="bg-white/5 border border-white/10 rounded-xl p-4">
+<h4 class="font-bold text-white mb-2 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">integration_instructions</span> Top Integrations
+                                    </h4>
+<div class="flex flex-wrap gap-2">
+<span class="bg-white/10 px-3 py-1 rounded-full text-xs font-semibold">Salesforce</span>
+<span class="bg-white/10 px-3 py-1 rounded-full text-xs font-semibold">Slack</span>
+<span class="bg-white/10 px-3 py-1 rounded-full text-xs font-semibold">Stripe</span>
+<span class="bg-white/10 px-3 py-1 rounded-full text-xs font-semibold">Shopify</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Portfolio Preview Title -->
+<div class="mt-12 mb-6 flex items-center justify-between">
+<h3 class="text-xl font-bold">Featured Projects</h3>
+<a class="text-primary text-sm font-bold hover:underline" href="#">View All</a>
+</div>
+<!-- Portfolio Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Portfolio Card 1 -->
+<div class="group relative overflow-hidden rounded-2xl bg-card-dark border border-white/5 hover:border-primary/50 transition-all shadow-lg">
+<div class="aspect-video bg-gray-800 bg-cover bg-center transition-transform duration-500 group-hover:scale-105" data-alt="Dashboard showing complex data visualization graph" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCOJwFtqKFXMfkCt4eYu-RQQd39Bqtyoa7mYtJPDCQaiIZsHGLazqx24S0iDpm89qOI4UzISXGSfD1EePZw6I7MWQKtCRo6KgJJYfV1xwox4eBjgBynVAPSLMW-NQASWJi0DPpnJgJfEvuC5QTqhEfwrjY8CmF0k9wXo9mluQUaWnov22R0lMvABf3A2YMQ61Jt18k5LD8tU8DN3D7wccEJuHNdTIp-De7EfmkN324tl9gThu_9klNZqG5PVP-LnEB45YjDfBNg1C6F')"></div>
+<div class="p-5">
+<h4 class="font-bold text-lg mb-1">CRM Data Sync Engine</h4>
+<p class="text-sm text-gray-400 mb-4 line-clamp-2">Bi-directional sync between HubSpot and custom ERP using advanced n8n logic and error handling.</p>
+<button class="flex items-center gap-2 text-xs font-bold text-primary group-hover:gap-3 transition-all">
+                                        VIEW WORKFLOW <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Portfolio Card 2 -->
+<div class="group relative overflow-hidden rounded-2xl bg-card-dark border border-white/5 hover:border-primary/50 transition-all shadow-lg">
+<div class="aspect-video bg-gray-800 bg-cover bg-center transition-transform duration-500 group-hover:scale-105" data-alt="Abstract code on a digital screen with blue lights" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC0QGrJD2plMwN_G3JZ013XUcIkfn78cwJRoBd7DO_PaR3bnJasJR9VqfoYJnPG4XRt4Hp4CDLtZdQIg8Z8ZXDg39I7VDMKp09LU-jRYZ8xdbYOhm3j8cumBukkhqAbDnXw-JA36-YJ7YbQ09hrbmVK4zrxoRQsUdhp_0jJx2L8VRQmw4v7hq_OOCWz08MSyrsvsvWbIlWcQVhGm81tHGGg3aH2IuLOrb-HWDwC0WQLrHmLdEdB9WpT-hDRsmmRULrQqedvyyowlKk2')"></div>
+<div class="p-5">
+<h4 class="font-bold text-lg mb-1">Automated SaaS Billing</h4>
+<p class="text-sm text-gray-400 mb-4 line-clamp-2">Complete billing automation pipeline with Stripe, Slack notifications, and QuickBooks reporting.</p>
+<button class="flex items-center gap-2 text-xs font-bold text-primary group-hover:gap-3 transition-all">
+                                        VIEW WORKFLOW <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Sidebar (Right) -->
+<div class="lg:col-span-4">
+<div class="sticky top-24 flex flex-col gap-6">
+<!-- Main Action Card -->
+<div class="glass-panel rounded-2xl p-8 shadow-2xl relative overflow-hidden">
+<!-- Background Accent -->
+<div class="absolute -top-12 -right-12 size-32 bg-primary/10 rounded-full blur-3xl"></div>
+<div class="mb-6">
+<p class="text-gray-400 text-sm font-medium">Starting from</p>
+<h2 class="text-5xl font-black text-white mt-1">$95<span class="text-lg font-bold text-gray-500">/hr</span></h2>
+</div>
+<div class="flex flex-col gap-4">
+<button class="w-full bg-primary hover:bg-primary/90 text-white font-extrabold py-4 rounded-xl shadow-lg shadow-primary/20 transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">send</span>
+                                    Send Invitation
+                                </button>
+<button class="w-full bg-white/5 hover:bg-white/10 text-white border border-white/20 font-bold py-4 rounded-xl transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">event_available</span>
+                                    Book 1:1 Consultation
+                                </button>
+</div>
+<div class="mt-8 space-y-4 pt-6 border-t border-white/10">
+<div class="flex items-center justify-between group cursor-pointer">
+<span class="text-gray-400 font-medium group-hover:text-white transition-colors">Save to Favorites</span>
+<span class="material-symbols-outlined text-gray-500 group-hover:text-primary group-hover:fill-primary transition-all">favorite</span>
+</div>
+<div class="flex items-center justify-between group cursor-pointer">
+<span class="text-gray-400 font-medium group-hover:text-white transition-colors">Share Profile</span>
+<span class="material-symbols-outlined text-gray-500 group-hover:text-accent-blue transition-all">share</span>
+</div>
+</div>
+</div>
+<!-- Availability Card -->
+<div class="glass-panel rounded-2xl p-6 border border-white/5">
+<h4 class="font-bold text-sm mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-green-400 text-sm fill-green-400">circle</span> 
+                                Current Availability
+                            </h4>
+<div class="space-y-3">
+<div class="flex justify-between items-center text-sm">
+<span class="text-gray-500">Weekly capacity</span>
+<span class="text-white font-semibold">20 hours</span>
+</div>
+<div class="flex justify-between items-center text-sm">
+<span class="text-gray-500">Typical response</span>
+<span class="text-white font-semibold">Under 2 hours</span>
+</div>
+</div>
+</div>
+<!-- User Testimonial Sidebar Snippet -->
+<div class="bg-card-dark/50 rounded-2xl p-6 border border-white/5 italic">
+<div class="flex text-primary mb-2">
+<span class="material-symbols-outlined text-xs fill-primary">star</span>
+<span class="material-symbols-outlined text-xs fill-primary">star</span>
+<span class="material-symbols-outlined text-xs fill-primary">star</span>
+<span class="material-symbols-outlined text-xs fill-primary">star</span>
+<span class="material-symbols-outlined text-xs fill-primary">star</span>
+</div>
+<p class="text-gray-400 text-sm leading-relaxed">"Alex is hands down the best n8n expert we've hired. He solved a workflow issue that three other developers couldn't fix."</p>
+<p class="text-xs font-bold text-white mt-3 not-italic">— Sarah T., CTO @ DataFlow</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer Footer -->
+<footer class="mt-12 py-12 px-6 border-t border-white/5 glass-panel">
+<div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+<div class="flex items-center gap-2 text-white/50">
+<span class="material-symbols-outlined text-lg">account_tree</span>
+<span class="text-sm font-bold">n8nExperts Marketplace</span>
+</div>
+<div class="flex gap-8 text-sm text-gray-500">
+<a class="hover:text-white transition-colors" href="#">Privacy Policy</a>
+<a class="hover:text-white transition-colors" href="#">Terms of Service</a>
+<a class="hover:text-white transition-colors" href="#">Support</a>
+</div>
+<p class="text-sm text-gray-600">© 2024 n8nExperts. All rights reserved.</p>
+</div>
+</footer>
+</div>
+</body></html>

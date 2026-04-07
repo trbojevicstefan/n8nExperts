@@ -14,12 +14,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import {
-  AppPageHeader,
   ContextAside,
   DenseListCard,
   EmptyState,
-  FilterToolbar,
-  StatStrip,
 } from "@/components/layout/PagePrimitives";
 import { getFormFeedback } from "@/lib/form-feedback";
 import { getJobMarketplaceSummary } from "@/lib/hiring-signals";
@@ -247,9 +244,6 @@ export default function FindWork() {
     [expertSkills, selectedJob]
   );
 
-  const strongBriefs = sortedJobs.filter((item) => item.summary.detailTone === "strong").length;
-  const seriousClients = sortedJobs.filter((item) => item.summary.seriousness.score >= 70).length;
-
   const saveCurrentSearch = async () => {
     if (!user || user.role !== "expert") {
       return;
@@ -335,265 +329,317 @@ export default function FindWork() {
   };
 
   return (
-    <div className="container py-8">
-      <AppPageHeader
-        eyebrow={
-          <>
-            <Briefcase className="h-4 w-4" />
-            Expert workspace
-          </>
-        }
-        title="Find Work"
-        description="Sort for detail, filter for fit, and apply with a proposal that sounds specific to the job in front of you."
-      >
-        <StatStrip
-          items={[
-            { label: "Results", value: sortedJobs.length, hint: "Open jobs in the current view." },
-            { label: "Strong briefs", value: strongBriefs, hint: "Jobs with the clearest structured scope." },
-            { label: "Serious clients", value: seriousClients, hint: "Brief quality plus visible hiring proof." },
-            {
-              label: "Best-fit basis",
-              value: expertSkills.length > 0 ? `${expertSkills.length} profile skills` : "Structured brief",
-              hint: "Best fit uses your skills when available, then falls back to the brief.",
-            },
-          ]}
-        />
-      </AppPageHeader>
+    <div className="min-h-[calc(100vh-4rem)] bg-[#0a0a0b] text-white pt-10 pb-20 relative">
+      <div 
+        className="absolute inset-0 pointer-events-none opacity-50 z-0"
+        style={{ backgroundImage: 'radial-gradient(rgba(244, 37, 89, 0.1) 1px, transparent 1px)', backgroundSize: '30px 30px' }}
+      ></div>
 
-      {flash && (
-        <div
-          className={`mt-6 rounded-lg px-3 py-2 text-sm ${
-            flash.tone === "success"
-              ? "border border-emerald-500/20 bg-emerald-500/10 text-emerald-200"
-              : flash.tone === "error"
-                ? "border border-red-500/20 bg-red-500/10 text-red-200"
-                : "border border-sky-500/20 bg-sky-500/10 text-sky-200"
-          }`}
-        >
-          {flash.text}
-        </div>
-      )}
-
-      <FilterToolbar
-        className="mt-6"
-        title="Filter jobs"
-        description="Use a few simple filters, then switch between newest, most detailed, or best fit without waiting on a new ranking service."
-        actions={
-          user?.role === "expert" ? (
-            <>
-              <Button size="sm" variant="outline" onClick={saveCurrentSearch}>
-                <BookmarkPlus className="h-4 w-4 mr-1" />
-                Save search
-              </Button>
-              <Link to="/saved-searches" className="text-xs text-sky-300 hover:underline">
-                Manage saved searches
-              </Link>
-            </>
-          ) : null
-        }
-      >
-        <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-5">
-          <div className="relative xl:col-span-2">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
-            <Input
-              className="pl-10"
-              placeholder="Search jobs by title, stack, or integration..."
-              value={searchText}
-              onChange={(event) => updateSearch({ search: event.target.value })}
-            />
+      <div className="max-w-7xl mx-auto px-4 py-8 flex gap-8 relative z-10 w-full">
+        {/* Job Feed Content */}
+        <div className="flex-1 max-w-3xl xl:max-w-4xl mx-auto w-full">
+          <div className="mb-10 text-center xl:text-left">
+            <h1 className="text-4xl font-extrabold tracking-tight mb-2 text-white">Find Work</h1>
+            <p className="text-slate-400 text-lg">Browse open projects and submit proposals to top clients.</p>
           </div>
-          <Input placeholder="Skills (comma separated)" value={skillsFilter} onChange={(event) => updateSearch({ skills: event.target.value })} />
-          <Input placeholder="Min budget" value={minBudget} onChange={(event) => updateSearch({ min: event.target.value })} />
-          <div className="flex gap-2">
-            <Input placeholder="Max budget" value={maxBudget} onChange={(event) => updateSearch({ max: event.target.value })} />
-            <select
-              aria-label="Sort jobs"
-              className="rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] px-3 py-2 text-sm text-white"
-              value={sortFilter}
-              onChange={(event) => updateSearch({ sort: event.target.value })}
+
+          {flash && (
+            <div
+              className={`mb-6 rounded-xl px-4 py-3 text-sm font-semibold border ${
+                flash.tone === "success"
+                  ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-300"
+                  : flash.tone === "error"
+                    ? "border-red-500/30 bg-red-500/10 text-red-300"
+                    : "border-sky-500/30 bg-sky-500/10 text-sky-300"
+              }`}
             >
-              <option value="newest">Newest</option>
-              <option value="oldest">Oldest</option>
-              <option value="budgetDesc">High budget</option>
-              <option value="budgetAsc">Low budget</option>
-              <option value="mostDetailed">Most detailed</option>
-              <option value="bestFit">Best fit</option>
-            </select>
-          </div>
-        </div>
-        {info && (
-          <p className="mt-2 text-xs text-emerald-300">
-            {info}{" "}
-            {info.includes("My Applications") && (
-              <Link to="/my-applications" className="font-semibold text-emerald-200 underline underline-offset-4">
-                Open My Applications
-              </Link>
-            )}
-          </p>
-        )}
-        <p className="mt-3 text-xs text-[var(--color-text-muted)]">
-          Most detailed and best fit are client-side sorts based on the structured brief, visible client history, and your current expert skills when available.
-        </p>
-      </FilterToolbar>
-
-      <FormBanner message={pageError} className="mb-4" />
-
-      <div className="mt-6 grid gap-6 xl:grid-cols-[minmax(0,1fr)_320px]">
-        <div className="grid gap-4">
-          {isLoading && <p className="text-slate-300">Loading jobs...</p>}
-          {!isLoading && sortedJobs.length === 0 && (
-            <EmptyState
-              title="No jobs match these filters."
-              description="Try clearing one or two filters, or switch back to newest so you can widen the search before new jobs come in."
-              action={
-                <Button variant="outline" size="sm" onClick={() => setSearchParams(new URLSearchParams(), { replace: true })}>
-                  Clear filters
-                </Button>
-              }
-            />
+              {flash.text}
+            </div>
           )}
 
-          {sortedJobs.map(({ job, summary }) => {
-            const client = typeof job.clientId === "string" ? null : job.clientId;
-            const detail = detailBadge(summary.detailTone);
+          {/* Filters / Search Bar (Replaces PagePrimitives components to match Stitch) */}
+          <div className="mb-8 p-4 rounded-2xl border border-white/10 bg-white/5 space-y-4">
+            <div className="flex items-center gap-2 overflow-x-auto pb-2 custom-scrollbar">
+              <div className="relative flex-1 min-w-[200px]">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                <Input
+                  className="pl-10 bg-white/5 border-white/10 text-white rounded-full focus:ring-primary focus:border-transparent h-10 w-full"
+                  placeholder="Search projects..."
+                  value={searchText}
+                  onChange={(event) => updateSearch({ search: event.target.value })}
+                />
+              </div>
+              
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-slate-400 whitespace-nowrap">Sort:</span>
+                <select
+                  aria-label="Sort jobs"
+                  className="bg-transparent border-none text-sm font-semibold focus:ring-0 p-0 pr-4 cursor-pointer text-primary appearance-none [&>option]:bg-[#1e1e1e]"
+                  value={sortFilter}
+                  onChange={(event) => updateSearch({ sort: event.target.value })}
+                >
+                  <option value="newest">Newest</option>
+                  <option value="oldest">Oldest</option>
+                  <option value="budgetDesc">Budget: High to Low</option>
+                  <option value="budgetAsc">Budget: Low to High</option>
+                  <option value="mostDetailed">Most Detailed</option>
+                  <option value="bestFit">Best Fit</option>
+                </select>
+              </div>
 
-            return (
-              <DenseListCard key={job._id} className={`transition hover:border-[var(--color-border-hover)] ${detail.cardClassName}`}>
-                <button
-                  type="button"
+              {user?.role === "expert" && (
+                <Button size="sm" variant="outline" onClick={saveCurrentSearch} className="rounded-full border-white/20 bg-white/5 hover:bg-white/10 ml-auto whitespace-nowrap">
+                  <BookmarkPlus className="h-4 w-4 mr-1" />
+                  Save search
+                </Button>
+              )}
+            </div>
+            
+            {info && (
+              <p className="text-xs text-emerald-400 px-2">
+                {info}{" "}
+                {info.includes("My Applications") && (
+                  <Link to="/my-applications" className="font-bold underline underline-offset-4">
+                    Open My Applications
+                  </Link>
+                )}
+              </p>
+            )}
+          </div>
+
+          <FormBanner message={pageError} className="mb-4" />
+
+          {/* Feed List */}
+          <div className="space-y-5">
+            {isLoading && <p className="text-slate-400 text-center py-10 font-medium">Loading projects...</p>}
+            
+            {!isLoading && sortedJobs.length === 0 && (
+              <EmptyState
+                title="No jobs match these filters."
+                description="Try clearing one or two filters, or switch back to newest."
+                action={
+                  <Button variant="outline" size="sm" onClick={() => setSearchParams(new URLSearchParams(), { replace: true })}>
+                    Clear filters
+                  </Button>
+                }
+              />
+            )}
+
+            {sortedJobs.map(({ job, summary }) => {
+              const client = typeof job.clientId === "string" ? null : job.clientId;
+              
+              return (
+                <div 
+                  key={job._id}
                   onClick={() => {
                     setSelectedJob(job);
                     updateSearch({ jobId: job._id });
                   }}
-                  className="w-full text-left"
+                  className="group bg-[#1e1e1e] border border-white/10 p-6 rounded-2xl hover:border-primary/50 transition-all cursor-pointer shadow-sm relative overflow-hidden"
                 >
-                  <div className="flex flex-wrap items-start justify-between gap-4">
-                    <div className="space-y-2">
-                      <div className="flex flex-wrap gap-2">
-                        <Badge variant={detail.variant}>{detail.label}</Badge>
-                        <Badge variant={seriousnessVariant(summary.seriousness.score)}>{summary.seriousness.label}</Badge>
-                        {summary.fit.overlap.length > 0 && (
-                          <Badge variant="secondary">
-                            {summary.fit.overlap.length} shared skill{summary.fit.overlap.length === 1 ? "" : "s"}
-                          </Badge>
-                        )}
-                      </div>
-                      <h2 className="text-lg font-bold text-white">{job.title}</h2>
-                      <p className="text-sm text-slate-300 line-clamp-3">{job.description}</p>
+                  {/* Highlight bar for 'best fits' or 'strong briefs' */}
+                  {(summary.detailTone === "strong" || summary.fit.score > 70) && (
+                    <div className="absolute top-0 left-0 w-1 h-full bg-primary opacity-50 group-hover:opacity-100 transition-opacity"></div>
+                  )}
+                  
+                  <div className="flex justify-between items-start mb-2">
+                    <div className="flex items-center gap-2">
+                      <h3 className="text-xl font-bold text-white group-hover:text-primary transition-colors text-balance mr-4">{job.title}</h3>
+                      {client && client.hiresCount && client.hiresCount > 0 ? (
+                        <span className="material-symbols-outlined text-sky-400 text-xl" title="Verified Client" style={{ fontVariationSettings: "'FILL' 1" }}>verified</span>
+                      ) : null}
                     </div>
-                    <Badge variant="outline">{job.visibility}</Badge>
+                    <span className="text-primary font-extrabold text-lg whitespace-nowrap shrink-0">
+                      ${job.budgetAmount} {job.budgetType === "hourly" ? "/hr" : "Fixed"}
+                    </span>
                   </div>
-
-                  <div className="mt-3 flex flex-wrap gap-2 text-xs text-slate-300">
-                    <JobBriefSignals job={job} showScore />
-                    {summary.fit.overlap.map((skill) => (
-                      <Badge key={`${job._id}-${skill}`} variant="secondary" className="capitalize">
-                        Match: {skill}
-                      </Badge>
-                    ))}
+                  
+                  <div className="flex gap-3 text-sm text-slate-400 mb-4 font-medium">
+                    <span className="flex items-center gap-1.5 border border-white/10 bg-white/5 px-2 py-0.5 rounded-full text-xs">
+                      <Clock3 className="h-3 w-3" /> {formatRelativeTime(job.createdAt)}
+                    </span>
+                    {summary.detailTone === "strong" && (
+                      <span className="flex items-center gap-1.5 border border-emerald-500/20 bg-emerald-500/10 text-emerald-300 px-2 py-0.5 rounded-full text-xs">
+                        Detailed Brief
+                      </span>
+                    )}
+                    {summary.fit.overlap.length > 0 && (
+                      <span className="flex items-center gap-1.5 border border-sky-500/20 bg-sky-500/10 text-sky-300 px-2 py-0.5 rounded-full text-xs cursor-help" title={`Matches: ${summary.fit.overlap.join(', ')}`}>
+                        {summary.fit.overlap.length} Skill Match
+                      </span>
+                    )}
                   </div>
-
-                  <div className="mt-3 rounded-xl border border-white/10 bg-black/10 p-3">
-                    <p className="text-sm font-medium text-white">{summary.seriousness.summary}</p>
-                    <p className="mt-1 text-xs text-slate-400">{summary.fit.summary}</p>
-                  </div>
-
-                  <div className="mt-3 flex flex-wrap gap-2">
+                  
+                  <p className="text-slate-300 mb-5 line-clamp-3 leading-relaxed text-sm">
+                    {job.description}
+                  </p>
+                  
+                  <div className="flex flex-wrap gap-2 mb-6">
                     {job.skills.map((skill) => (
-                      <Badge key={skill} variant="secondary" className="text-xs">
+                      <span key={skill} className="bg-white/5 border border-white/10 text-slate-300 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider">
                         {skill}
-                      </Badge>
+                      </span>
                     ))}
                   </div>
-
-                  <div className="mt-4 flex flex-wrap items-center gap-4 text-sm">
-                    <p className="font-semibold text-primary">
-                      ${job.budgetAmount} {job.budgetType === "hourly" ? "/hr" : "fixed"}
-                    </p>
-                    <p className="inline-flex items-center gap-1 text-slate-400">
-                      <Clock3 className="h-4 w-4" />
-                      {formatRelativeTime(job.createdAt)}
-                    </p>
-                    {sortFilter === "bestFit" && <p className="text-slate-300">Fit score {summary.fit.score}</p>}
-                    {sortFilter === "mostDetailed" && <p className="text-slate-300">Detail score {summary.quality.score}</p>}
-                  </div>
-                </button>
-
-                {user?.role === "expert" && (
-                  <div className="mt-3">
-                    <Button size="sm" variant="outline" onClick={() => toggleSavedJob(job._id)}>
-                      <Star className={`h-4 w-4 mr-1 ${savedJobIds.has(job._id) ? "fill-current text-amber-300" : ""}`} />
-                      {savedJobIds.has(job._id) ? "Starred for later" : "Star job for later"}
-                    </Button>
-                  </div>
-                )}
-
-                {client && (
-                  <div className="mt-3 border-t border-white/10 pt-3 text-xs text-slate-400">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <span>Client: {client.companyName || client.username}</span>
-                      <Link to={`/clients/${client._id}`} className="text-sky-300 hover:underline">
-                        View client profile
-                      </Link>
+                  
+                  <div className="flex items-center justify-between border-t border-white/5 pt-4">
+                    <div className="flex flex-wrap items-center gap-4 text-xs font-semibold text-slate-500">
+                      <span className="flex items-center gap-1.5 text-slate-400">
+                        <span className="material-symbols-outlined text-lg">group</span>
+                        {/* We don't have proposal count in job object normally, but we can fake it or omit it. Let's show client name */}
+                        {client ? client.companyName || client.username : "Confidential Client"}
+                      </span>
+                      
+                      {sortFilter === "mostDetailed" && <span className="text-slate-500">Detail: {summary.quality.score}</span>}
+                      {sortFilter === "bestFit" && <span className="text-slate-500">Fit score: {summary.fit.score}</span>}
                     </div>
-                    <div className="mt-2 flex flex-wrap gap-2">
-                      {summary.seriousness.signals
-                        .filter((signal) => signal.present)
-                        .slice(0, 3)
-                        .map((signal) => (
-                          <Badge key={`${job._id}-${signal.key}`} variant="secondary">
-                            {signal.detail}
-                          </Badge>
-                        ))}
-                    </div>
-                    <div className="mt-2 grid grid-cols-2 gap-2 rounded-lg border border-white/10 bg-white/5 p-2 sm:grid-cols-4">
-                      <p>
-                        Posted: <span className="font-semibold text-white">{client.jobsPostedCount ?? 0}</span>
-                      </p>
-                      <p>
-                        Completed: <span className="font-semibold text-white">{client.jobsCompletedCount ?? 0}</span>
-                      </p>
-                      <p>
-                        Hires: <span className="font-semibold text-white">{client.hiresCount ?? 0}</span>
-                      </p>
-                      <p>
-                        Avg response:{" "}
-                        <span className="font-semibold text-white">
-                          {client.avgClientResponseHours ? `${client.avgClientResponseHours}h` : "New"}
-                        </span>
-                      </p>
+
+                    <div className="flex items-center gap-3">
+                      {user?.role === "expert" && (
+                        <button 
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            toggleSavedJob(job._id);
+                          }}
+                          className={`p-1.5 rounded-full transition-colors ${savedJobIds.has(job._id) ? "text-amber-400 bg-amber-400/10" : "text-slate-400 hover:text-white hover:bg-white/10"}`}
+                          title="Save Job"
+                        >
+                          <Star className={`h-4 w-4 ${savedJobIds.has(job._id) ? "fill-current" : ""}`} />
+                        </button>
+                      )}
+                      <button className="text-primary text-sm font-bold flex items-center gap-1 group-hover:underline">
+                        View Details <span className="material-symbols-outlined text-sm">arrow_forward</span>
+                      </button>
                     </div>
                   </div>
-                )}
-              </DenseListCard>
-            );
-          })}
+                </div>
+              );
+            })}
+          </div>
         </div>
 
-        <ContextAside
-          eyebrow="How to sort"
-          title="Use detail first, then decide if the fit is real."
-          description="A strong application starts by checking whether the brief is specific enough to support a serious conversation."
-          className="h-fit xl:sticky"
-          style={{ top: "calc(var(--chrome-sticky-offset) + 0.5rem)" }}
-        >
-          <div className="space-y-3 text-sm text-[var(--color-text-secondary)]">
-            <div className="rounded-2xl border border-white/8 bg-white/5 p-4">
-              <p className="font-semibold text-white">Most detailed</p>
-              <p className="mt-2">This sort rewards outcome, systems, constraints, deliverables, and timing signals already present in the brief.</p>
+        {/* Sliding Proposal Drawer (Desktop Context Aside replacement) */}
+        <aside className="hidden xl:block w-[450px] sticky h-[calc(100vh-8rem)] rounded-3xl border border-white/10 shadow-2xl overflow-hidden" style={{ top: "calc(var(--chrome-sticky-offset) + 1rem)", background: 'rgba(30, 30, 30, 0.8)', backdropFilter: 'blur(12px)' }}>
+          <div className="h-full flex flex-col">
+            <div className="p-6 border-b border-white/10 flex items-center justify-between bg-white/[0.02]">
+              <h2 className="text-xl font-black text-white flex items-center gap-2">
+                <Briefcase className="h-5 w-5 text-primary" />
+                {selectedJob ? "Submit Proposal" : "Job Context"}
+              </h2>
+              {selectedJob && (
+                <button onClick={() => { setSelectedJob(null); updateSearch({ jobId: "" }); }} className="p-1.5 hover:bg-white/10 rounded-full transition-colors text-slate-400">
+                  <span className="material-symbols-outlined text-xl">close</span>
+                </button>
+              )}
             </div>
-            <div className="rounded-2xl border border-white/8 bg-white/5 p-4">
-              <p className="font-semibold text-white">Best fit</p>
-              <p className="mt-2">This combines brief strength with direct overlap against your current expert skills when we have them.</p>
-            </div>
-            <div className="rounded-2xl border border-white/8 bg-white/5 p-4">
-              <p className="font-semibold text-white">Proposal rule</p>
-              <p className="mt-2">If the client brief still feels thin, qualify the scope in your proposal instead of pretending the work is already fully defined.</p>
+
+            <div className="p-6 overflow-y-auto custom-scrollbar flex-1">
+              {!selectedJob ? (
+                <div className="space-y-6">
+                  <div className="text-center p-8 bg-white/5 rounded-2xl border border-white/5">
+                    <span className="material-symbols-outlined text-5xl text-slate-500 mb-4">search</span>
+                    <h3 className="text-lg font-bold text-white mb-2">Select a Job</h3>
+                    <p className="text-sm text-slate-400">Click on a project from the feed to view its details and submit a proposal.</p>
+                  </div>
+
+                  <div className="space-y-4">
+                    <h4 className="text-sm font-bold uppercase tracking-wider text-slate-500">How sorting works</h4>
+                    <div className="bg-white/5 p-4 rounded-xl border border-white/5">
+                      <p className="font-bold text-white text-sm mb-1">Most detailed</p>
+                      <p className="text-xs text-slate-400 leading-relaxed">Rewards outcomes, systems, and clear constraints. Look for these for smoother communication.</p>
+                    </div>
+                    <div className="bg-white/5 p-4 rounded-xl border border-white/5">
+                      <p className="font-bold text-white text-sm mb-1">Best fit</p>
+                      <p className="text-xs text-slate-400 leading-relaxed">Cross-references the job's stack against your profile skills.</p>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-8">
+                  {/* Job Summary Header */}
+                  <div className="p-5 bg-primary/10 rounded-2xl border border-primary/20 relative overflow-hidden">
+                    <div className="absolute -top-4 -right-4 size-16 bg-primary/20 rounded-full blur-[20px]"></div>
+                    <div className="text-[10px] font-bold uppercase tracking-widest text-primary mb-2 relative z-10">Applying for</div>
+                    <h4 className="text-lg font-bold text-white leading-tight relative z-10">{selectedJob.title}</h4>
+                    <div className="mt-3 text-sm font-semibold text-slate-300 flex items-center gap-2 relative z-10">
+                      <span className="material-symbols-outlined text-base">payments</span>
+                      Budget: ${selectedJob.budgetAmount} {selectedJob.budgetType === "hourly" ? "Hourly Rate" : "Fixed"}
+                    </div>
+                  </div>
+
+                  {/* Client Context */}
+                  {typeof selectedJob.clientId !== "string" && (
+                     <div className="rounded-xl border border-white/10 bg-white/[0.03] p-4 text-sm text-slate-300 space-y-3">
+                        <div className="flex items-center justify-between">
+                          <p className="font-bold text-white">Client info</p>
+                          <Link to={`/clients/${selectedJob.clientId._id}`} className="text-primary text-xs font-bold hover:underline">View Profile</Link>
+                        </div>
+                        <div className="grid grid-cols-2 gap-3 text-xs">
+                          <div>
+                            <p className="text-slate-500">Jobs Posted</p>
+                            <p className="font-bold text-white text-lg">{selectedJob.clientId.jobsPostedCount ?? 0}</p>
+                          </div>
+                          <div>
+                            <p className="text-slate-500">Avg Response</p>
+                            <p className="font-bold text-white text-lg">{selectedJob.clientId.avgClientResponseHours ? `${selectedJob.clientId.avgClientResponseHours}h` : "New"}</p>
+                          </div>
+                        </div>
+                     </div>
+                  )}
+
+                  {selectedJob.brief && <JobBriefDetails brief={selectedJob.brief} />}
+
+                  <div className="border-t border-white/10 pt-6">
+                    <h3 className="text-lg font-bold text-white mb-4">Your Proposal</h3>
+                    
+                    {!user || user.role !== "expert" ? (
+                      <div className="rounded-xl border border-sky-400/20 bg-sky-500/10 p-5 text-sm font-medium text-sky-200">
+                        <span className="material-symbols-outlined text-sky-400 text-3xl mb-2 block">info</span>
+                        Browse the job here, then switch into an expert account when you are ready to apply.
+                      </div>
+                    ) : (
+                      <ProposalComposer
+                        key={selectedJob._id}
+                        job={selectedJob}
+                        coverLetter={proposalData.coverLetter}
+                        onCoverLetterChange={(coverLetter) => updateProposalField("coverLetter", coverLetter)}
+                        bidAmount={proposalData.bidAmount}
+                        onBidAmountChange={(bidAmount) => updateProposalField("bidAmount", bidAmount)}
+                        estimatedDuration={proposalData.estimatedDuration}
+                        onEstimatedDurationChange={(estimatedDuration) => updateProposalField("estimatedDuration", estimatedDuration)}
+                        feedback={applyFeedback}
+                      />
+                    )}
+                  </div>
+
+                  {user?.role === "expert" && (
+                    <div className="pt-2">
+                       <Button
+                        className="w-full h-14 font-extrabold text-base bg-primary hover:bg-primary/90 text-white rounded-xl shadow-[0_0_20px_rgba(244,37,89,0.3)] transition-all flex items-center justify-center gap-2"
+                        onClick={handleApply}
+                        disabled={proposalData.coverLetter.trim().length < 30 || isSubmitting}
+                      >
+                        {isSubmitting ? (
+                          "Submitting..."
+                        ) : (
+                          <>
+                            Submit Proposal <Send className="h-5 w-5" />
+                          </>
+                        )}
+                      </Button>
+                      <p className="text-center text-xs font-semibold text-slate-500 mt-4 px-4">
+                        By submitting, you agree to the n8n Experts terms of service and project agreement.
+                      </p>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           </div>
-        </ContextAside>
+        </aside>
       </div>
 
+      {/* Mobile Modal for selected job */}
       <Sheet
         open={Boolean(selectedJob)}
         onOpenChange={(open) => {
@@ -602,102 +648,69 @@ export default function FindWork() {
           updateSearch({ jobId: "" });
         }}
       >
-        <SheetContent className="overflow-y-auto sm:max-w-xl">
+        <SheetContent className="overflow-y-auto sm:max-w-xl bg-[#121212] border-white/10 text-white xl:hidden">
           <SheetHeader>
-            <SheetTitle>{selectedJob?.title}</SheetTitle>
-            <SheetDescription>
-              Write a proposal that references this client&apos;s outcome, systems, risks, and timing instead of sending a generic introduction.
+            <SheetTitle className="text-white">{selectedJob?.title}</SheetTitle>
+            <SheetDescription className="text-slate-400">
+              Review details and submit a customized proposal below.
             </SheetDescription>
           </SheetHeader>
 
           {selectedJob && (
-            <div className="mt-6 space-y-5">
-              {user?.role === "expert" && (
-                <div className="flex items-center justify-end">
-                  <Button size="sm" variant="outline" onClick={() => toggleSavedJob(selectedJob._id)}>
-                    <Star className={`h-4 w-4 mr-1 ${savedJobIds.has(selectedJob._id) ? "fill-current text-amber-300" : ""}`} />
-                    {savedJobIds.has(selectedJob._id) ? "Starred for later" : "Star for later"}
-                  </Button>
-                </div>
-              )}
-
-              <div className="rounded-xl border border-white/10 bg-[var(--color-bg-elevated)] p-4 text-sm text-slate-300">
-                <div className="flex flex-wrap gap-2">
-                  {selectedJobSummary && (
-                    <>
-                      <Badge variant={detailBadge(selectedJobSummary.detailTone).variant}>{detailBadge(selectedJobSummary.detailTone).label}</Badge>
-                      <Badge variant={seriousnessVariant(selectedJobSummary.seriousness.score)}>{selectedJobSummary.seriousness.label}</Badge>
-                      {selectedJobSummary.fit.overlap.length > 0 && (
-                        <Badge variant="secondary">{selectedJobSummary.fit.overlap.join(", ")}</Badge>
-                      )}
-                    </>
+            <div className="mt-6 space-y-6 pb-20">
+              <div className="p-4 bg-primary/10 rounded-2xl border border-primary/20">
+                <div className="text-sm font-semibold text-slate-300 flex flex-wrap items-center justify-between gap-2">
+                  <span className="flex items-center gap-2">
+                    <span className="material-symbols-outlined text-base text-primary">payments</span>
+                    Budget: ${selectedJob.budgetAmount} {selectedJob.budgetType === "hourly" ? "Hourly Rate" : "Fixed"}
+                  </span>
+                  
+                  {user?.role === "expert" && (
+                    <Button size="sm" variant="outline" className="bg-white/5 border-white/10 hover:bg-white/10 text-white" onClick={() => toggleSavedJob(selectedJob._id)}>
+                      <Star className={`h-4 w-4 mr-1 ${savedJobIds.has(selectedJob._id) ? "fill-current text-amber-300" : ""}`} />
+                      {savedJobIds.has(selectedJob._id) ? "Starred" : "Save"}
+                    </Button>
                   )}
                 </div>
-                <p className="mt-3 text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Overview</p>
-                <p className="mt-2">{selectedJob.description}</p>
-                <p className="mt-3 font-semibold text-primary">
-                  Budget: ${selectedJob.budgetAmount} {selectedJob.budgetType === "hourly" ? "/hr" : "fixed"}
-                </p>
-                <JobBriefSignals job={selectedJob} className="mt-3" />
-                {typeof selectedJob.clientId !== "string" && (
-                  <div className="mt-3 text-xs text-slate-400">
-                    <p>
-                      Client: {selectedJob.clientId.companyName || selectedJob.clientId.username}
-                      <Link to={`/clients/${selectedJob.clientId._id}`} className="ml-2 text-sky-300 hover:underline">
-                        Open profile
-                      </Link>
-                    </p>
-                    <div className="mt-2 grid grid-cols-2 gap-2 rounded-lg border border-white/10 bg-white/5 p-2">
-                      <p>
-                        Jobs posted: <span className="font-semibold text-white">{selectedJob.clientId.jobsPostedCount ?? 0}</span>
-                      </p>
-                      <p>
-                        Completed: <span className="font-semibold text-white">{selectedJob.clientId.jobsCompletedCount ?? 0}</span>
-                      </p>
-                      <p>
-                        Hires: <span className="font-semibold text-white">{selectedJob.clientId.hiresCount ?? 0}</span>
-                      </p>
-                      <p>
-                        Avg response:{" "}
-                        <span className="font-semibold text-white">
-                          {selectedJob.clientId.avgClientResponseHours ? `${selectedJob.clientId.avgClientResponseHours}h` : "New"}
-                        </span>
-                      </p>
-                    </div>
-                  </div>
-                )}
               </div>
+
+               <div className="text-sm text-slate-300 leading-relaxed font-medium bg-white/5 p-4 rounded-xl border border-white/10">
+                 {selectedJob.description}
+               </div>
 
               {selectedJob.brief && <JobBriefDetails brief={selectedJob.brief} />}
 
-              {!user || user.role !== "expert" ? (
-                <div className="rounded-xl border border-sky-400/20 bg-sky-500/10 p-4 text-sm text-sky-100">
-                  Browse the job here, then switch into an expert account when you are ready to apply.
-                </div>
-              ) : (
-                <ProposalComposer
-                  key={selectedJob._id}
-                  job={selectedJob}
-                  coverLetter={proposalData.coverLetter}
-                  onCoverLetterChange={(coverLetter) => updateProposalField("coverLetter", coverLetter)}
-                  bidAmount={proposalData.bidAmount}
-                  onBidAmountChange={(bidAmount) => updateProposalField("bidAmount", bidAmount)}
-                  estimatedDuration={proposalData.estimatedDuration}
-                  onEstimatedDurationChange={(estimatedDuration) => updateProposalField("estimatedDuration", estimatedDuration)}
-                  feedback={applyFeedback}
-                />
-              )}
+              <div className="pt-4 border-t border-white/10">
+                <h3 className="text-lg font-bold text-white mb-4">Your Proposal</h3>
+                {!user || user.role !== "expert" ? (
+                  <div className="rounded-xl border border-sky-400/20 bg-sky-500/10 p-4 text-sm text-sky-100">
+                    Browse the job here, then switch into an expert account when you are ready to apply.
+                  </div>
+                ) : (
+                  <ProposalComposer
+                    key={selectedJob._id}
+                    job={selectedJob}
+                    coverLetter={proposalData.coverLetter}
+                    onCoverLetterChange={(coverLetter) => updateProposalField("coverLetter", coverLetter)}
+                    bidAmount={proposalData.bidAmount}
+                    onBidAmountChange={(bidAmount) => updateProposalField("bidAmount", bidAmount)}
+                    estimatedDuration={proposalData.estimatedDuration}
+                    onEstimatedDurationChange={(estimatedDuration) => updateProposalField("estimatedDuration", estimatedDuration)}
+                    feedback={applyFeedback}
+                  />
+                )}
+              </div>
             </div>
           )}
 
-          <SheetFooter className="mt-6">
+          <SheetFooter className="absolute bottom-0 left-0 right-0 p-4 bg-[#121212] border-t border-white/10 z-10">
             <Button
-              className="w-full"
+              className="w-full bg-primary hover:bg-primary/90 text-white h-12 font-bold rounded-xl"
               onClick={handleApply}
               disabled={!user || user.role !== "expert" || proposalData.coverLetter.trim().length < 30 || isSubmitting}
             >
               <Send className="h-4 w-4 mr-2" />
-              {isSubmitting ? "Submitting..." : user?.role === "expert" ? "Send proposal" : "Log in as expert to apply"}
+              {isSubmitting ? "Submitting..." : user?.role === "expert" ? "Send proposal" : "Log in to apply"}
             </Button>
           </SheetFooter>
         </SheetContent>

@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>n8n Experts - Find Work Marketplace</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f42559",
+                        "background-light": "#f8f5f6",
+                        "background-dark": "#121212",
+                        "card-dark": "#1e1e1e",
+                        "border-dark": "#2d2d2d"
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Manrope', sans-serif;
+        }
+        .glass-panel {
+            background: rgba(30, 30, 30, 0.8);
+            backdrop-filter: blur(12px);
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display min-h-screen">
+<!-- Top Navigation -->
+<header class="sticky top-0 z-40 w-full border-b border-slate-200 dark:border-border-dark bg-white/80 dark:bg-background-dark/80 backdrop-blur-md">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex justify-between h-16 items-center">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-2 text-primary">
+<span class="material-symbols-outlined text-3xl font-bold">hub</span>
+<span class="text-xl font-extrabold tracking-tight dark:text-white">n8n Experts</span>
+</div>
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-primary text-sm font-semibold border-b-2 border-primary py-5" href="#">Find Work</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-primary transition-colors text-sm font-medium" href="#">My Proposals</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-primary transition-colors text-sm font-medium" href="#">Messages</a>
+<a class="text-slate-500 dark:text-slate-400 hover:text-primary transition-colors text-sm font-medium" href="#">Dashboard</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden lg:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg">search</span>
+<input class="bg-slate-100 dark:bg-card-dark border-none rounded-lg pl-10 pr-4 py-2 text-sm w-64 focus:ring-1 focus:ring-primary" placeholder="Search projects..." type="text"/>
+</div>
+<button class="p-2 text-slate-500 hover:bg-slate-100 dark:hover:bg-card-dark rounded-lg relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full border-2 border-white dark:border-background-dark"></span>
+</button>
+<div class="h-8 w-8 rounded-full overflow-hidden border border-slate-200 dark:border-border-dark">
+<img alt="User Profile" data-alt="A professional headshot of a developer" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC3bOLUCqbzGe8Ynq115-4d0rEVCEBz6l9mZQMgQ8asGdr22wYvetVUWyI1bI733eGNx544tCvOUHhNAndC6-f4G2ZluO5JgioLwLlIcvkYpx37MTcCr3bDRwSNwvbpnfOOwlKXAkZu-VZuOo2heTxv1A7y0tVWRsPOwSfvLbR3Lol9_ELB73j2onVoM__2Vf1Qqb6l8DTchvjyrNTvFU2uq2BtjgEY7JodDc96fMbVid3oLWURpyO0D2FwzUMqeRhtjp442GMhZ95e"/>
+</div>
+</div>
+</div>
+</div>
+</header>
+<main class="max-w-7xl mx-auto px-4 py-8 flex gap-8 relative">
+<!-- Job Feed Content -->
+<div class="flex-1 max-w-3xl mx-auto">
+<div class="mb-10 text-center">
+<h1 class="text-4xl font-extrabold tracking-tight mb-2 dark:text-white">Find Work</h1>
+<p class="text-slate-500 dark:text-slate-400 text-lg">Browse open projects and submit proposals to top clients.</p>
+</div>
+<!-- Filters -->
+<div class="flex items-center gap-2 mb-8 overflow-x-auto pb-2 scrollbar-hide">
+<button class="bg-primary text-white px-4 py-1.5 rounded-full text-sm font-semibold whitespace-nowrap">All Jobs</button>
+<button class="bg-slate-200 dark:bg-card-dark text-slate-600 dark:text-slate-300 px-4 py-1.5 rounded-full text-sm font-medium whitespace-nowrap hover:bg-slate-300 dark:hover:bg-border-dark transition-colors">Fixed Price</button>
+<button class="bg-slate-200 dark:bg-card-dark text-slate-600 dark:text-slate-300 px-4 py-1.5 rounded-full text-sm font-medium whitespace-nowrap hover:bg-slate-300 dark:hover:bg-border-dark transition-colors">Hourly</button>
+<button class="bg-slate-200 dark:bg-card-dark text-slate-600 dark:text-slate-300 px-4 py-1.5 rounded-full text-sm font-medium whitespace-nowrap hover:bg-slate-300 dark:hover:bg-border-dark transition-colors">Verified Only</button>
+<div class="ml-auto flex items-center gap-2">
+<span class="text-sm text-slate-500">Sort by:</span>
+<select class="bg-transparent border-none text-sm font-semibold focus:ring-0 p-0 cursor-pointer text-primary">
+<option>Newest</option>
+<option>Budget: High to Low</option>
+</select>
+</div>
+</div>
+<!-- Feed List -->
+<div class="space-y-4">
+<!-- Card 1 -->
+<div class="group bg-white dark:bg-card-dark border border-slate-200 dark:border-border-dark p-6 rounded-xl hover:border-primary/50 transition-all cursor-pointer shadow-sm">
+<div class="flex justify-between items-start mb-2">
+<div class="flex items-center gap-2">
+<h3 class="text-xl font-bold dark:text-white group-hover:text-primary transition-colors">Automate HubSpot to Slack via n8n</h3>
+<span class="material-symbols-outlined text-primary text-xl" title="Verified Client">verified</span>
+</div>
+<span class="text-primary font-extrabold text-lg">$800 Fixed</span>
+</div>
+<div class="flex gap-3 text-sm text-slate-500 dark:text-slate-400 mb-4">
+<span>Posted 15 min ago</span>
+<span>•</span>
+<span>Expert Level</span>
+</div>
+<p class="text-slate-600 dark:text-slate-300 mb-5 line-clamp-2 leading-relaxed">
+                        Seeking an expert to build a robust workflow that syncs custom objects and triggers notifications based on lead score changes. Must handle rate limits efficiently.
+                    </p>
+<div class="flex flex-wrap gap-2 mb-6">
+<span class="bg-slate-100 dark:bg-border-dark text-slate-600 dark:text-slate-400 px-3 py-1 rounded text-xs font-medium">n8n</span>
+<span class="bg-slate-100 dark:bg-border-dark text-slate-600 dark:text-slate-400 px-3 py-1 rounded text-xs font-medium">HubSpot</span>
+<span class="bg-slate-100 dark:bg-border-dark text-slate-600 dark:text-slate-400 px-3 py-1 rounded text-xs font-medium">Webhooks</span>
+<span class="bg-slate-100 dark:bg-border-dark text-slate-600 dark:text-slate-400 px-3 py-1 rounded text-xs font-medium">Slack API</span>
+</div>
+<div class="flex items-center justify-between border-t border-slate-100 dark:border-border-dark pt-4">
+<div class="flex items-center gap-2 text-sm text-slate-500">
+<span class="material-symbols-outlined text-lg">group</span>
+<span>12 Proposals</span>
+</div>
+<button class="text-primary text-sm font-bold flex items-center gap-1">
+                            View Details <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="group bg-white dark:bg-card-dark border border-slate-200 dark:border-border-dark p-6 rounded-xl hover:border-primary/50 transition-all cursor-pointer shadow-sm">
+<div class="flex justify-between items-start mb-2">
+<div class="flex items-center gap-2">
+<h3 class="text-xl font-bold dark:text-white group-hover:text-primary transition-colors">Custom API Integration for E-commerce</h3>
+<span class="material-symbols-outlined text-primary text-xl" title="Verified Client">verified</span>
+</div>
+<span class="text-primary font-extrabold text-lg">$65/hr</span>
+</div>
+<div class="flex gap-3 text-sm text-slate-500 dark:text-slate-400 mb-4">
+<span>Posted 1 hour ago</span>
+<span>•</span>
+<span>Intermediate Level</span>
+</div>
+<p class="text-slate-600 dark:text-slate-300 mb-5 line-clamp-2 leading-relaxed">
+                        Looking for an n8n specialist to connect a headless Shopify store with a custom ERP system via REST API for inventory management and order syncing.
+                    </p>
+<div class="flex flex-wrap gap-2 mb-6">
+<span class="bg-slate-100 dark:bg-border-dark text-slate-600 dark:text-slate-400 px-3 py-1 rounded text-xs font-medium">REST API</span>
+<span class="bg-slate-100 dark:bg-border-dark text-slate-600 dark:text-slate-400 px-3 py-1 rounded text-xs font-medium">Shopify</span>
+<span class="bg-slate-100 dark:bg-border-dark text-slate-600 dark:text-slate-400 px-3 py-1 rounded text-xs font-medium">JSON</span>
+</div>
+<div class="flex items-center justify-between border-t border-slate-100 dark:border-border-dark pt-4">
+<div class="flex items-center gap-2 text-sm text-slate-500">
+<span class="material-symbols-outlined text-lg">group</span>
+<span>8 Proposals</span>
+</div>
+<button class="text-primary text-sm font-bold flex items-center gap-1">
+                            View Details <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="group bg-white dark:bg-card-dark border border-slate-200 dark:border-border-dark p-6 rounded-xl hover:border-primary/50 transition-all cursor-pointer shadow-sm">
+<div class="flex justify-between items-start mb-2">
+<div class="flex items-center gap-2">
+<h3 class="text-xl font-bold dark:text-white group-hover:text-primary transition-colors">Airtable to MySQL Sync Workflow</h3>
+<span class="material-symbols-outlined text-primary text-xl" title="Verified Client">verified</span>
+</div>
+<span class="text-primary font-extrabold text-lg">$450 Fixed</span>
+</div>
+<div class="flex gap-3 text-sm text-slate-500 dark:text-slate-400 mb-4">
+<span>Posted 3 hours ago</span>
+<span>•</span>
+<span>Beginner Level</span>
+</div>
+<p class="text-slate-600 dark:text-slate-300 mb-5 line-clamp-2 leading-relaxed">
+                        Simple daily sync between Airtable base and a MySQL database. Need someone to set up the n8n node and handle basic error logging.
+                    </p>
+<div class="flex flex-wrap gap-2 mb-6">
+<span class="bg-slate-100 dark:bg-border-dark text-slate-600 dark:text-slate-400 px-3 py-1 rounded text-xs font-medium">Airtable</span>
+<span class="bg-slate-100 dark:bg-border-dark text-slate-600 dark:text-slate-400 px-3 py-1 rounded text-xs font-medium">MySQL</span>
+<span class="bg-slate-100 dark:bg-border-dark text-slate-600 dark:text-slate-400 px-3 py-1 rounded text-xs font-medium">Cron</span>
+</div>
+<div class="flex items-center justify-between border-t border-slate-100 dark:border-border-dark pt-4">
+<div class="flex items-center gap-2 text-sm text-slate-500">
+<span class="material-symbols-outlined text-lg">group</span>
+<span>2 Proposals</span>
+</div>
+<button class="text-primary text-sm font-bold flex items-center gap-1">
+                            View Details <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Sliding Proposal Drawer (Desktop Preview Side Panel) -->
+<!-- In a real app, this would animate from the right. Here it's styled as a sticky side panel for visualization -->
+<aside class="hidden xl:block w-[450px] sticky top-24 h-[calc(100vh-8rem)] glass-panel rounded-2xl border border-white/10 overflow-y-auto shadow-2xl">
+<div class="p-8">
+<div class="flex items-center justify-between mb-8">
+<h2 class="text-2xl font-black dark:text-white">Submit Proposal</h2>
+<button class="p-2 hover:bg-white/10 rounded-full">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<!-- Job Summary Header in Drawer -->
+<div class="mb-8 p-4 bg-primary/10 rounded-xl border border-primary/20">
+<div class="text-xs font-bold uppercase tracking-wider text-primary mb-1">Applying for</div>
+<h4 class="text-lg font-bold dark:text-white leading-tight">Automate HubSpot to Slack via n8n</h4>
+<div class="mt-2 text-sm text-slate-400 flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">payments</span>
+                        Budget: $800.00 Fixed
+                    </div>
+</div>
+<!-- Proposal Form -->
+<form class="space-y-6">
+<div>
+<label class="block text-sm font-bold mb-2 dark:text-slate-200">Your Bid Amount ($)</label>
+<div class="relative">
+<span class="absolute left-4 top-1/2 -translate-y-1/2 font-bold text-slate-500">$</span>
+<input class="w-full bg-slate-900/50 border-white/10 rounded-xl py-3 pl-8 pr-4 text-white focus:ring-primary focus:border-primary" type="number" value="800"/>
+</div>
+</div>
+<!-- Fee Table -->
+<div class="bg-white/5 rounded-xl p-4 border border-white/5 space-y-3">
+<div class="flex justify-between text-sm">
+<span class="text-slate-400">Your Bid</span>
+<span class="font-medium dark:text-white">$800.00</span>
+</div>
+<div class="flex justify-between text-sm">
+<span class="text-slate-400">- 10% Platform Fee</span>
+<span class="font-medium text-red-400">-$80.00</span>
+</div>
+<div class="pt-3 border-t border-white/10 flex justify-between items-center">
+<span class="font-bold dark:text-white">Estimated Net Earnings</span>
+<span class="text-xl font-black text-primary">$720.00</span>
+</div>
+</div>
+<div>
+<label class="block text-sm font-bold mb-2 dark:text-slate-200">Estimated Completion Time</label>
+<select class="w-full bg-slate-900/50 border-white/10 rounded-xl py-3 px-4 text-white focus:ring-primary focus:border-primary">
+<option>Less than 1 week</option>
+<option>1 to 2 weeks</option>
+<option>2 to 4 weeks</option>
+<option>More than a month</option>
+</select>
+</div>
+<div>
+<label class="block text-sm font-bold mb-2 dark:text-slate-200">Cover Letter</label>
+<textarea class="w-full bg-slate-900/50 border-white/10 rounded-xl py-3 px-4 text-white focus:ring-primary focus:border-primary resize-none" placeholder="Tell the client why you're the perfect fit for this workflow automation..." rows="6"></textarea>
+</div>
+<button class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-4 rounded-xl shadow-lg shadow-primary/20 transition-all active:scale-[0.98]" type="submit">
+                        Submit Proposal
+                    </button>
+<p class="text-center text-xs text-slate-500 px-4">
+                        By submitting, you agree to the n8n Experts terms of service and project agreement.
+                    </p>
+</form>
+</div>
+</aside>
+</main>
+<!-- Mobile Action (Float) -->
+<div class="xl:hidden fixed bottom-6 right-6">
+<button class="bg-primary text-white p-4 rounded-full shadow-2xl flex items-center justify-center">
+<span class="material-symbols-outlined text-3xl">add</span>
+</button>
+</div>
+</body></html>

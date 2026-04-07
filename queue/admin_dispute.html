@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Admin Dispute Resolution Center</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#135bec",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101622",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Manrope', sans-serif;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen">
+<div class="flex h-screen overflow-hidden">
+<!-- Sidebar Navigation -->
+<aside class="w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 flex flex-col shrink-0">
+<div class="p-6 border-b border-slate-200 dark:border-slate-800 flex items-center gap-3">
+<div class="bg-primary size-8 rounded-lg flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-xl">account_tree</span>
+</div>
+<div>
+<h1 class="font-bold text-sm leading-tight">n8nExperts</h1>
+<p class="text-xs text-slate-500 font-medium">Admin Panel</p>
+</div>
+</div>
+<nav class="flex-1 p-4 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-sm font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 bg-primary/10 text-primary rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">gavel</span>
+<span class="text-sm font-medium">Disputes</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">badge</span>
+<span class="text-sm font-medium">Experts</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="text-sm font-medium">Clients</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="text-sm font-medium">Escrow</span>
+</a>
+</nav>
+<div class="p-4 border-t border-slate-200 dark:border-slate-800">
+<div class="flex items-center gap-3 px-3 py-2">
+<div class="size-8 rounded-full bg-slate-200 dark:bg-slate-700 bg-cover bg-center" data-alt="Admin user profile picture" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC2rRYVFHiEExPdg1_nJhIqIbr3DmjqNC2f4ThLYzzGmdfx_h6lXV6LlWriCPHX1d9URSp2xEMg9g7djMSrFBH9erw-iN67WisFsrdfvRic-m9Li_NCufiDmJLCkwBzL1SkfdIlPFOSOc8fbFw-XHFJ1mM-RNT5ju2_-bxdNCZornhutQ_NIhhkgombnk8bsLLcjTMRgGQkvRO6ma1N2XJHpLn2OduHRpVp9orwQjQXxnK6rphT4nrjpvFUCQ9vZbKjKOx3dIEczIko')"></div>
+<div class="overflow-hidden">
+<p class="text-xs font-bold truncate">Alex Rivera</p>
+<p class="text-[10px] text-slate-500 truncate">Senior Moderator</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 flex flex-col min-w-0 overflow-hidden">
+<!-- Header -->
+<header class="h-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-6 shrink-0">
+<div class="flex items-center gap-4">
+<h2 class="text-lg font-bold">Dispute Resolution Center</h2>
+<span class="bg-red-100 text-red-600 px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider">12 Open Disputes</span>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg">search</span>
+<input class="pl-10 pr-4 py-2 bg-slate-100 dark:bg-slate-800 border-none rounded-lg text-sm w-64 focus:ring-2 focus:ring-primary" placeholder="Search disputes..." type="text"/>
+</div>
+<button class="relative p-2 text-slate-500">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 size-2 bg-red-500 rounded-full border-2 border-white dark:border-slate-900"></span>
+</button>
+<button class="p-2 text-slate-500">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</div>
+</header>
+<div class="flex-1 flex overflow-hidden">
+<!-- List Section -->
+<div class="w-2/3 flex flex-col bg-white dark:bg-slate-900 overflow-hidden">
+<!-- Tab Filter -->
+<div class="px-6 py-4 flex items-center gap-6 border-b border-slate-100 dark:border-slate-800">
+<button class="text-sm font-bold border-b-2 border-primary pb-4 -mb-4">Open (12)</button>
+<button class="text-sm font-medium text-slate-500 pb-4 -mb-4 hover:text-slate-800 transition-colors">Pending (8)</button>
+<button class="text-sm font-medium text-slate-500 pb-4 -mb-4 hover:text-slate-800 transition-colors">Resolved (156)</button>
+</div>
+<!-- Table Container -->
+<div class="flex-1 overflow-y-auto custom-scrollbar">
+<table class="w-full text-left border-collapse">
+<thead class="sticky top-0 bg-slate-50 dark:bg-slate-800/50 z-10">
+<tr>
+<th class="px-6 py-3 text-[10px] font-bold text-slate-500 uppercase tracking-widest">Dispute ID</th>
+<th class="px-6 py-3 text-[10px] font-bold text-slate-500 uppercase tracking-widest">Project</th>
+<th class="px-6 py-3 text-[10px] font-bold text-slate-500 uppercase tracking-widest text-center">Parties</th>
+<th class="px-6 py-3 text-[10px] font-bold text-slate-500 uppercase tracking-widest">Amount</th>
+<th class="px-6 py-3 text-[10px] font-bold text-slate-500 uppercase tracking-widest">Created</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 cursor-pointer transition-colors bg-blue-50/30 dark:bg-blue-900/10">
+<td class="px-6 py-4">
+<div class="font-bold text-sm">#DISP-2024-001</div>
+<div class="text-[10px] text-red-500 font-bold uppercase mt-1">High Priority</div>
+</td>
+<td class="px-6 py-4">
+<div class="text-sm font-medium text-slate-900 dark:text-slate-100 max-w-[200px] truncate">Custom n8n Salesforce Integration</div>
+<div class="text-xs text-slate-500 mt-1">Workflow Optimization</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex justify-center -space-x-2">
+<div class="size-8 rounded-full border-2 border-white dark:border-slate-900 bg-cover bg-center" data-alt="Client avatar thumbnail" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDvQokbvioS0PF44w7xi4ZjmbWMw8Q4-FOoaofFVB_WzASn9fn9X4_QP3jYaYjUOo00Q_4r6_YcWHJhb2dq5vJpo-fHRkf5gI92VzXznlL8UI-nUrUMTEcmLEKYh7bICyn6J6mAcqaNArzYtD6UjmSn1HH0i_5qfBGbS61avWs4tliRpXakHpnYzDvoe2KxJdrLhNcvYQx7SfnK-xGACcXJOTydmOjeIwT-It72m2HweU75KMSQpQv3Wr0lKIkM-TEUdjdbVgwqF20J')"></div>
+<div class="size-8 rounded-full border-2 border-white dark:border-slate-900 bg-cover bg-center" data-alt="Expert avatar thumbnail" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAZiDGTgwX1XXtRNEnHmE8dG_uGmMNDOP1IHCk8tPrtVT4kc1xAK66Uuq2r-NVsXdPWeF4amvhmIV4TjmGolq1CeNsBR_VDjxPOLTF9_ed_ZztfxeFwkhlWMpQ0tIkdwRm4vty4tWLduSOpqT6C4IPi9RfhWjMqaRHMNiC9VK6h8NLGe9v1Ri80WFZc5w3IocKgbzRy4HfBm7SZl1lqarkriOEI4XbN9k4Lft1dXXOLZeKeGHwndSQiM9dTfK2qJc3xfCLQl17KbQqN')"></div>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="text-sm font-extrabold text-red-600">$2,450.00</div>
+</td>
+<td class="px-6 py-4">
+<div class="text-xs text-slate-500">Oct 12, 2024</div>
+<div class="text-[10px] text-slate-400">3 days ago</div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 cursor-pointer transition-colors">
+<td class="px-6 py-4 text-sm font-bold">#DISP-2024-015</td>
+<td class="px-6 py-4">
+<div class="text-sm font-medium max-w-[200px] truncate">API Error Handling Module</div>
+<div class="text-xs text-slate-500 mt-1">Maintenance</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex justify-center -space-x-2">
+<div class="size-8 rounded-full border-2 border-white dark:border-slate-900 bg-cover bg-center" data-alt="Client avatar thumbnail" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBzl268UEpI_rqcr-6K4qIEkLqOHZykF6nePTt9Ppls2zCy0vXZ7bIJu4AfZtvanvpT1_Rpa55OZejVWzfHEUWZy6FXBHgfPVeTKH_sVHd3x5pPUwhsz1CFxuL8Ma-fsqDwjXi1AqjApoIFMgi0-HKIPE0n5XLl7w8qbhc9mzDKPRGlFoT_I2pWnvKl4TbJctuQ9HCdztT5Fk8oWU-JX5pAYtSxmdk9-2-oa9s8bJuhV2fJ1etxQgtm-BK1wAr41br7QtynKs7OeH3Y')"></div>
+<div class="size-8 rounded-full border-2 border-white dark:border-slate-900 bg-cover bg-center" data-alt="Expert avatar thumbnail" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC67ovwZpoRBt8A6K6kk11J99h0JS_5gbTA7bMpqXIa2Ez12YysNIiKiB9uoSm1o5ZJlP42k5oVGe0CcrszE2I0O9i5rnIKQi_xX7jcjPPRx6br_9oaBItXjqq8DkCwUy0OJ53t7XGS8ON7CPlYIY9I6RJ5Lg_D6LCACi0zK4VDg0No_iA_1g70wh3HNyp2Jb_s2yQDgxqOUQsmHR8ESRfphG9A3SkZLHKPqhH4yyzZBLjhXrnuXGRtwf0C3as_0rFuSjbJl_F_Z3-w')"></div>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="text-sm font-extrabold text-red-600">$850.00</div>
+</td>
+<td class="px-6 py-4 text-xs text-slate-500">Oct 14, 2024</td>
+</tr>
+<!-- Row 3 -->
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 cursor-pointer transition-colors">
+<td class="px-6 py-4 text-sm font-bold">#DISP-2024-022</td>
+<td class="px-6 py-4">
+<div class="text-sm font-medium max-w-[200px] truncate">Discord Bot for Support</div>
+<div class="text-xs text-slate-500 mt-1">Social Integration</div>
+</td>
+<td class="px-6 py-4">
+<div class="flex justify-center -space-x-2">
+<div class="size-8 rounded-full border-2 border-white dark:border-slate-900 bg-cover bg-center" data-alt="Client avatar thumbnail" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAGOfkKbMO5tEED24pASzdUMd8nN6t0cHwmXf2ndJrWQMTfrtPL88M4DCnYWne9_RUbMRpJ-a180TiyLdkR55zhKDvgwtwlreo-X2dU-JXC3Ah1kZqNr_RG-a3Du-S3kqDy75asEeQWk7U1REdgQxZub-eEL03TLu7O88e_zN1b4FWGxg4b3rp045Pxw1fvTocVfQZEh28wRfHQuej-AIjQMXJa_jCeKd8J3Hbz-k03lr4JXbPulNmXaD8ddu5RhGRDWvXfKyo7vnnx')"></div>
+<div class="size-8 rounded-full border-2 border-white dark:border-slate-900 bg-cover bg-center" data-alt="Expert avatar thumbnail" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCItoIqaT8ky5BwrQPlrmjjzoXMzWTpnot9rYOsAxrMM919Pj9qOKUHr2w_EQWKExQAaxdM9tEKZypPA1dZsprWpBE9JCuZj9WprjQHZZucdnzZ_ErcofjyZ4K8q9pQ60WxhzjS6nsL097ywxxY34NturSI168R4iLcljgDw0kxL8NQE4u2H5-6HzUsomueqHUEdUonxYG_qZqEV58fvEJdbrV1LEw3aNbLTZ-ZdQuYY4ZhjEbArG7qPX5h9pzdpDvI3iPiH96f2Irp')"></div>
+</div>
+</td>
+<td class="px-6 py-4">
+<div class="text-sm font-extrabold text-red-600">$1,200.00</div>
+</td>
+<td class="px-6 py-4 text-xs text-slate-500">Oct 14, 2024</td>
+</tr>
+<!-- Repeat for UI filler -->
+<tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 cursor-pointer transition-colors">
+<td class="px-6 py-4 text-sm font-bold">#DISP-2024-024</td>
+<td class="px-6 py-4">
+<div class="text-sm font-medium">Shopify Webhook Sync</div>
+<div class="text-xs text-slate-500 mt-1">E-commerce</div>
+</td>
+<td class="px-6 py-4 text-center text-xs">...</td>
+<td class="px-6 py-4 text-sm font-extrabold text-red-600">$450.00</td>
+<td class="px-6 py-4 text-xs text-slate-500">Oct 15, 2024</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Detail Panel (Slide-over/Sidebar) -->
+<div class="w-1/3 border-l border-slate-200 dark:border-slate-800 bg-background-light dark:bg-slate-900 flex flex-col">
+<div class="p-6 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 shrink-0">
+<div class="flex justify-between items-start mb-6">
+<div>
+<h3 class="font-extrabold text-xl text-slate-900 dark:text-slate-100">Dispute Details</h3>
+<p class="text-xs text-slate-500 font-medium">Managing #DISP-2024-001</p>
+</div>
+<span class="bg-amber-100 text-amber-700 px-3 py-1 rounded-full text-xs font-bold">Under Review</span>
+</div>
+<div class="flex flex-col gap-4">
+<div class="flex items-center gap-4 bg-slate-50 dark:bg-slate-800 p-3 rounded-xl border border-slate-100 dark:border-slate-700">
+<div class="size-10 rounded-full bg-slate-200 bg-cover bg-center" data-alt="Client profile picture" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDewl8_ISv5OgcTU8Ql_sQZ9g1sBQx_bgqlR6PV9_GgHWYS97wGpQRmqsl7PO__96TXj8CPvAXfd3Z6xHIrYJJQbxIO2plOIuGuy0TMg5DIoC8oKRv3KCbxFKU-dWO9dpMrxl6RjpMwXmCxdRG5pPkxcS396ne2PKp8xD_AxJk2tDnKYUMuXz-wT-rgUoaZPoh8JibButhjk2bGa5ApnRSnnJ1mk94XC8VNAVFiNowzY3GVt_xfgGmmGiDHEpDrPvkpA6o2Jp0nHzPU')"></div>
+<div class="flex-1">
+<p class="text-[10px] uppercase font-bold text-slate-400">Initiator (Client)</p>
+<p class="text-sm font-bold">Mark Zuckerberg</p>
+</div>
+<button class="text-primary hover:bg-primary/5 p-1 rounded transition-colors">
+<span class="material-symbols-outlined text-lg">open_in_new</span>
+</button>
+</div>
+<div class="flex items-center gap-4 bg-slate-50 dark:bg-slate-800 p-3 rounded-xl border border-slate-100 dark:border-slate-700">
+<div class="size-10 rounded-full bg-slate-200 bg-cover bg-center" data-alt="Expert profile picture" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBML5LQiJKA09hv2GFD35SaqAQNoIokRZRsFkn9JqX1KgAfW16WrkovJ7tI-UuCuB-UieEPcSkvFdjj6-L9JaJSTBlVPw2G8ySuO-AEvKC3HK3Q8lBbdQnG9wgkSkP_dwtTgOvyV5SnMN6HBTcYHuuRLIrNeQNjBYBIC07vAcpBBb_K8CtvjjpWjLvWgr6TKhdSGt_qf5j3Wp54v8vf1ddThncFMq6c6GvKODQAsGzjN1jzfPQZYwl9jiJskVlsUm-JQ6hDG2uQIb9t')"></div>
+<div class="flex-1">
+<p class="text-[10px] uppercase font-bold text-slate-400">Respondent (Expert)</p>
+<p class="text-sm font-bold">Jane Doe (Elite Expert)</p>
+</div>
+<button class="text-primary hover:bg-primary/5 p-1 rounded transition-colors">
+<span class="material-symbols-outlined text-lg">open_in_new</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Scrollable Details -->
+<div class="flex-1 overflow-y-auto p-6 space-y-8 custom-scrollbar">
+<div>
+<p class="text-[10px] uppercase font-bold text-slate-400 mb-2">Total Disputed Amount</p>
+<h4 class="text-3xl font-extrabold text-red-600">$2,450.00</h4>
+<p class="text-xs text-slate-500 mt-1">Currently held in platform escrow</p>
+</div>
+<div>
+<p class="text-[10px] uppercase font-bold text-slate-400 mb-2">Issue Description</p>
+<div class="bg-white dark:bg-slate-800 p-4 rounded-xl border border-slate-100 dark:border-slate-700 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
+                                "The expert was supposed to build a custom Salesforce node that handles bulk updates. After 3 weeks of delays, the final node consistently errors out on any batch over 10 records. Expert claims it's my API limits, but I've verified it works with other scripts."
+                            </div>
+</div>
+<div>
+<p class="text-[10px] uppercase font-bold text-slate-400 mb-2">Latest Communication</p>
+<div class="space-y-4">
+<div class="flex gap-3">
+<div class="size-6 rounded-full bg-slate-300 bg-cover shrink-0" data-alt="Expert tiny avatar" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB8d6rgW3ONh7iQJBD49q4cE1P0YSfBSmJe-CbnVxdkkoA7L1R-_rD67UolNpJjgh4AKZIC9KTpaOysONa4xKgcAGY1CU7BljCzKejMNX_PRxncuSE19so8G1irTDk3Pny3nP6KzUBcGvKcCEsszz8YFajq-D07gf2QDjz_tx86Bq6Qy7TIlCz1MiYsYevDPqkWfHiX8S7FQV6IA76Pll_HqfRZuHLBFYrCB8nR0vGEvgdge2EuKmc0FW7qOzqAOyCUtnRPKmECpoH7')"></div>
+<div class="bg-slate-100 dark:bg-slate-700 p-3 rounded-lg text-xs">
+                                        "The limits on your Salesforce instance are clearly documented. I cannot fix your internal IT policies."
+                                        <p class="text-[10px] text-slate-400 mt-2">Expert • Oct 14, 2:45 PM</p>
+</div>
+</div>
+<div class="flex gap-3 flex-row-reverse">
+<div class="size-6 rounded-full bg-slate-300 bg-cover shrink-0" data-alt="Client tiny avatar" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDhVmZ2-O-6mrQSymb8dCurYjkp_ATu2vRKwIZ2iLo_wce15VMa8YlrU2R9P9V9qZ0JbHGmigQGmVrf-DNm-egyY3PJ9nd8YU5bcJlyiKPdw-XPPrYsmYuNrwcwReXGOdvNt9fAToYWxeru7vPuRs5q9ZZpLsLYDnwL151seoKa8mzEFyQybYJsjHFAPIFIPdjAtrQWeVLXBOWUjw1uJviiEAxx-Rem5YKgbCq2cAo2Yj0gJ5WkYHVPR1crPgp9lUtF1UiUzc6bs16S')"></div>
+<div class="bg-primary/10 p-3 rounded-lg text-xs text-slate-800 dark:text-slate-100">
+                                        "That is false. I sent you the API logs showing the node is misformatting the JSON payload."
+                                        <p class="text-[10px] text-slate-400 mt-2 text-right">Client • Oct 14, 3:12 PM</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Resolution Dialog Tools -->
+<div class="bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-200 dark:border-slate-700 shadow-sm">
+<h5 class="text-sm font-bold mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">analytics</span>
+                                Resolution Allocation
+                            </h5>
+<div class="space-y-4">
+<div>
+<label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Pay to Client ($)</label>
+<input class="w-full text-sm border-slate-200 dark:border-slate-700 dark:bg-slate-900 rounded-lg focus:ring-primary" type="number" value="1225"/>
+</div>
+<div>
+<label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Pay to Expert ($)</label>
+<input class="w-full text-sm border-slate-200 dark:border-slate-700 dark:bg-slate-900 rounded-lg focus:ring-primary" type="number" value="1225"/>
+</div>
+<div>
+<label class="block text-[10px] uppercase font-bold text-slate-400 mb-1">Resolution Notes (Internal)</label>
+<textarea class="w-full text-sm border-slate-200 dark:border-slate-700 dark:bg-slate-900 rounded-lg focus:ring-primary" placeholder="Explain your verdict..." rows="3"></textarea>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer Actions -->
+<div class="p-6 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 flex gap-3 shrink-0">
+<button class="flex-1 px-4 py-2.5 border border-slate-300 dark:border-slate-700 rounded-lg text-sm font-bold hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors">
+                            Contact Parties
+                        </button>
+<button class="flex-1 px-4 py-2.5 bg-primary text-white rounded-lg text-sm font-bold hover:bg-blue-700 shadow-lg shadow-primary/20 transition-all">
+                            Resolve Dispute
+                        </button>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>

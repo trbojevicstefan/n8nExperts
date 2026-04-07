@@ -1,4 +1,4 @@
-export type Role = "client" | "expert";
+export type Role = "client" | "expert" | "admin";
 export type BriefExpertType = "builder" | "consultant" | "maintainer";
 export type BriefHandoffExpectation = "none" | "documentation" | "training" | "documentation_and_training";
 export type ClientCommunicationPreference = "async_updates" | "weekly_live" | "shared_channel" | "mixed";

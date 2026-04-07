@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Join n8nExperts - Select Your Role</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f42559",
+                        "background-light": "#f8f5f6",
+                        "background-dark": "#0a0a0a",
+                        "card-dark": "#161112",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(22, 17, 18, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(244, 37, 89, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        .glass-card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(circle at 2px 2px, rgba(244, 37, 89, 0.05) 1px, transparent 0);
+            background-size: 24px 24px;
+            pointer-events: none;
+        }
+        .active-glow {
+            border-color: #f42559;
+            box-shadow: 0 0 20px rgba(244, 37, 89, 0.2);
+        }
+        .brand-gradient-bg {
+            background: radial-gradient(circle at top right, rgba(244, 37, 89, 0.15), transparent 40%),
+                        radial-gradient(circle at bottom left, rgba(244, 37, 89, 0.1), transparent 40%);
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-gray-900 dark:text-white min-h-screen flex flex-col brand-gradient-bg">
+<div class="layout-container flex h-full grow flex-col">
+<!-- Top Navigation -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-white/5 px-6 lg:px-20 py-4">
+<div class="flex items-center gap-3 text-white">
+<div class="size-8 flex items-center justify-center bg-primary rounded-lg shadow-[0_0_15px_rgba(244,37,89,0.4)]">
+<span class="material-symbols-outlined text-white text-xl">hub</span>
+</div>
+<h2 class="text-white text-xl font-bold leading-tight tracking-tight">n8nExperts</h2>
+</div>
+<div class="flex gap-4">
+<button class="hidden md:flex min-w-[100px] cursor-pointer items-center justify-center rounded-lg h-10 px-4 bg-white/5 hover:bg-white/10 text-white text-sm font-semibold transition-all">
+<span>Explore</span>
+</button>
+<button class="flex min-w-[100px] cursor-pointer items-center justify-center rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold shadow-lg shadow-primary/20 hover:scale-105 transition-all">
+<span>Log in</span>
+</button>
+</div>
+</header>
+<main class="flex-1 flex flex-col items-center justify-center px-4 py-12">
+<!-- Header Section -->
+<div class="max-w-[800px] w-full text-center mb-12">
+<h1 class="text-white tracking-tight text-4xl md:text-5xl font-extrabold leading-tight mb-4">
+                    Join n8nExperts
+                </h1>
+<p class="text-gray-400 text-lg md:text-xl font-medium max-w-xl mx-auto">
+                    Select how you would like to use the platform to start building or hiring.
+                </p>
+</div>
+<!-- Selection Cards Container -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-[960px] w-full px-4 mb-12">
+<!-- Client Card (Active Example) -->
+<div class="glass-card active-glow group flex flex-col p-8 rounded-2xl cursor-pointer transition-all duration-300 hover:scale-[1.02]">
+<!-- Selection Indicator -->
+<div class="absolute top-4 right-4 h-6 w-6 bg-primary rounded-full flex items-center justify-center shadow-[0_0_10px_rgba(244,37,89,0.5)]">
+<span class="material-symbols-outlined text-white text-sm font-bold">check</span>
+</div>
+<!-- Icon Enclosure -->
+<div class="size-16 mb-8 rounded-xl bg-primary/20 flex items-center justify-center shadow-[0_0_30px_rgba(244,37,89,0.2)] border border-primary/30">
+<span class="material-symbols-outlined text-primary text-4xl">group</span>
+</div>
+<div class="flex-1">
+<h3 class="text-2xl font-bold text-white mb-2">I am a Client</h3>
+<p class="text-gray-400 mb-8 text-base">Looking to automate my business workflows with expert help.</p>
+<ul class="space-y-4">
+<li class="flex items-center gap-3 text-gray-300 font-medium">
+<span class="material-symbols-outlined text-primary text-xl">check_circle</span>
+                                Hire top automation talent
+                            </li>
+<li class="flex items-center gap-3 text-gray-300 font-medium">
+<span class="material-symbols-outlined text-primary text-xl">check_circle</span>
+                                Secure Escrow payments
+                            </li>
+<li class="flex items-center gap-3 text-gray-300 font-medium">
+<span class="material-symbols-outlined text-primary text-xl">check_circle</span>
+                                Fast delivery &amp; support
+                            </li>
+</ul>
+</div>
+</div>
+<!-- Expert Card -->
+<div class="glass-card flex flex-col p-8 rounded-2xl cursor-pointer transition-all duration-300 hover:scale-[1.02] hover:border-primary/40 opacity-80 hover:opacity-100">
+<!-- Icon Enclosure -->
+<div class="size-16 mb-8 rounded-xl bg-white/5 flex items-center justify-center border border-white/10 group-hover:border-primary/30">
+<span class="material-symbols-outlined text-gray-400 group-hover:text-primary text-4xl transition-colors">work</span>
+</div>
+<div class="flex-1">
+<h3 class="text-2xl font-bold text-white mb-2">I am an Expert</h3>
+<p class="text-gray-400 mb-8 text-base">Looking to provide professional n8n automation services.</p>
+<ul class="space-y-4">
+<li class="flex items-center gap-3 text-gray-300 font-medium">
+<span class="material-symbols-outlined text-gray-600 text-xl">check_circle</span>
+                                Find high-paying gigs
+                            </li>
+<li class="flex items-center gap-3 text-gray-300 font-medium">
+<span class="material-symbols-outlined text-gray-600 text-xl">check_circle</span>
+                                Work on your own terms
+                            </li>
+<li class="flex items-center gap-3 text-gray-300 font-medium">
+<span class="material-symbols-outlined text-gray-600 text-xl">check_circle</span>
+                                Showcase your portfolio
+                            </li>
+</ul>
+</div>
+</div>
+</div>
+<!-- Action Buttons Stack -->
+<div class="w-full max-w-[440px] px-4 space-y-4">
+<button class="w-full flex items-center justify-center rounded-xl h-14 px-6 bg-primary text-white text-lg font-bold shadow-xl shadow-primary/20 hover:brightness-110 active:scale-95 transition-all">
+<span>Continue with Email</span>
+</button>
+<button class="w-full flex items-center justify-center rounded-xl h-14 px-6 bg-transparent border-2 border-primary/40 text-white text-lg font-bold hover:bg-primary/5 active:scale-95 transition-all">
+<img alt="Google Logo" class="size-5 mr-3" data-alt="Google colorful logo icon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJbOeNiagCGoYj7heRU0zonjchb1v9B3Gto9uoGwgBUPQdZHt7H9gQ77C94GY7Ll59Ih_c9cOeAI1f2XKmSPa-ZOFwoNMpGGhPpf6XRUciYYn42HjuJr5HXJ6hoREzSwH_mO--ASMy8WLr4Y2783YDhfEfoSDxD8NeEyT7bYmuAP4KIyes-Z9-8i9hQwolHoagpO1fmvxIJVm5b1HyDGf7nRx7CfBjoeQnoXLtB7daqDTYSpwvETMVmBeMqS8he9sS0Y9UzBD_L8vI"/>
+<span>Continue with Google</span>
+</button>
+</div>
+<!-- Footer Section -->
+<div class="mt-10 text-center">
+<p class="text-gray-500 text-base">
+                    Already have an account? 
+                    <a class="text-primary font-bold hover:underline ml-1" href="#">Log in</a>
+</p>
+</div>
+</main>
+<!-- Optional Decorative Element -->
+<div class="fixed bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent"></div>
+</div>
+</body></html>

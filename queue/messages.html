@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Direct Messages Chat Interface - n8nExperts</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f42559",
+                        "background-light": "#f8f5f6",
+                        "background-dark": "#121212",
+                        "surface-dark": "#1e1e1e",
+                        "accent-dark": "#2a2a2a",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #39282c;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #f42559;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-white overflow-hidden">
+<div class="flex h-screen w-full flex-col">
+<!-- Top Nav Bar -->
+<header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-white/10 bg-white dark:bg-background-dark px-6 py-3 z-20">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-3 text-primary">
+<div class="size-6">
+<svg class="w-full h-full" fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M6 6H42L36 24L42 42H6L12 24L6 6Z" fill="currentColor"></path>
+</svg>
+</div>
+<h2 class="text-slate-900 dark:text-white text-lg font-bold leading-tight tracking-tight">n8nExperts</h2>
+</div>
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary text-sm font-medium transition-colors" href="#">Dashboard</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary text-sm font-medium transition-colors" href="#">Experts</a>
+<a class="text-slate-600 dark:text-slate-400 hover:text-primary dark:hover:text-primary text-sm font-medium transition-colors" href="#">Marketplace</a>
+<a class="text-primary text-sm font-bold border-b-2 border-primary pb-1" href="#">Messages</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="hidden sm:flex min-w-[120px] cursor-pointer items-center justify-center rounded-lg h-9 px-4 bg-primary text-white text-sm font-bold transition-all hover:bg-primary/90">
+                Post a Project
+            </button>
+<div class="flex gap-2">
+<button class="flex size-9 cursor-pointer items-center justify-center rounded-lg bg-slate-100 dark:bg-surface-dark text-slate-600 dark:text-white hover:bg-slate-200 dark:hover:bg-accent-dark">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+</button>
+<button class="flex size-9 cursor-pointer items-center justify-center rounded-lg bg-slate-100 dark:bg-surface-dark text-slate-600 dark:text-white hover:bg-slate-200 dark:hover:bg-accent-dark">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+</button>
+</div>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-9 ring-2 ring-primary/20" data-alt="User profile picture avatar" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCCw3BNnitXo10UamZKzxJRcIY2Mi5wSOA4cr28h_-ee7qkFiwkODWZAE3YYeRF5kKQAKOx-wLmM4p4ItEbi6E836Pq71cakW8_CM29OlDp9ZpsZ5aw7pW1JPXgW88lpjGJq9UKOGDp8VEw94lyGQIZzAmH7c9oHmIyP_HECqj1N_-lDPvf9WazIl2W9KsxUFMjlzKhQcbjjhgkIJyCTZ5n1bpdFFwl-eWsvNJAAsFGk_VBDcQAwYkmZInkTMBSmDDuTrmE5r_iJ7Wx");'></div>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex flex-1 overflow-hidden">
+<!-- Left Sidebar: Conversations List -->
+<aside class="w-80 lg:w-[360px] flex flex-col border-r border-slate-200 dark:border-white/10 bg-white dark:bg-background-dark z-10">
+<div class="p-4 space-y-4">
+<div class="flex items-center justify-between">
+<h1 class="text-xl font-bold dark:text-white">Messages</h1>
+<button class="text-primary hover:bg-primary/10 p-1 rounded-full transition-colors">
+<span class="material-symbols-outlined">edit_square</span>
+</button>
+</div>
+<!-- Search -->
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors text-[20px]">search</span>
+<input class="w-full bg-slate-100 dark:bg-surface-dark border-none rounded-xl pl-10 pr-4 py-2 text-sm focus:ring-1 focus:ring-primary transition-all placeholder:text-slate-500" placeholder="Search conversations..." type="text"/>
+</div>
+</div>
+<!-- List of Chats -->
+<div class="flex-1 overflow-y-auto custom-scrollbar">
+<!-- Chat Item Active -->
+<div class="flex items-center gap-3 px-4 py-4 bg-primary/5 border-l-4 border-primary cursor-pointer transition-colors">
+<div class="relative shrink-0">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-12" data-alt="Expert Alex profile photo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCWE9Q5KozmeND7d_NkaB5n6Cfx_pyXUNwjf2_FFlwLO1wwyWgxzeTXNCVufzpJooM8D6x6LrF8MUuZledhJohqYBCIBMh1J-48HHh4F6JYQvc1sLrFHGDUTn7qcbs3vHt3PTmNCBf41GKCA8B3JZh2jFtTQ9cdNYizbHlevcFsvrB66OudwLJl4Tksj6vDSb4lPhuYTx2WbJe88x7T3K3BPYX9UysZ_RC9RlIV04-nEJ6DCoppaq79BLthfFCA-LzI2NRdftn90zOg");'></div>
+<div class="absolute bottom-0 right-0 size-3.5 bg-green-500 rounded-full border-2 border-white dark:border-background-dark"></div>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-center mb-1">
+<h3 class="font-bold text-sm truncate dark:text-white">Alex - n8n Expert</h3>
+<span class="text-[11px] text-primary font-semibold">2m ago</span>
+</div>
+<p class="text-xs text-slate-600 dark:text-slate-400 truncate">Can we integrate the Shopify API tonight?</p>
+</div>
+<div class="flex flex-col items-end gap-1">
+<div class="bg-primary text-white text-[10px] font-bold size-5 rounded-full flex items-center justify-center">2</div>
+</div>
+</div>
+<!-- Chat Item 2 -->
+<div class="flex items-center gap-3 px-4 py-4 hover:bg-slate-50 dark:hover:bg-surface-dark/50 cursor-pointer transition-colors border-l-4 border-transparent">
+<div class="relative shrink-0">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-12" data-alt="Workflow Specialist Sarah profile photo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDFNN5UMp4kuqoYV-azJL1DXnY9sus9VGWd8QVvi8xm7G187kYFe600aF2mvYmswiqIgdjfKeOR6GyMFmjJX3DwdPI82SNBM3jjE-t9XA4wkhXnJGQc2-k7jAWoEn8wgBW8Ye7NkuHpnhVV9KYZwKJKYgcTjHkF__MZL6oPmWqgJbC_XHAvBr782ABI88QyoKgmAMvTRaAQb0GRaB5eiCie_RdZ6rc6N_BHWO4qhYyY0TeJxnm6By2Dd9VCxWIIx499wGSDbnZHZOJx");'></div>
+<div class="absolute bottom-0 right-0 size-3.5 bg-slate-400 rounded-full border-2 border-white dark:border-background-dark"></div>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-center mb-1">
+<h3 class="font-bold text-sm truncate dark:text-white">Sarah - Workflow Specialist</h3>
+<span class="text-[11px] text-slate-400">15m ago</span>
+</div>
+<p class="text-xs text-slate-500 truncate">The logic for the loop is now fixed.</p>
+</div>
+</div>
+<!-- Chat Item 3 -->
+<div class="flex items-center gap-3 px-4 py-4 hover:bg-slate-50 dark:hover:bg-surface-dark/50 cursor-pointer transition-colors border-l-4 border-transparent">
+<div class="relative shrink-0">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-12" data-alt="Expert Marcus profile photo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDRX6_zWwyiIrZkP6Lq6csdj9JUxN_y89Ahw-2H_iWR_MOLpNNvW9DV361nekGVHrlS8QIo_wC_Qlcp6qnBGC52VGcEiOkXZj3QBV_XVRihSlOfFo_9vkfYdj2whOiDF7XgCRoFeq7b3jjZORIm4a3CFXTX9eA0Bce3ineYSQRJJqkBwxsKYYPWCjOCpYNHaewDuCyvgV62wLl8N_vHFQjq0BkZPEkfl1ooDKD1Ej0hHsqTKHNwQT58YA9PG24SAikBYgsfqjbS71OD");'></div>
+<div class="absolute bottom-0 right-0 size-3.5 bg-green-500 rounded-full border-2 border-white dark:border-background-dark"></div>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-center mb-1">
+<h3 class="font-bold text-sm truncate dark:text-white">Marcus - Automator</h3>
+<span class="text-[11px] text-slate-400">1h ago</span>
+</div>
+<p class="text-xs text-slate-500 truncate">Let's schedule a call for the database migration.</p>
+</div>
+</div>
+<!-- Chat Item 4 -->
+<div class="flex items-center gap-3 px-4 py-4 hover:bg-slate-50 dark:hover:bg-surface-dark/50 cursor-pointer transition-colors border-l-4 border-transparent">
+<div class="relative shrink-0">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-12" data-alt="Developer Jordan profile photo" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAifxPNu3wCsk4gTHeyK7pQtrP3ZRtrsOKUEFq6DlN6NyF2gqkpDfatoK5Pz5oeWaQfutsJUCIq9SI4MXwoG4d1TZ71aVRLXxJhhMaazO65CnO3nkA2KJ9GdodmegoQ67F4o-wn2yR3g6snioZfR52kuUX8nmxsvt9waZ36jWHPi74hA7eLUi7URWae-o54CtOJzfGMukgHt0KoXZCA204BfJGR26tu2F4NYWjnH7pfxAabHBoYmOwiCxaMY3Rqz-jvftbb61ImYCBi");'></div>
+<div class="absolute bottom-0 right-0 size-3.5 bg-slate-400 rounded-full border-2 border-white dark:border-background-dark"></div>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-center mb-1">
+<h3 class="font-bold text-sm truncate dark:text-white">Jordan - Frontend Dev</h3>
+<span class="text-[11px] text-slate-400">3h ago</span>
+</div>
+<p class="text-xs text-slate-500 truncate">I've updated the webhook listeners as discussed.</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Chat Window -->
+<section class="flex-1 flex flex-col bg-slate-50 dark:bg-background-dark relative">
+<!-- Chat Header -->
+<header class="h-16 flex items-center justify-between px-6 border-b border-slate-200 dark:border-white/10 bg-white/80 dark:bg-background-dark/80 backdrop-blur-md z-10">
+<div class="flex items-center gap-3">
+<div class="relative">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" data-alt="Current chat profile Alex" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCzpEwDShUNJY9qJusuM5fwK10FP1HYQUo--gxiac1M5qh7a1g0o2xVtmgTw2ZBmeDsFj-LXxFJdOpFg5MT1nryMXiduUGQx4rEdptxtCq7LfH-cU4H9Sh2TA-RfBOLqFo7lZ45-78k2R_DMUEdgiHevmolcKES2dXO_-DKG8ijAbPFakxFrvbeD9kgKQljDIMR1h75ExNbwq36aVL3y83e29cC6lAP1LdkEYEhRwltBO6aqkn47-qlsKtCfyo-70VthyEdP_DVK83W");'></div>
+<div class="absolute bottom-0 right-0 size-2.5 bg-green-500 rounded-full border border-white dark:border-background-dark"></div>
+</div>
+<div>
+<h2 class="text-sm font-bold dark:text-white">Alex - n8n Expert</h2>
+<span class="text-[11px] text-green-500 font-medium">Online</span>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<a class="text-primary text-xs font-bold hover:underline" href="#">View Profile</a>
+<div class="h-6 w-[1px] bg-slate-200 dark:bg-white/10"></div>
+<button class="text-slate-500 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">videocam</span>
+</button>
+<button class="text-slate-500 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</header>
+<!-- Message Area Thread -->
+<div class="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar flex flex-col">
+<!-- Date Separator -->
+<div class="flex justify-center">
+<span class="text-[10px] uppercase tracking-widest text-slate-400 font-bold bg-slate-200/50 dark:bg-white/5 px-3 py-1 rounded-full">Today</span>
+</div>
+<!-- Other Message -->
+<div class="flex gap-3 max-w-[80%] self-start">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-8 shrink-0 self-end mb-4" data-alt="Alex avatar miniature" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAEE_h6O1CqyYRaKDClTp-em7jYCCdYeqTnYX97ugkoZuRS6SLYR3jPjEBYS6jUFpVnnImhfLW5kyHLQiYCOwgG5DNfMQEJY7fONA9aPX89V4pZmhygaVMFTHOF8HTipsAX38a3TtdNlhOAElznsZ5QT217ZEejQijB3oQOPlMAsY1N4_zpeqd7VzZ-6yRzwG7-ZOwN6Mwr50e5dAJe6GekzlW1Qe_qzOMt1Z3ES02uXCwm_ajd3-lWU_wg_bUV8e9mB8VVMRc_zobk");'></div>
+<div class="flex flex-col gap-1">
+<div class="glass dark:bg-accent-dark/40 rounded-2xl rounded-bl-none px-4 py-3 text-sm dark:text-slate-100 shadow-sm">
+                            Hey there! I've just finished reviewing your n8n workflow for the CRM integration.
+                        </div>
+<span class="text-[10px] text-slate-400 ml-1">10:42 AM</span>
+</div>
+</div>
+<!-- Me Message -->
+<div class="flex gap-3 max-w-[80%] self-end flex-row-reverse">
+<div class="flex flex-col gap-1 items-end">
+<div class="bg-primary text-white rounded-2xl rounded-br-none px-4 py-3 text-sm shadow-lg shadow-primary/20">
+                            That's great news, Alex! Did you find any bottlenecks in the execution speed?
+                        </div>
+<div class="flex items-center gap-1">
+<span class="text-[10px] text-slate-400">10:45 AM</span>
+<span class="material-symbols-outlined text-[14px] text-primary">done_all</span>
+</div>
+</div>
+</div>
+<!-- Other Message -->
+<div class="flex gap-3 max-w-[80%] self-start">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-8 shrink-0 self-end mb-4" data-alt="Alex avatar miniature" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCPIMbBxP0borgleHmoNUvsD3Gn2SgLBzs6_tc3cpVba3h0koK3UIl8y5XC7WbjBQWSoOVqf1wtqteS9KHn9SnJ9gWfplyvbwAVVC9aylN5rygZpggtAbQvbE9cIpveD3KZemSAbp8X6r3qg0diBtwfoDMlY2FG4eNa1CW6y1--RG6EFJnIV3rZrjplFuRQVudOmb1nwSEOW184r8hZ6_afAyk9hz3iFJaVB0qPQoq33Oh7RqCA1TtVkIAGphsx8s9LVYwbe75kURs1");'></div>
+<div class="flex flex-col gap-1">
+<div class="glass dark:bg-accent-dark/40 rounded-2xl rounded-bl-none px-4 py-3 text-sm dark:text-slate-100 shadow-sm">
+                            Actually, yes. The HTTP Request node was hitting the rate limit. I've implemented a "Wait" node with a 2-second delay and a retry logic.
+                        </div>
+<div class="glass dark:bg-accent-dark/40 rounded-2xl rounded-bl-none px-4 py-3 text-sm dark:text-slate-100 shadow-sm mt-1">
+                            Can we integrate the Shopify API tonight to test it under real load?
+                        </div>
+<span class="text-[10px] text-slate-400 ml-1">10:48 AM</span>
+</div>
+</div>
+<!-- Me Message Typing/Thinking (Placeholder) -->
+<div class="flex gap-3 self-end flex-row-reverse">
+<div class="bg-primary/10 px-3 py-2 rounded-full flex gap-1">
+<div class="size-1.5 bg-primary rounded-full animate-bounce"></div>
+<div class="size-1.5 bg-primary rounded-full animate-bounce [animation-delay:0.2s]"></div>
+<div class="size-1.5 bg-primary rounded-full animate-bounce [animation-delay:0.4s]"></div>
+</div>
+</div>
+</div>
+<!-- Input Area -->
+<footer class="p-6 bg-white dark:bg-background-dark border-t border-slate-200 dark:border-white/10">
+<div class="max-w-4xl mx-auto flex items-end gap-4">
+<div class="flex-1 bg-slate-100 dark:bg-surface-dark rounded-2xl p-2 flex items-end transition-all focus-within:ring-2 focus-within:ring-primary/30">
+<button class="p-2 text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">attach_file</span>
+</button>
+<textarea class="flex-1 bg-transparent border-none focus:ring-0 resize-none py-2 text-sm dark:text-white placeholder:text-slate-500 custom-scrollbar" placeholder="Type a message..." rows="1"></textarea>
+<button class="p-2 text-slate-400 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">sentiment_satisfied</span>
+</button>
+</div>
+<button class="size-12 rounded-full bg-primary text-white flex items-center justify-center shadow-lg shadow-primary/30 hover:scale-105 active:scale-95 transition-all">
+<span class="material-symbols-outlined">send</span>
+</button>
+</div>
+<div class="max-w-4xl mx-auto mt-2 flex items-center justify-between">
+<p class="text-[10px] text-slate-400">Shift + Enter for new line</p>
+<div class="flex gap-2">
+<span class="size-2 bg-primary rounded-full animate-pulse"></span>
+<span class="text-[10px] text-slate-400">Alex is typing...</span>
+</div>
+</div>
+</footer>
+</section>
+</main>
+</div>
+</body></html>

@@ -71,44 +71,44 @@ export default function WorkspaceDashboard() {
 
     return (
         <div className="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen bg-grid overflow-x-hidden">
-            <main className="flex-1 px-6 lg:px-20 py-8 max-w-[1400px] mx-auto w-full">
+            <main className="flex-1 px-6 lg:px-20 py-12 lg:py-16 max-w-[1400px] mx-auto w-full">
                 {/* Project Header Section */}
-                <div className="flex flex-wrap items-start justify-between gap-6 mb-8">
-                    <div className="flex flex-col gap-2">
-                        <div className="flex items-center gap-3">
-                            <h1 className="text-3xl md:text-4xl font-black text-white tracking-tight">{workspaceData.projectTitle}</h1>
-                            <span className="bg-primary text-white text-[10px] font-bold px-2 py-1 rounded tracking-widest uppercase">In Progress</span>
+                <div className="flex flex-wrap items-start justify-between gap-8 mb-12">
+                    <div className="flex flex-col gap-3">
+                        <div className="flex items-center gap-4">
+                            <h1 className="text-4xl md:text-5xl font-black text-white tracking-tight">{workspaceData.projectTitle}</h1>
+                            <span className="bg-primary text-white text-[10px] font-bold px-2 py-1 rounded tracking-widest uppercase shadow-[0_0_10px_rgba(244,37,89,0.5)]">In Progress</span>
                         </div>
-                        <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-slate-400 text-sm">
-                            <div className="flex items-center gap-1.5">
-                                <span className="material-symbols-outlined text-sm">payments</span>
-                                <span>Budget: <span className="text-white font-medium">${workspaceData.budget} {workspaceData.budgetType}</span></span>
+                        <div className="flex flex-wrap items-center gap-x-8 gap-y-3 text-slate-400 text-sm font-medium">
+                            <div className="flex items-center gap-2">
+                                <span className="material-symbols-outlined text-sm text-primary">payments</span>
+                                <span>Budget: <span className="text-white font-bold">${workspaceData.budget} {workspaceData.budgetType}</span></span>
                             </div>
-                            <div className="flex items-center gap-1.5">
-                                <span className="material-symbols-outlined text-sm">calendar_today</span>
-                                <span>Started: <span className="text-white font-medium">{workspaceData.startDate}</span></span>
+                            <div className="flex items-center gap-2">
+                                <span className="material-symbols-outlined text-sm text-primary">calendar_today</span>
+                                <span>Started: <span className="text-white font-bold">{workspaceData.startDate}</span></span>
                             </div>
-                            <div className="flex items-center gap-1.5">
-                                <span className="material-symbols-outlined text-sm">timer</span>
-                                <span>Est. Completion: <span className="text-white font-medium">{workspaceData.estCompletion}</span></span>
+                            <div className="flex items-center gap-2">
+                                <span className="material-symbols-outlined text-sm text-primary">timer</span>
+                                <span>Est. Completion: <span className="text-white font-bold">{workspaceData.estCompletion}</span></span>
                             </div>
                         </div>
                     </div>
-                    <div className="flex gap-3">
-                        <button className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-white/10 border border-white/10 rounded-lg text-sm font-bold transition-all">
+                    <div className="flex gap-4">
+                        <button className="flex items-center gap-2 px-5 py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-sm font-bold transition-all shadow-sm">
                             <span className="material-symbols-outlined text-sm">share</span> Share
                         </button>
-                        <button className="flex items-center gap-2 px-4 py-2 bg-primary hover:bg-primary/90 text-white rounded-lg text-sm font-bold shadow-lg shadow-primary/20 transition-all">
+                        <button className="flex items-center gap-2 px-5 py-3 bg-primary hover:bg-primary/90 text-white rounded-xl text-sm font-bold shadow-[0_0_20px_rgba(244,37,89,0.4)] transition-all">
                             <span className="material-symbols-outlined text-sm">rocket_launch</span> Launch Workflow
                         </button>
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
                     {/* Main Column */}
-                    <div className="lg:col-span-2 space-y-8">
+                    <div className="lg:col-span-2 space-y-10">
                         {/* Milestone Tracker Card */}
-                        <div className="glass-card rounded-xl p-6 border border-white/10 bg-[#1e1316]/70 backdrop-blur-md">
+                        <div className="glass-card rounded-3xl p-8 border border-white/10 bg-[#1e1316]/70 backdrop-blur-md">
                             <div className="flex items-center justify-between mb-8">
                                 <div>
                                     <h3 className="text-lg font-bold text-white">Project Progress</h3>
@@ -174,19 +174,19 @@ export default function WorkspaceDashboard() {
                                 </h3>
                                 <button className="text-xs text-primary font-bold hover:underline">View All History</button>
                             </div>
-                            <div className="p-6 h-80 overflow-y-auto space-y-6">
+                            <div className="p-6 h-[400px] overflow-y-auto space-y-6">
                                 {workspaceData.messages.map((msg) => (
                                     <div key={msg.id} className={`flex gap-4 ${msg.role === 'client' ? 'flex-row-reverse' : ''}`}>
-                                        <img className="size-8 rounded-full" src={msg.avatar} alt={msg.sender} />
+                                        <img className="size-10 rounded-full border border-white/10 shadow-sm" src={msg.avatar} alt={msg.sender} />
                                         <div className={`flex-1 ${msg.role === 'client' ? 'text-right' : ''}`}>
                                             <div className={`flex items-center gap-2 mb-1 ${msg.role === 'client' ? 'justify-end' : ''}`}>
                                                 {msg.role === 'expert' && <span className="text-xs font-bold text-white">{msg.sender}</span>}
-                                                <span className="text-[10px] text-slate-500">{msg.time}</span>
+                                                <span className="text-[10px] text-slate-500 uppercase tracking-widest">{msg.time}</span>
                                                 {msg.role === 'client' && <span className="text-xs font-bold text-white">{msg.sender}</span>}
                                             </div>
-                                            <div className={`inline-block p-3 rounded-lg text-sm max-w-md ${msg.role === 'client'
-                                                ? 'bg-primary/20 border border-primary/30 rounded-tr-none text-slate-100 text-left'
-                                                : 'bg-white/5 border border-white/10 rounded-tl-none text-slate-300'
+                                            <div className={`inline-block px-5 py-3.5 rounded-2xl text-sm font-medium leading-relaxed max-w-md shadow-md ${msg.role === 'client'
+                                                ? 'bg-primary text-white rounded-tr-none shadow-[0_0_15px_rgba(244,37,89,0.3)] text-left'
+                                                : 'bg-white/10 border border-white/10 rounded-tl-none text-slate-100'
                                                 }`}>
                                                 {msg.content}
                                             </div>
@@ -206,13 +206,13 @@ export default function WorkspaceDashboard() {
                             <div className="p-4 border-t border-white/5 bg-white/5">
                                 <div className="relative">
                                     <input
-                                        className="w-full bg-background-dark/50 border border-white/10 rounded-lg py-3 pl-4 pr-12 text-sm focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary text-white placeholder-slate-500"
+                                        className="w-full bg-[#0b141f] border border-white/20 rounded-xl py-4 pl-5 pr-14 text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-white placeholder-slate-500 shadow-inner"
                                         placeholder="Type your reply..."
                                         type="text"
                                         value={newMessage}
                                         onChange={(e) => setNewMessage(e.target.value)}
                                     />
-                                    <button className="absolute right-2 top-1/2 -translate-y-1/2 size-8 bg-primary rounded-md flex items-center justify-center text-white hover:bg-primary-hover transition-colors">
+                                    <button className="absolute right-3 top-1/2 -translate-y-1/2 size-10 bg-primary rounded-lg flex items-center justify-center text-white hover:brightness-110 shadow-[0_0_10px_rgba(244,37,89,0.4)] transition-all">
                                         <span className="material-symbols-outlined text-sm">send</span>
                                     </button>
                                 </div>
@@ -221,9 +221,9 @@ export default function WorkspaceDashboard() {
                     </div>
 
                     {/* Right Sidebar */}
-                    <div className="space-y-8">
+                    <div className="space-y-10">
                         {/* Participants Section */}
-                        <div className="glass-card rounded-xl p-6 border border-white/10 bg-[#1e1316]/70 backdrop-blur-md">
+                        <div className="glass-card rounded-3xl p-8 border border-white/10 bg-[#1e1316]/70 backdrop-blur-md">
                             <h3 className="text-md font-bold text-white mb-5 flex items-center gap-2">
                                 <span className="material-symbols-outlined text-slate-400">group</span> Participants
                             </h3>
@@ -250,7 +250,7 @@ export default function WorkspaceDashboard() {
                         </div>
 
                         {/* Quick Actions Section */}
-                        <div className="glass-card rounded-xl p-6 border border-white/10 bg-[#1e1316]/70 backdrop-blur-md">
+                        <div className="glass-card rounded-3xl p-8 border border-white/10 bg-[#1e1316]/70 backdrop-blur-md">
                             <h3 className="text-md font-bold text-white mb-5">Quick Actions</h3>
                             <div className="flex flex-col gap-3">
                                 <button className="flex items-center justify-between w-full px-4 py-3 bg-primary text-white font-bold rounded-lg text-sm hover:brightness-110 transition-all shadow-lg shadow-primary/20">

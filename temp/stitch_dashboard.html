@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;family=Manrope:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface-container": "#17202c",
+            "surface-container-high": "#222b36",
+            "error": "#ffb4ab",
+            "outline": "#ac888a",
+            "tertiary-fixed": "#86f9bc",
+            "on-tertiary-fixed": "#002112",
+            "secondary": "#4edea3",
+            "on-secondary-container": "#00311f",
+            "secondary-fixed-dim": "#4edea3",
+            "on-secondary": "#003824",
+            "on-error": "#690005",
+            "on-background": "#dae3f3",
+            "surface-dim": "#0b141f",
+            "on-error-container": "#ffdad6",
+            "tertiary": "#69dca2",
+            "on-tertiary-fixed-variant": "#005233",
+            "secondary-container": "#00a572",
+            "on-tertiary": "#003822",
+            "surface-container-highest": "#2d3542",
+            "inverse-surface": "#dae3f3",
+            "on-primary-container": "#5b0019",
+            "error-container": "#93000a",
+            "surface-container-lowest": "#060f1a",
+            "surface-tint": "#ffb2b9",
+            "on-secondary-fixed-variant": "#005236",
+            "on-primary": "#67001e",
+            "on-primary-fixed-variant": "#91002d",
+            "inverse-on-surface": "#28313d",
+            "surface": "#0b141f",
+            "tertiary-container": "#29a46f",
+            "outline-variant": "#5c3f41",
+            "surface-variant": "#2d3542",
+            "primary-container": "#ff506f",
+            "surface-container-low": "#131c28",
+            "primary-fixed": "#ffdadb",
+            "tertiary-fixed-dim": "#69dca2",
+            "inverse-primary": "#be003e",
+            "surface-bright": "#313a46",
+            "on-primary-fixed": "#40000f",
+            "primary": "#ffb2b9",
+            "secondary-fixed": "#6ffbbe",
+            "on-secondary-fixed": "#002113",
+            "on-surface-variant": "#e5bdbf",
+            "on-tertiary-container": "#00311d",
+            "primary-fixed-dim": "#ffb2b9",
+            "background": "#0b141f",
+            "on-surface": "#dae3f3"
+          },
+          fontFamily: {
+            "headline": ["Space Grotesk"],
+            "body": ["Manrope"],
+            "label": ["Manrope"]
+          },
+          borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+        },
+      },
+    }
+  </script>
+<style>
+    .glass-card {
+      background: rgba(30, 19, 22, 0.7);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+    .neon-glow-primary {
+      box-shadow: 0 0 15px rgba(244, 37, 89, 0.3);
+    }
+    .neon-glow-secondary {
+      box-shadow: 0 0 15px rgba(78, 222, 163, 0.2);
+    }
+    body {
+      background-color: #0b141f;
+      color: #dae3f3;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="font-body selection:bg-primary selection:text-on-primary">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-[#0b141f]/80 backdrop-blur-xl flex items-center justify-between px-6 h-16 shadow-[0_4px_30px_rgba(244,37,89,0.08)]">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full overflow-hidden border-2 border-primary/30 active:scale-95 duration-200 cursor-pointer">
+<img alt="User Profile Avatar" class="w-full h-full object-cover" data-alt="Professional headshot of a young male creative expert with soft studio lighting and dark background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0JUYF8ii4j0KyXTbYjSaSLVJOFAizsbytD68qZSCaXeO6-lhFWT9bsEIwXNQzHDxbIwqdRfuqQBdFNqlboVgRJMh7gQwXzoAA--ZJPLv3cs84erPhtUHl9Dmbfs6-EZJPYd2XpnNNUNgH4yP9dTJAQE4bzlu-HGLw3B31az7CrQ0qKEMsZv2-XkgYR7rbAJIQHJo-WhO-wQINV2WhN3HQiMvg6777iueU2mGehwZR6it-HgYgNUutv_LbAXzlbXox3-nUx_lOD1VJ"/>
+</div>
+<span class="text-xl font-bold tracking-tighter text-white font-headline">ExpertHub</span>
+</div>
+<div class="relative active:scale-95 duration-200 cursor-pointer p-2 hover:bg-white/5 transition-colors rounded-full">
+<span class="material-symbols-outlined text-white/70">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full"></span>
+</div>
+<div class="bg-gradient-to-r from-transparent via-[#f42559]/15 to-transparent h-[1px] w-full absolute bottom-0"></div>
+</header>
+<main class="pt-24 pb-32 px-6 max-w-md mx-auto space-y-8">
+<!-- Greeting Section -->
+<section class="space-y-1">
+<p class="font-label text-sm uppercase tracking-[0.2em] text-primary/80 font-bold">Dashboard</p>
+<h1 class="font-headline text-4xl font-bold text-white tracking-tight">Good morning, <span class="text-primary">Alex</span></h1>
+</section>
+<!-- Quick Actions Row -->
+<section class="grid grid-cols-3 gap-3">
+<button class="glass-card flex flex-col items-center justify-center p-4 rounded-2xl active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-primary mb-2">add_circle</span>
+<span class="font-label text-[10px] font-bold text-white/90 uppercase tracking-wider text-center leading-tight">Post Project</span>
+</button>
+<button class="glass-card flex flex-col items-center justify-center p-4 rounded-2xl active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-secondary mb-2">search</span>
+<span class="font-label text-[10px] font-bold text-white/90 uppercase tracking-wider text-center leading-tight">Find Work</span>
+</button>
+<button class="glass-card flex flex-col items-center justify-center p-4 rounded-2xl active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-white mb-2">payments</span>
+<span class="font-label text-[10px] font-bold text-white/90 uppercase tracking-wider text-center leading-tight">Withdraw</span>
+</button>
+</section>
+<!-- Key Metrics Bento -->
+<section class="grid grid-cols-2 gap-4">
+<div class="glass-card col-span-2 p-5 rounded-3xl relative overflow-hidden">
+<div class="absolute -right-4 -top-4 w-24 h-24 bg-primary/10 rounded-full blur-3xl"></div>
+<div class="flex justify-between items-start">
+<div class="space-y-1">
+<p class="text-white/50 text-sm font-medium">Monthly Earnings</p>
+<h2 class="text-3xl font-bold text-white font-headline">$4,500.00</h2>
+</div>
+<div class="p-2 bg-primary/20 rounded-xl">
+<span class="material-symbols-outlined text-primary">trending_up</span>
+</div>
+</div>
+<div class="mt-4 flex items-center gap-2">
+<span class="text-secondary text-xs font-bold">+12% from last month</span>
+</div>
+</div>
+<div class="glass-card p-5 rounded-3xl space-y-3">
+<p class="text-white/50 text-xs font-medium uppercase tracking-widest">Projects</p>
+<div class="flex items-baseline gap-1">
+<span class="text-2xl font-bold text-white">3</span>
+<span class="text-xs text-white/40">Active</span>
+</div>
+<div class="h-1 w-full bg-white/10 rounded-full overflow-hidden">
+<div class="h-full bg-primary w-2/3"></div>
+</div>
+</div>
+<div class="glass-card p-5 rounded-3xl space-y-3">
+<p class="text-white/50 text-xs font-medium uppercase tracking-widest">Success</p>
+<div class="flex items-baseline gap-1">
+<span class="text-2xl font-bold text-secondary">98%</span>
+</div>
+<div class="flex -space-x-2">
+<div class="w-6 h-6 rounded-full border border-surface bg-surface-container-highest"></div>
+<div class="w-6 h-6 rounded-full border border-surface bg-surface-container-high"></div>
+<div class="w-6 h-6 rounded-full border border-surface bg-surface-container-low"></div>
+</div>
+</div>
+</section>
+<!-- Active Projects List -->
+<section class="space-y-4">
+<div class="flex justify-between items-end">
+<h3 class="font-headline text-xl font-bold text-white">Active Projects</h3>
+<span class="text-primary text-xs font-bold uppercase tracking-widest cursor-pointer hover:underline">View All</span>
+</div>
+<div class="space-y-3">
+<!-- Project Card 1 -->
+<div class="glass-card p-5 rounded-2xl group hover:bg-white/5 transition-colors">
+<div class="flex justify-between items-start mb-3">
+<div>
+<h4 class="text-white font-bold mb-1">Custom API Integration</h4>
+<p class="text-white/40 text-xs">Client: FinTech Solutions</p>
+</div>
+<span class="bg-secondary/10 text-secondary text-[10px] font-bold px-2 py-1 rounded-full border border-secondary/20">ON TRACK</span>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-[10px] font-bold text-white/60">
+<span>Next Milestone: Auth Layer</span>
+<span>75%</span>
+</div>
+<div class="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+<div class="h-full bg-gradient-to-r from-primary to-secondary w-3/4 rounded-full"></div>
+</div>
+</div>
+</div>
+<!-- Project Card 2 -->
+<div class="glass-card p-5 rounded-2xl group hover:bg-white/5 transition-colors">
+<div class="flex justify-between items-start mb-3">
+<div>
+<h4 class="text-white font-bold mb-1">Shopify Store Optimization</h4>
+<p class="text-white/40 text-xs">Client: Bloom Apparel</p>
+</div>
+<span class="bg-primary/10 text-primary text-[10px] font-bold px-2 py-1 rounded-full border border-primary/20">DUE SOON</span>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between text-[10px] font-bold text-white/60">
+<span>Next Milestone: Assets Comp.</span>
+<span>40%</span>
+</div>
+<div class="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+<div class="h-full bg-primary w-2/5 rounded-full"></div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Recent Messages -->
+<section class="space-y-4">
+<div class="flex justify-between items-end">
+<h3 class="font-headline text-xl font-bold text-white">Recent Messages</h3>
+<span class="material-symbols-outlined text-white/40 cursor-pointer">more_horiz</span>
+</div>
+<div class="space-y-2">
+<!-- Message 1 -->
+<div class="glass-card p-4 rounded-2xl flex gap-4 items-center active:scale-[0.98] transition-transform">
+<div class="relative">
+<div class="w-12 h-12 rounded-xl overflow-hidden">
+<img alt="Client Avatar" class="w-full h-full object-cover" data-alt="Close-up portrait of a professional woman with a friendly expression in a modern office environment" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBi0Oqvg0mqZE-kbzsptEn8JFHMqHcYaQaW-cIT7DOFfGlaOsW_8PfEimmt5HzsMk5MD01uK5TjhO9zfmEN2X_C9TEpvi7iV4V2-ZbjmkPvwPqqcScy5RcsNqlEBda1eYd_qU0MtpNP-a1OzA_Gj6rRAnVEZNEzlyy3devx9t1uNmcJ4LCCFmH0mj1lHMf1JWdTNQWSsheoLEfhduiI9S1r5eHDZq5Na0_IT-Vr3H2yrUgqTKAoBPTh5m4ZTDwIz161ddBWNi9jml8f"/>
+</div>
+<div class="absolute -bottom-1 -right-1 w-3 h-3 bg-secondary rounded-full border-2 border-[#0b141f]"></div>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-baseline mb-0.5">
+<h5 class="text-white font-bold text-sm truncate">Sarah Jenkins</h5>
+<span class="text-[10px] text-white/40 font-medium">10m ago</span>
+</div>
+<p class="text-white/60 text-xs truncate">The API documentation looks solid, let's proceed...</p>
+</div>
+</div>
+<!-- Message 2 -->
+<div class="glass-card p-4 rounded-2xl flex gap-4 items-center active:scale-[0.98] transition-transform">
+<div class="relative">
+<div class="w-12 h-12 rounded-xl overflow-hidden">
+<img alt="Client Avatar" class="w-full h-full object-cover" data-alt="Professional portrait of a male tech lead with glasses, modern lighting, high resolution" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBCVUfT9M3fooLh-aN19ncoU4NpoLyXzDVhRp2OcELMeYrrwHKr_AYQ5iJS-Qx7jy9qniux9P3GSS0V5Hxa_sEGtuAvUwdtKlAErobNdy8uHgLwWUeytFsOJzPKqv32HLYFqDbYAPxlKPV5fQQZUrkQIjM5dbBzhafnvJGcAF99Lgw9bBZRMdzJkL0VLklh_Lg5rU9SxskS1aLH4-knhldT9VOU7LU_DsPdWuuqVI9-7f5jp8y202wvAZNWBgGuniq47H_QLsK-I6Ju"/>
+</div>
+</div>
+<div class="flex-1 min-w-0">
+<div class="flex justify-between items-baseline mb-0.5">
+<h5 class="text-white font-bold text-sm truncate">Marcus Chen</h5>
+<span class="text-[10px] text-white/40 font-medium">2h ago</span>
+</div>
+<p class="text-white/60 text-xs truncate">I've uploaded the new branding assets to the folder.</p>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full flex justify-around items-center h-20 pb-4 px-4 bg-[#0b141f]/70 backdrop-blur-md z-50 rounded-t-3xl border-t border-white/10 shadow-[0_-8px_32px_rgba(0,0,0,0.5)]">
+<!-- Active Tab: Home -->
+<a class="flex flex-col items-center justify-center text-[#ffb2b9] drop-shadow-[0_0_8px_rgba(244,37,89,0.6)] active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span class="font-label text-[10px] font-semibold tracking-wide uppercase">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-white/40 hover:text-white/80 transition-all active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined mb-1">work</span>
+<span class="font-label text-[10px] font-semibold tracking-wide uppercase">Projects</span>
+</a>
+<a class="flex flex-col items-center justify-center text-white/40 hover:text-white/80 transition-all active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined mb-1">chat_bubble</span>
+<span class="font-label text-[10px] font-semibold tracking-wide uppercase">Messages</span>
+</a>
+<a class="flex flex-col items-center justify-center text-white/40 hover:text-white/80 transition-all active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined mb-1">search</span>
+<span class="font-label text-[10px] font-semibold tracking-wide uppercase">Talent</span>
+</a>
+<a class="flex flex-col items-center justify-center text-white/40 hover:text-white/80 transition-all active:scale-90 transition-transform" href="#">
+<span class="material-symbols-outlined mb-1">menu</span>
+<span class="font-label text-[10px] font-semibold tracking-wide uppercase">Menu</span>
+</a>
+</nav>
+</body></html>

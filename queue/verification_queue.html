@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Expert Verification Admin Queue | n8nExperts</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#135bec",
+                        "background-light": "#f6f6f8",
+                        "background-dark": "#101622",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Manrope', sans-serif; }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-800 dark:text-slate-200 antialiased font-display">
+<div class="relative flex h-screen w-full flex-col overflow-hidden">
+<!-- Top Navigation Bar -->
+<header class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-6 py-3 shrink-0 z-20">
+<div class="flex items-center gap-8">
+<div class="flex items-center gap-3">
+<div class="size-8 bg-primary text-white rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-xl">hub</span>
+</div>
+<h2 class="text-slate-900 dark:text-white text-lg font-bold tracking-tight">n8nExperts Admin</h2>
+</div>
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-slate-500 hover:text-primary text-sm font-semibold transition-colors" href="#">Dashboard</a>
+<a class="text-primary text-sm font-semibold border-b-2 border-primary py-1" href="#">Experts Queue</a>
+<a class="text-slate-500 hover:text-primary text-sm font-semibold transition-colors" href="#">Settings</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg">search</span>
+<input class="w-64 bg-slate-100 dark:bg-slate-800 border-none rounded-lg pl-10 pr-4 py-2 text-sm focus:ring-2 focus:ring-primary/50" placeholder="Search experts..."/>
+</div>
+<div class="flex items-center gap-3 pl-4 border-l border-slate-200 dark:border-slate-800">
+<div class="text-right hidden sm:block">
+<p class="text-xs font-bold text-slate-900 dark:text-white">Admin User</p>
+<p class="text-[10px] text-slate-500">Super Admin</p>
+</div>
+<img class="size-9 rounded-full border border-slate-200" data-alt="Admin user profile picture" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBFwrz1IZHvKV9Q6wHIEwBt2RC-bLAYMEyldNoUS2178H4z7pT1GvAwhQx2_Fzgn45dUMm4N-tqGH3rcX2MFwoqSfPtOTGKXB4qxCfL9GeK1qZFQQ36Md470e76tZMVv7gDSxQ-IkdCaFvt0SvNt_Pe17xr-hAjv1dCE0bD9RW7n0BJtOajgkpA-yNqdcJDyk_U_beXTxvNQ5GOXJ6sjXDpxxHGRFKkn46vxo6puyCFDkPkcUZSS43Gz107uQDMQhoxEqCclQpZ_hSC"/>
+</div>
+</div>
+</header>
+<!-- Main Content Area: Split Layout -->
+<main class="flex flex-1 overflow-hidden">
+<!-- Sidebar: Pending List -->
+<aside class="w-[400px] border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 flex flex-col shrink-0">
+<div class="p-4 border-b border-slate-100 dark:border-slate-800">
+<div class="flex items-center justify-between mb-4">
+<h3 class="font-bold text-slate-900 dark:text-white">Pending Verification</h3>
+<span class="px-2 py-0.5 bg-primary/10 text-primary text-[10px] font-bold rounded-full uppercase tracking-wider">12 New</span>
+</div>
+<div class="flex gap-2">
+<button class="flex-1 px-3 py-1.5 bg-primary text-white text-xs font-semibold rounded-lg">All</button>
+<button class="flex-1 px-3 py-1.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-xs font-semibold rounded-lg hover:bg-slate-200">Priority</button>
+<button class="flex-1 px-3 py-1.5 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-xs font-semibold rounded-lg hover:bg-slate-200">Flagged</button>
+</div>
+</div>
+<div class="flex-1 overflow-y-auto scrollbar-hide divide-y divide-slate-100 dark:divide-slate-800">
+<!-- Expert Card (Active) -->
+<div class="p-4 bg-primary/5 border-l-4 border-primary cursor-pointer transition-colors relative">
+<div class="flex gap-3">
+<img class="size-12 rounded-lg object-cover" data-alt="Professional headshot of Alex Rivera" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC3IqwR_iKLz1BRfUCSHK4VMWqWCiPNv7SscKO8vR5EzXbeGtA8H0EUJhlhpmeoEdmPdkgvcDGWuBXo2QYA9Q-sgPwYLAcPeqvPaJtD-M9unV8_WYh5XuPoA82vl39fdHrJ8cHmwXs-AtPZAn3obgwXOKlLAARnwMIDi9yI3GqpLY1XRSo4RogfZoI-St-qIRHZdQxu_jObZo6smUeom-dvsvX4fa0WrnFt-dav4-TRxUXzRbJ8-t_BtJ2hPBemsRC96i-DD84nZOt3"/>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between mb-1">
+<h4 class="font-bold text-slate-900 dark:text-white truncate">Alex Rivera</h4>
+<span class="text-[10px] text-slate-400 font-medium">2d ago</span>
+</div>
+<p class="text-xs text-slate-500 line-clamp-2 leading-relaxed mb-2">Workflow automation specialist with 5+ years of experience in n8n and API integrations...</p>
+<div class="flex items-center gap-3 text-[11px] font-semibold text-slate-600 dark:text-slate-400">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs">payments</span>$85/hr</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs">location_on</span>Berlin, DE</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Expert Card -->
+<div class="p-4 hover:bg-slate-50 dark:hover:bg-slate-800/50 cursor-pointer transition-colors">
+<div class="flex gap-3">
+<img class="size-12 rounded-lg object-cover" data-alt="Professional headshot of Sarah Chen" src="https://lh3.googleusercontent.com/aida-public/AB6AXuALq1J-QBcRpILdtvZf16mzZcuZP8jcA77bnmYPZQYsA-BfmzhQ-pt2oNKRXs0B3hu4839MHFNnCswkZABfkezvSw900ZPo94zrWdtsl5-R1D9wybiafbn0SBoS-QTtCFlz5c1G7EjgAykFfNLALszgNxmzitPZ5Wx-UZDUv9wfprvDLQjzbHuLX3jpjV_RN37He6pjcmzAxV1GdEDfk6PTufjmIVAHrxuWyulxQLMFgTR-hpFlE6ZRx6XQS8-hF-MdLIqoNZf8X70m"/>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between mb-1">
+<h4 class="font-bold text-slate-900 dark:text-white truncate">Sarah Chen</h4>
+<span class="text-[10px] text-slate-400 font-medium">3d ago</span>
+</div>
+<p class="text-xs text-slate-500 line-clamp-2 leading-relaxed mb-2">Expert in high-volume CRM data syncs and custom node development for large enterprise clients.</p>
+<div class="flex items-center gap-3 text-[11px] font-semibold text-slate-600 dark:text-slate-400">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs">payments</span>$120/hr</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs">location_on</span>Toronto, CA</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Expert Card -->
+<div class="p-4 hover:bg-slate-50 dark:hover:bg-slate-800/50 cursor-pointer transition-colors">
+<div class="flex gap-3">
+<img class="size-12 rounded-lg object-cover" data-alt="Professional headshot of Marcus Thorne" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA7Bsy-KzXP2_QbiE8y9nSi-u2qTj9yCXYZXmbGTHbFa-14nZl24LT2lDTlB4pA-jIzV8yd-_-PLUgzsJprydtHOEobZtEin4ONEsv_71gV-b4Jh9LFzcw0oJnO0xE7Ep4XYOnqL5bIDlKJqbIXudAB8kGerncFbvAj10vkL9FJDTEavlnf41RiFpJPAvSjpuhmlL-Xi868aQ_85KeS3pslCAegxsBd5UJc6un-3IYleDsQ1sgkDe30o8VzbM89SrYpx73nxMb4jBt6"/>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between mb-1">
+<h4 class="font-bold text-slate-900 dark:text-white truncate">Marcus Thorne</h4>
+<span class="text-[10px] text-slate-400 font-medium">5d ago</span>
+</div>
+<p class="text-xs text-slate-500 line-clamp-2 leading-relaxed mb-2">Certified n8n architect. Focused on AI-driven automation and automated content pipelines.</p>
+<div class="flex items-center gap-3 text-[11px] font-semibold text-slate-600 dark:text-slate-400">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs">payments</span>$95/hr</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs">location_on</span>London, UK</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Expert Card -->
+<div class="p-4 hover:bg-slate-50 dark:hover:bg-slate-800/50 cursor-pointer transition-colors">
+<div class="flex gap-3">
+<img class="size-12 rounded-lg object-cover" data-alt="Professional headshot of David Kim" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAa9AI5BlA7tLbQBV3rPCxLvh9s6qDQ_YxCSg5qT7dWyJQmhD2YwyDgkBUgGBG1tcKNW37q0az6Hk9GL9x-lR96cNLWCZsuAvmVteh6q5zQsg9IAIxV6Tlq2wnUrr_YJc8B7Orz4U9pK15lYQdmj7sgJA05EeGjGH-GX9qTV9Jagb2BWH5aSKq1ylLDKwEtUtmQ1u7ufKbMYw8vBsASTf7HigLgXsZirdGiK-_LgnkatCEbLL18QqzBGFTpVU0JLebyrts58nJ_wHCd"/>
+<div class="flex-1 min-w-0">
+<div class="flex items-center justify-between mb-1">
+<h4 class="font-bold text-slate-900 dark:text-white truncate">David Kim</h4>
+<span class="text-[10px] text-slate-400 font-medium">1w ago</span>
+</div>
+<p class="text-xs text-slate-500 line-clamp-2 leading-relaxed mb-2">Passionate about low-code tools. Building business logic without writing thousands of lines of code.</p>
+<div class="flex items-center gap-3 text-[11px] font-semibold text-slate-600 dark:text-slate-400">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs">payments</span>$65/hr</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-xs">location_on</span>Seoul, KR</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</aside>
+<!-- Detail Panel -->
+<section class="flex-1 flex flex-col bg-slate-50 dark:bg-background-dark overflow-y-auto relative">
+<!-- Profile Header -->
+<div class="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 p-8 pt-10">
+<div class="max-w-4xl mx-auto flex flex-col md:flex-row items-center md:items-start gap-8">
+<div class="relative">
+<img class="size-32 rounded-full border-4 border-white dark:border-slate-800 shadow-xl" data-alt="Large profile picture of Alex Rivera" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCOkcOk311c59KXX0jlSHRj61jQC3FQK-zy9Ov0SgmQRuJWgj9Gv8eMb1n5V_3lFMF1RiDA5j3QMO-MwZzkjuOPUjMC4OXKvt7ndm0KyRTwg5YQ8qsjIHJ8ZmVjaRI-pg24-zMxtgZrpFDdXahluBNNvMwtuedZUzXEAjt7MC5mQWnCpyYa5oOBLXKLbT8tYEbGJLkV-gFFoH2D_JXOqFfD13JJRUkrfFvVukhpxmNPxqGA1qLvlVInppxnljw_BVvpmobKM-in5zro"/>
+<div class="absolute bottom-1 right-1 size-8 bg-green-500 border-4 border-white dark:border-slate-800 rounded-full"></div>
+</div>
+<div class="flex-1 text-center md:text-left">
+<div class="flex flex-col md:flex-row md:items-center gap-3 mb-2">
+<h1 class="text-3xl font-bold text-slate-900 dark:text-white">Alex Rivera</h1>
+<span class="inline-flex items-center px-3 py-1 bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 text-xs font-bold rounded-full border border-amber-200 dark:border-amber-800 uppercase tracking-widest w-fit mx-auto md:mx-0">Pending Verification</span>
+</div>
+<p class="text-slate-500 dark:text-slate-400 text-lg mb-6">Senior Workflow Architect &amp; Automation Specialist</p>
+<!-- Info Grid -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+<div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-100 dark:border-slate-700/50">
+<p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Hourly Rate</p>
+<p class="text-xl font-bold text-slate-900 dark:text-white">$85/hr</p>
+</div>
+<div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-100 dark:border-slate-700/50">
+<p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Location</p>
+<p class="text-xl font-bold text-slate-900 dark:text-white">Berlin, DE</p>
+</div>
+<div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-100 dark:border-slate-700/50">
+<p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">n8n Portfolio</p>
+<p class="text-xl font-bold text-slate-900 dark:text-white">14 Items</p>
+</div>
+<div class="bg-slate-50 dark:bg-slate-800/50 p-4 rounded-xl border border-slate-100 dark:border-slate-700/50">
+<p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Experience</p>
+<p class="text-xl font-bold text-slate-900 dark:text-white">5+ Years</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Detail Content -->
+<div class="max-w-4xl mx-auto w-full p-8 pb-32 space-y-10">
+<!-- Bio Section -->
+<section>
+<h3 class="text-xl font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">person</span>
+                            About the Expert
+                        </h3>
+<div class="bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800">
+<p class="text-slate-600 dark:text-slate-300 leading-relaxed text-base">
+                                Hello! I'm Alex, a seasoned automation engineer with a deep passion for connecting disparate systems into cohesive, efficient workflows. Over the last 5 years, I've specialized in n8n, helping over 50 clients transition from manual spreadsheets to automated pipelines.
+                                <br/><br/>
+                                My expertise lies in complex API integrations, data transformations via Javascript, and building scalable internal tools. I believe that automation should be accessible, maintainable, and most importantly, reliable. I've worked with everything from early-stage startups to established mid-market companies to streamline their operations.
+                            </p>
+</div>
+</section>
+<!-- Portfolio Gallery -->
+<section>
+<h3 class="text-xl font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">auto_fix_high</span>
+                            Featured n8n Projects
+                        </h3>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Portfolio Card -->
+<div class="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 overflow-hidden group">
+<div class="h-40 bg-slate-200 dark:bg-slate-800 relative">
+<div class="absolute inset-0 bg-gradient-to-br from-primary/20 to-indigo-500/20"></div>
+<img class="w-full h-full object-cover mix-blend-overlay opacity-50" data-alt="Screenshot of a complex n8n workflow" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAvJXBS9a0ayBP34XuwQpwSzF5J12iUZ6Z-_yDmXw3UM_aS0SKnnC45Z5bt07W8SowLWtAjlrPd90qQS3prkiiNsey34UCBe8T3h9A2roUy0rvA90e-NE9vjYcgBuZoxd2eCYmbrdmjwOi995pB9UwFV_5RnYu940EipbidPmWnPgyU1FcP1O0Bc3IgDx7tro78VPkNVhQE-fkqxAVBWykgozH0ZKX3nO8y69VxkBAQxwj8BSGPfI_yDJm3p5MEjvD_g7QRpjr2w157"/>
+<span class="absolute top-3 right-3 bg-white/90 dark:bg-slate-900/90 px-2 py-1 rounded text-[10px] font-bold uppercase tracking-widest text-slate-600 dark:text-slate-400">Enterprise</span>
+</div>
+<div class="p-5">
+<h4 class="font-bold text-slate-900 dark:text-white mb-2 group-hover:text-primary transition-colors">Salesforce-to-Slack Sync Engine</h4>
+<p class="text-sm text-slate-500 dark:text-slate-400 mb-4 line-clamp-2">Real-time bi-directional synchronization between Salesforce leads and Slack internal channels with custom logic.</p>
+<a class="inline-flex items-center gap-1 text-sm font-bold text-primary hover:underline" href="#">
+                                        View Workflow <span class="material-symbols-outlined text-sm">open_in_new</span>
+</a>
+</div>
+</div>
+<!-- Portfolio Card -->
+<div class="bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 overflow-hidden group">
+<div class="h-40 bg-slate-200 dark:bg-slate-800 relative">
+<div class="absolute inset-0 bg-gradient-to-br from-primary/20 to-purple-500/20"></div>
+<img class="w-full h-full object-cover mix-blend-overlay opacity-50" data-alt="Screenshot of an AI automation pipeline" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBV52r6DbkJ7kTRb9JDqYH18933R4WkpUhgXvT1_rX7P5Xa9QxYS5o6wyN2Jh_3EAazwousImoiiI16tQoYRZTCASZ5b8uUC-8EnCfOoEq3MJcOb60LuU88Ry9GaEvYP1kEIE_BnNCtj3irYNOH5L-WRx2Q97DAXb8rYVj4uygNGdjJm8SoBHR5GhwskzWC9J912sNz5Oqrd0zg0ISq1jE78UoUcHG_THakfuRGiTy6jMt-iQO8nP2SW1JSWUJOoOqJchDfhYYTA_31"/>
+<span class="absolute top-3 right-3 bg-white/90 dark:bg-slate-900/90 px-2 py-1 rounded text-[10px] font-bold uppercase tracking-widest text-slate-600 dark:text-slate-400">AI / LLM</span>
+</div>
+<div class="p-5">
+<h4 class="font-bold text-slate-900 dark:text-white mb-2 group-hover:text-primary transition-colors">AI Content Generator Pipeline</h4>
+<p class="text-sm text-slate-500 dark:text-slate-400 mb-4 line-clamp-2">Automated SEO blog generation using OpenAI GPT-4, DALL-E 3, and Webflow API with human-in-the-loop approval.</p>
+<a class="inline-flex items-center gap-1 text-sm font-bold text-primary hover:underline" href="#">
+                                        View Workflow <span class="material-symbols-outlined text-sm">open_in_new</span>
+</a>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Action Bar (Sticky Footer) -->
+<footer class="absolute bottom-0 left-0 right-0 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-t border-slate-200 dark:border-slate-800 p-4 z-10">
+<div class="max-w-4xl mx-auto flex items-center justify-between">
+<div class="flex items-center gap-4 text-slate-500 dark:text-slate-400 text-sm">
+<span class="material-symbols-outlined">shield_person</span>
+                            Expert verification level: <strong class="text-slate-900 dark:text-white ml-1">Gold</strong>
+</div>
+<div class="flex items-center gap-3">
+<button class="px-6 py-2.5 border border-red-200 dark:border-red-900/50 text-red-600 dark:text-red-400 font-bold rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-lg">cancel</span>
+                                Reject Application
+                            </button>
+<button class="px-8 py-2.5 bg-primary text-white font-bold rounded-lg shadow-lg shadow-primary/20 hover:bg-primary/90 transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-lg">verified</span>
+                                Approve Expert
+                            </button>
+</div>
+</div>
+</footer>
+</section>
+</main>
+</div>
+<!-- Rejection Dialog Overlay (Hidden by default, shown as example) -->
+<!-- Remove 'hidden' class to see the modal -->
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm hidden">
+<div class="w-full max-w-lg bg-white dark:bg-slate-900 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-hidden">
+<div class="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+<h3 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+<span class="material-symbols-outlined text-red-500">report</span>
+                    Reject Application
+                </h3>
+<button class="text-slate-400 hover:text-slate-600"><span class="material-symbols-outlined">close</span></button>
+</div>
+<div class="p-6">
+<p class="text-sm text-slate-500 dark:text-slate-400 mb-6">
+                    You are about to reject <strong>Alex Rivera</strong>'s application. Please provide a reason to help them improve.
+                </p>
+<div class="space-y-4">
+<div>
+<label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Reason for Rejection</label>
+<textarea class="w-full h-32 bg-slate-50 dark:bg-slate-800 border-slate-200 dark:border-slate-700 rounded-xl p-4 text-sm focus:ring-primary focus:border-primary placeholder:text-slate-400" placeholder="e.g. Portfolio links are broken or experience level does not meet current requirements..."></textarea>
+</div>
+<label class="flex items-center gap-3 cursor-pointer">
+<input checked="" class="rounded border-slate-300 dark:border-slate-700 text-primary focus:ring-primary" type="checkbox"/>
+<span class="text-sm text-slate-600 dark:text-slate-400">Allow re-application in 30 days</span>
+</label>
+</div>
+</div>
+<div class="p-4 bg-slate-50 dark:bg-slate-800/50 flex justify-end gap-3">
+<button class="px-4 py-2 text-sm font-bold text-slate-500 hover:text-slate-700">Cancel</button>
+<button class="px-6 py-2 bg-red-600 text-white text-sm font-bold rounded-lg hover:bg-red-700 shadow-lg shadow-red-600/20">Confirm Rejection</button>
+</div>
+</div>
+</div>
+</body></html>

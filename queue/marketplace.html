@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>n8nExperts Marketplace Grid</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f42559",
+                        "background-light": "#f8f5f6",
+                        "background-dark": "#0d0d0d",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope"]
+                    },
+                    borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+                },
+            },
+        }
+    </script>
+<style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .search-glow:focus-within {
+            box-shadow: 0 0 15px rgba(244, 37, 89, 0.3);
+            border-color: #f42559;
+        }
+        .profile-gradient {
+            background: linear-gradient(45deg, #f42559, #8b5cf6);
+            padding: 2px;
+        }
+        .success-badge {
+            background: linear-gradient(90deg, rgba(34, 197, 94, 0.2), rgba(244, 37, 89, 0.2));
+            border: 1px solid rgba(244, 37, 89, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen">
+<!-- Top Navigation Bar (Modified from Template) -->
+<header class="border-b border-white/10 bg-background-light dark:bg-background-dark/50 backdrop-blur-md sticky top-0 z-50">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex items-center justify-between h-16">
+<div class="flex items-center gap-2">
+<div class="size-8 bg-primary rounded-lg flex items-center justify-center text-white">
+<span class="material-symbols-outlined text-xl">account_tree</span>
+</div>
+<h1 class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">WorkflowMatch</h1>
+</div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-sm font-medium hover:text-primary transition-colors" href="#">Find Experts</a>
+<a class="text-sm font-medium opacity-60 hover:opacity-100 transition-opacity" href="#">Post a Project</a>
+<a class="text-sm font-medium opacity-60 hover:opacity-100 transition-opacity" href="#">My Projects</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="p-2 rounded-full hover:bg-white/10">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="h-10 w-10 rounded-full border border-primary/20 bg-cover bg-center" data-alt="User profile avatar circle" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBGdUy-EP8sjZvgPtT37ViAP_6z94P4VW0YTJs2Oq-KqLf0ANDiPrnA5QANfubo0MmTQOddOR43i3YFR_wy18684jEwRh6xYKR1Z7KX4mji_hAi82Sb-wyw6-QXdS6IzAW-LC5ChpFLTqDpNtxjGOWYsQpy_pZ0n7f8tQ0bhpdiCFJUyxFhXK9T5BSpqtLkF4kwUbYeUdo00t0Hga_Qm0EnoWX4aAhRl1ar4iEDZ6lowpgj4HlVvHj6fNrbDB4Q8eFiwS7uoyj61BfH')"></div>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+<!-- Search Header Area -->
+<div class="flex flex-col items-center mb-12">
+<div class="w-full max-w-2xl">
+<div class="search-glow group flex items-center bg-white dark:bg-white/5 border border-white/10 rounded-xl px-4 py-3 transition-all duration-300">
+<span class="material-symbols-outlined text-slate-400 group-focus-within:text-primary mr-3">search</span>
+<input class="w-full bg-transparent border-none focus:ring-0 text-lg placeholder:text-slate-500 dark:text-white" placeholder="Search experts by name or skill..." type="text"/>
+</div>
+<p class="text-center mt-4 text-sm text-slate-500 dark:text-slate-400">
+                    Showing <span class="text-primary font-semibold">1,248 experts</span> matching your criteria
+                </p>
+</div>
+</div>
+<div class="flex flex-col lg:flex-row gap-8">
+<!-- Sidebar Filters -->
+<aside class="w-full lg:w-64 shrink-0 space-y-8">
+<!-- Hourly Rate -->
+<div>
+<h3 class="text-sm font-bold uppercase tracking-wider text-slate-400 mb-4">Hourly Rate</h3>
+<div class="relative pt-6">
+<div class="h-1 w-full bg-slate-200 dark:bg-white/10 rounded-full">
+<div class="absolute h-1 bg-primary left-[20%] right-[30%] rounded-full"></div>
+</div>
+<div class="absolute top-4 left-[20%] -translate-x-1/2 flex flex-col items-center">
+<div class="size-4 rounded-full bg-white border-2 border-primary cursor-pointer"></div>
+<span class="text-xs mt-1 text-slate-400">$60</span>
+</div>
+<div class="absolute top-4 left-[70%] -translate-x-1/2 flex flex-col items-center">
+<div class="size-4 rounded-full bg-white border-2 border-primary cursor-pointer"></div>
+<span class="text-xs mt-1 text-slate-400">$200</span>
+</div>
+</div>
+</div>
+<!-- Skills Multi-select -->
+<div>
+<h3 class="text-sm font-bold uppercase tracking-wider text-slate-400 mb-4">Specialized Skills</h3>
+<div class="flex flex-wrap gap-2">
+<button class="px-3 py-1.5 rounded-lg bg-primary text-white text-xs font-semibold">n8n</button>
+<button class="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-xs hover:border-primary/50 transition-colors">JavaScript</button>
+<button class="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-xs hover:border-primary/50 transition-colors">API Design</button>
+<button class="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-xs hover:border-primary/50 transition-colors">Python</button>
+<button class="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-xs hover:border-primary/50 transition-colors">PostgreSQL</button>
+<button class="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-xs hover:border-primary/50 transition-colors">OpenAI</button>
+</div>
+</div>
+<!-- Availability -->
+<div>
+<h3 class="text-sm font-bold uppercase tracking-wider text-slate-400 mb-4">Availability</h3>
+<div class="space-y-3">
+<label class="flex items-center gap-3 cursor-pointer group">
+<input checked="" class="form-radio text-primary bg-transparent border-white/20 focus:ring-primary focus:ring-offset-0" name="availability" type="radio"/>
+<span class="text-sm text-slate-300 group-hover:text-white">Immediate</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="form-radio text-primary bg-transparent border-white/20 focus:ring-primary focus:ring-offset-0" name="availability" type="radio"/>
+<span class="text-sm text-slate-300 group-hover:text-white">Within 1-2 weeks</span>
+</label>
+<label class="flex items-center gap-3 cursor-pointer group">
+<input class="form-radio text-primary bg-transparent border-white/20 focus:ring-primary focus:ring-offset-0" name="availability" type="radio"/>
+<span class="text-sm text-slate-300 group-hover:text-white">1 month+</span>
+</label>
+</div>
+</div>
+</aside>
+<!-- Expert Grid -->
+<div class="flex-1">
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+<!-- Expert Card 1 -->
+<div class="glass-card rounded-xl p-6 flex flex-col hover:scale-[1.02] transition-transform duration-300">
+<div class="flex items-start justify-between mb-4">
+<div class="profile-gradient rounded-full">
+<div class="size-16 rounded-full bg-cover bg-center border-2 border-background-dark" data-alt="Portrait of an automation specialist" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCwP5ThUOcrhAF4F1ZVFpRqeNqQXQ1WBlHPGo2mI6EWCV86s-tje0Zin8uP9ADriV95kD8Hzw41vfkIadCQtdNw9BKDmM99hl1l7BU5j0fZiuwU146u9VPBMMZizOQdQVaXmuDzcM1dCNlFL5moGFidz4CWop40M5G8SE0xtBbK1EyKGKjKGCOOGfewyygEB3vgg3DoNTJEbysrRKH0U9PEeht1Bea5PDjqOA1-KHdiBAISshdemuRy3xRv8t918TQJ8zn6Wg6F9Gi5')"></div>
+</div>
+<div class="success-badge px-3 py-1 rounded-full flex items-center gap-1">
+<span class="material-symbols-outlined text-xs text-green-400">check_circle</span>
+<span class="text-[10px] font-bold text-white uppercase tracking-tighter">98% Success</span>
+</div>
+</div>
+<div class="mb-4">
+<div class="flex items-center gap-1">
+<h3 class="text-lg font-bold text-white">Alex Rivera</h3>
+<span class="material-symbols-outlined text-blue-400 text-lg fill-1">verified</span>
+</div>
+<p class="text-sm text-primary font-medium">Senior Automation Architect</p>
+</div>
+<div class="flex items-center gap-4 mb-6 text-sm text-slate-400">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-yellow-500 text-sm fill-1">star</span>
+<span class="text-white font-medium">4.9</span>
+<span>(50+ jobs)</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">payments</span>
+<span class="text-white font-medium">$85/hr</span>
+</div>
+</div>
+<div class="flex flex-wrap gap-2 mb-8 flex-grow">
+<span class="px-2 py-1 rounded bg-white/5 border border-white/10 text-[10px] uppercase font-bold text-slate-400">n8n Expert</span>
+<span class="px-2 py-1 rounded bg-white/5 border border-white/10 text-[10px] uppercase font-bold text-slate-400">Webhooks</span>
+<span class="px-2 py-1 rounded bg-white/5 border border-white/10 text-[10px] uppercase font-bold text-slate-400">SaaS Sync</span>
+</div>
+<div class="flex gap-3">
+<button class="flex-1 py-2 rounded-lg border border-primary text-primary text-sm font-bold hover:bg-primary/10 transition-colors">View Profile</button>
+<button class="flex-1 py-2 rounded-lg bg-primary text-white text-sm font-bold hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20">Invite</button>
+</div>
+</div>
+<!-- Expert Card 2 -->
+<div class="glass-card rounded-xl p-6 flex flex-col hover:scale-[1.02] transition-transform duration-300">
+<div class="flex items-start justify-between mb-4">
+<div class="profile-gradient rounded-full">
+<div class="size-16 rounded-full bg-cover bg-center border-2 border-background-dark" data-alt="Female technology expert profile photo" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBmh5IvKLnmV3k8ttiv9uO5pYYlpoBN7fxPs4BsdB3VrCoyjXultSASHhxekGrOgr2VWvwwSE3E1grN8oO9HdMxUpUtEJ4Fa4qd4Jn_pyQQCZqa9TEtcZ1ACyAVNpE1yYtLOLVXmJRbmXAIXHfjymPZ8wI1hvviXfFt5Llk2nggg8WOoLkGJULmOIgmC29a2fsz8UHnnj22Gmz3A8YpTy9AwxyPwH_K9ZPRw2fV6up9ZUF2KpDUsEFf05rtQuctFPIW2_3-3HodyzZf')"></div>
+</div>
+<div class="success-badge px-3 py-1 rounded-full flex items-center gap-1">
+<span class="material-symbols-outlined text-xs text-green-400">check_circle</span>
+<span class="text-[10px] font-bold text-white uppercase tracking-tighter">100% Success</span>
+</div>
+</div>
+<div class="mb-4">
+<div class="flex items-center gap-1">
+<h3 class="text-lg font-bold text-white">Sarah Chen</h3>
+<span class="material-symbols-outlined text-blue-400 text-lg fill-1">verified</span>
+</div>
+<p class="text-sm text-primary font-medium">Full-stack n8n Developer</p>
+</div>
+<div class="flex items-center gap-4 mb-6 text-sm text-slate-400">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-yellow-500 text-sm fill-1">star</span>
+<span class="text-white font-medium">5.0</span>
+<span>(124 jobs)</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">payments</span>
+<span class="text-white font-medium">$120/hr</span>
+</div>
+</div>
+<div class="flex flex-wrap gap-2 mb-8 flex-grow">
+<span class="px-2 py-1 rounded bg-white/5 border border-white/10 text-[10px] uppercase font-bold text-slate-400">Custom Nodes</span>
+<span class="px-2 py-1 rounded bg-white/5 border border-white/10 text-[10px] uppercase font-bold text-slate-400">AI / LLM</span>
+<span class="px-2 py-1 rounded bg-white/5 border border-white/10 text-[10px] uppercase font-bold text-slate-400">CRM Ops</span>
+</div>
+<div class="flex gap-3">
+<button class="flex-1 py-2 rounded-lg border border-primary text-primary text-sm font-bold hover:bg-primary/10 transition-colors">View Profile</button>
+<button class="flex-1 py-2 rounded-lg bg-primary text-white text-sm font-bold hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20">Invite</button>
+</div>
+</div>
+<!-- Expert Card 3 -->
+<div class="glass-card rounded-xl p-6 flex flex-col hover:scale-[1.02] transition-transform duration-300">
+<div class="flex items-start justify-between mb-4">
+<div class="profile-gradient rounded-full">
+<div class="size-16 rounded-full bg-cover bg-center border-2 border-background-dark" data-alt="Tech specialist with modern background" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC2s2E3DnD-s_Zo4zZDvQApfqS5gNgveMEfJcB2He4hM49muj5h8V0e5gRPurGvFODkacGvxn8UD5BKEb8aeYW3Ph0aL9iRwqwccjhg-Y5XAtv_4-fcsP52-kZ2iP_Vjh9KI1RQ8E36UK8Gk_gqpCADF2suQLLRHyFdQQW2J01z7NqXpRVbL1fSfAeKZ3JlCLv31oHa5LzoD1UZtM22Ro81avYdyca1JS-KQpI6niq3oRjQiRZxJPCCby29SO2M-H-ZaWU-0MytEUuz')"></div>
+</div>
+<div class="success-badge px-3 py-1 rounded-full flex items-center gap-1">
+<span class="material-symbols-outlined text-xs text-green-400">check_circle</span>
+<span class="text-[10px] font-bold text-white uppercase tracking-tighter">95% Success</span>
+</div>
+</div>
+<div class="mb-4">
+<div class="flex items-center gap-1">
+<h3 class="text-lg font-bold text-white">Marcus Thorne</h3>
+<span class="material-symbols-outlined text-blue-400 text-lg fill-1">verified</span>
+</div>
+<p class="text-sm text-primary font-medium">E-commerce Automation Lead</p>
+</div>
+<div class="flex items-center gap-4 mb-6 text-sm text-slate-400">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-yellow-500 text-sm fill-1">star</span>
+<span class="text-white font-medium">4.8</span>
+<span>(38 jobs)</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">payments</span>
+<span class="text-white font-medium">$95/hr</span>
+</div>
+</div>
+<div class="flex flex-wrap gap-2 mb-8 flex-grow">
+<span class="px-2 py-1 rounded bg-white/5 border border-white/10 text-[10px] uppercase font-bold text-slate-400">Shopify</span>
+<span class="px-2 py-1 rounded bg-white/5 border border-white/10 text-[10px] uppercase font-bold text-slate-400">Stripe</span>
+<span class="px-2 py-1 rounded bg-white/5 border border-white/10 text-[10px] uppercase font-bold text-slate-400">Database</span>
+</div>
+<div class="flex gap-3">
+<button class="flex-1 py-2 rounded-lg border border-primary text-primary text-sm font-bold hover:bg-primary/10 transition-colors">View Profile</button>
+<button class="flex-1 py-2 rounded-lg bg-primary text-white text-sm font-bold hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20">Invite</button>
+</div>
+</div>
+<!-- Expert Card 4 -->
+<div class="glass-card rounded-xl p-6 flex flex-col hover:scale-[1.02] transition-transform duration-300 opacity-80">
+<div class="flex items-start justify-between mb-4">
+<div class="profile-gradient rounded-full">
+<div class="size-16 rounded-full bg-cover bg-center border-2 border-background-dark" data-alt="Portrait of a male developer" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDk9jDQjPj8_v-XwYbI_hKqYycnWSOUTiJ1zJ-ZntgN9UuHe7KHOojE10wAGENpP4FfmnMUpvW4I-MypUmVQ6euHoL2RWoY5EAH4o6Fwxp1zURs6t1YJfgWYC3wZjsKqUtg4Bj53EHvjRrZVbFGQ9Jgk3EX3XHYWKM6w7RxRb_WCOOHdWSPDk9YaSg8tKzGTvJX_0ckTfwRwN8wM0OWIAnXb5YVxEeXg1eryq2fnTT51rJNALqxl5nFE5rPNPKyJ31v-DOAqh-sMKNU')"></div>
+</div>
+<div class="success-badge px-3 py-1 rounded-full flex items-center gap-1">
+<span class="material-symbols-outlined text-xs text-green-400">check_circle</span>
+<span class="text-[10px] font-bold text-white uppercase tracking-tighter">99% Success</span>
+</div>
+</div>
+<div class="mb-4">
+<div class="flex items-center gap-1">
+<h3 class="text-lg font-bold text-white">Julian Vester</h3>
+<span class="material-symbols-outlined text-blue-400 text-lg fill-1">verified</span>
+</div>
+<p class="text-sm text-primary font-medium">No-Code Architect</p>
+</div>
+<div class="flex items-center gap-4 mb-6 text-sm text-slate-400">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-yellow-500 text-sm fill-1">star</span>
+<span class="text-white font-medium">4.9</span>
+<span>(82 jobs)</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">payments</span>
+<span class="text-white font-medium">$75/hr</span>
+</div>
+</div>
+<div class="flex flex-wrap gap-2 mb-8 flex-grow">
+<span class="px-2 py-1 rounded bg-white/5 border border-white/10 text-[10px] uppercase font-bold text-slate-400">Make.com</span>
+<span class="px-2 py-1 rounded bg-white/5 border border-white/10 text-[10px] uppercase font-bold text-slate-400">n8n</span>
+<span class="px-2 py-1 rounded bg-white/5 border border-white/10 text-[10px] uppercase font-bold text-slate-400">Airtable</span>
+</div>
+<div class="flex gap-3">
+<button class="flex-1 py-2 rounded-lg border border-primary text-primary text-sm font-bold hover:bg-primary/10 transition-colors">View Profile</button>
+<button class="flex-1 py-2 rounded-lg bg-primary text-white text-sm font-bold hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20">Invite</button>
+</div>
+</div>
+<!-- Expert Card 5 -->
+<div class="glass-card rounded-xl p-6 flex flex-col hover:scale-[1.02] transition-transform duration-300 opacity-80">
+<div class="flex items-start justify-between mb-4">
+<div class="profile-gradient rounded-full">
+<div class="size-16 rounded-full bg-cover bg-center border-2 border-background-dark" data-alt="Asian female developer in dark room" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDCxJHiGwdJouLciEy6gjbGgUYjhLTgRkgx8vLz3qv8OXGACBJeF0vfp1NeqiRaTYDYga-kAV833rFZzpPq8AP2i9Z-Le_fIyxcu5bJkn3p_v2ZuqIpSLhJZ0k2pMJr8NQ8UVbUI9AHOAoO2v5evBJhQpjx0rwgM6vXq5fHcnFkHYb6VJBh1mxQAQQhIVMaTe1oP6Ty2Kk7umOujNdkshg0oA3OJU5mvVfb_iQ-Jm-KRBKzZ8DkGL5yfGtnvSSag0FHn8SMYy0wU1Fp')"></div>
+</div>
+<div class="success-badge px-3 py-1 rounded-full flex items-center gap-1">
+<span class="material-symbols-outlined text-xs text-green-400">check_circle</span>
+<span class="text-[10px] font-bold text-white uppercase tracking-tighter">92% Success</span>
+</div>
+</div>
+<div class="mb-4">
+<div class="flex items-center gap-1">
+<h3 class="text-lg font-bold text-white">Yuki Sato</h3>
+<span class="material-symbols-outlined text-blue-400 text-lg fill-1">verified</span>
+</div>
+<p class="text-sm text-primary font-medium">API Integration Specialist</p>
+</div>
+<div class="flex items-center gap-4 mb-6 text-sm text-slate-400">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-yellow-500 text-sm fill-1">star</span>
+<span class="text-white font-medium">4.7</span>
+<span>(15 jobs)</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">payments</span>
+<span class="text-white font-medium">$110/hr</span>
+</div>
+</div>
+<div class="flex flex-wrap gap-2 mb-8 flex-grow">
+<span class="px-2 py-1 rounded bg-white/5 border border-white/10 text-[10px] uppercase font-bold text-slate-400">Node.js</span>
+<span class="px-2 py-1 rounded bg-white/5 border border-white/10 text-[10px] uppercase font-bold text-slate-400">OAuth</span>
+<span class="px-2 py-1 rounded bg-white/5 border border-white/10 text-[10px] uppercase font-bold text-slate-400">Serverless</span>
+</div>
+<div class="flex gap-3">
+<button class="flex-1 py-2 rounded-lg border border-primary text-primary text-sm font-bold hover:bg-primary/10 transition-colors">View Profile</button>
+<button class="flex-1 py-2 rounded-lg bg-primary text-white text-sm font-bold hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20">Invite</button>
+</div>
+</div>
+<!-- Expert Card 6 -->
+<div class="glass-card rounded-xl p-6 flex flex-col hover:scale-[1.02] transition-transform duration-300 opacity-80">
+<div class="flex items-start justify-between mb-4">
+<div class="profile-gradient rounded-full">
+<div class="size-16 rounded-full bg-cover bg-center border-2 border-background-dark" data-alt="Portrait of professional developer" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCpvKDnr2BDrG-0cse82hUVRQ8f4pOyj9vzgV2FhF1LMjyFumq79DPQhv9jRaHIWOnTs68vz_T-7ZZ2HiF_YQWFOL-ljDPzctJtK8GSKzAmWPSDLU9z9FKtr0HSDev7DyF1hyxRceoCz7IOrHtw6wPQWGa6zHQUOrH6u67dWcEaYc-S3pOu7ekW0xH4nf_YYva9vGdrGBzoq03qz7gSZieDtlGaEhpsUdTAKKV9YXrq4rXDGhm8ahBb42cxFIIB-1h67foRNzVQ-wtX')"></div>
+</div>
+<div class="success-badge px-3 py-1 rounded-full flex items-center gap-1">
+<span class="material-symbols-outlined text-xs text-green-400">check_circle</span>
+<span class="text-[10px] font-bold text-white uppercase tracking-tighter">97% Success</span>
+</div>
+</div>
+<div class="mb-4">
+<div class="flex items-center gap-1">
+<h3 class="text-lg font-bold text-white">David Miller</h3>
+<span class="material-symbols-outlined text-blue-400 text-lg fill-1">verified</span>
+</div>
+<p class="text-sm text-primary font-medium">Systems Engineer</p>
+</div>
+<div class="flex items-center gap-4 mb-6 text-sm text-slate-400">
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-yellow-500 text-sm fill-1">star</span>
+<span class="text-white font-medium">4.9</span>
+<span>(64 jobs)</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">payments</span>
+<span class="text-white font-medium">$150/hr</span>
+</div>
+</div>
+<div class="flex flex-wrap gap-2 mb-8 flex-grow">
+<span class="px-2 py-1 rounded bg-white/5 border border-white/10 text-[10px] uppercase font-bold text-slate-400">PostgreSQL</span>
+<span class="px-2 py-1 rounded bg-white/5 border border-white/10 text-[10px] uppercase font-bold text-slate-400">AWS Lambda</span>
+<span class="px-2 py-1 rounded bg-white/5 border border-white/10 text-[10px] uppercase font-bold text-slate-400">n8n Self-hosted</span>
+</div>
+<div class="flex gap-3">
+<button class="flex-1 py-2 rounded-lg border border-primary text-primary text-sm font-bold hover:bg-primary/10 transition-colors">View Profile</button>
+<button class="flex-1 py-2 rounded-lg bg-primary text-white text-sm font-bold hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20">Invite</button>
+</div>
+</div>
+</div>
+<!-- Pagination/Load More -->
+<div class="flex justify-center mt-12">
+<button class="px-8 py-3 bg-white/5 border border-white/10 rounded-xl text-sm font-bold hover:bg-white/10 transition-all flex items-center gap-2">
+                        Load More Experts
+                        <span class="material-symbols-outlined">expand_more</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+<!-- Simple Footer Area -->
+<footer class="mt-20 border-t border-white/10 py-12">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+<p class="text-slate-500 text-sm">© 2024 WorkflowMatch Marketplace. All rights reserved.</p>
+</div>
+</footer>
+</body></html>

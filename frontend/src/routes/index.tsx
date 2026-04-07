@@ -29,6 +29,9 @@ const NotificationsPage = lazy(() => import("@/pages/workspace/Notifications"));
 const SavedSearches = lazy(() => import("@/pages/workspace/SavedSearches"));
 const ClientProfileEdit = lazy(() => import("@/pages/clients/ClientProfileEdit"));
 const ClientPublicProfile = lazy(() => import("@/pages/clients/ClientPublicProfile"));
+const DashboardOverview = lazy(() => import("@/pages/workspace/DashboardOverview"));
+const VerificationQueue = lazy(() => import("@/pages/admin/VerificationQueue"));
+const DisputeResolution = lazy(() => import("@/pages/admin/DisputeResolution"));
 
 function PageFallback() {
   return (
@@ -47,7 +50,7 @@ const router = createBrowserRouter([
     element: <PublicLayout />,
     children: [
       { path: "/", element: withSuspense(<Home />) },
-      { path: "/workspace", element: <Navigate to="/" replace /> },
+      // { path: "/workspace", element: <Navigate to="/" replace /> },
       { path: "/how-it-works", element: withSuspense(<HowItWorks />) },
       { path: "/for-clients", element: withSuspense(<ForClients />) },
       { path: "/for-experts", element: withSuspense(<ForExperts />) },
@@ -80,6 +83,7 @@ const router = createBrowserRouter([
           { path: "/inbox", element: withSuspense(<Inbox />) },
           { path: "/notifications", element: withSuspense(<NotificationsPage />) },
           { path: "/saved-searches", element: withSuspense(<SavedSearches />) },
+          { path: "/workspace", element: withSuspense(<DashboardOverview />) },
         ],
       },
       {
@@ -100,6 +104,13 @@ const router = createBrowserRouter([
           { path: "/invitations", element: withSuspense(<Invitations />) },
           { path: "/expert/services", element: withSuspense(<ExpertServices />) },
           { path: "/expert/setup", element: withSuspense(<ExpertWizard />) },
+        ],
+      },
+      {
+        element: <RequireRole role="admin" />,
+        children: [
+          { path: "/admin/verification-queue", element: withSuspense(<VerificationQueue />) },
+          { path: "/admin/dispute-resolution", element: withSuspense(<DisputeResolution />) },
         ],
       },
     ],

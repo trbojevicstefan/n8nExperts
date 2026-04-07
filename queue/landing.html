@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>n8nExperts Marketplace - Hire n8n Specialists</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f4258c",
+                        "background-light": "#f8f5f7",
+                        "background-dark": "#0a0a0a",
+                        "surface-dark": "#161616",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .grid-pattern {
+            background-image: radial-gradient(circle, #f4258c 1px, transparent 1px);
+            background-size: 30px 30px;
+            opacity: 0.1;
+        }
+        .glass-card {
+            background: rgba(22, 22, 22, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(244, 37, 140, 0.1);
+        }
+        .hero-glow {
+            background: radial-gradient(circle at center, rgba(244, 37, 140, 0.15) 0%, transparent 70%);
+        }
+    </style>
+</head>
+<body class="font-display bg-background-light dark:bg-background-dark text-slate-900 dark:text-white antialiased transition-colors duration-300">
+<div class="relative min-h-screen flex flex-col overflow-x-hidden">
+<!-- Navigation -->
+<header class="sticky top-0 z-50 w-full border-b border-white/5 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md">
+<div class="max-w-7xl mx-auto px-6 lg:px-10 py-4 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="text-primary flex items-center">
+<span class="material-symbols-outlined text-4xl">hub</span>
+</div>
+<h2 class="text-xl font-extrabold tracking-tight">n8nExperts</h2>
+</div>
+<nav class="hidden md:flex items-center gap-10">
+<a class="text-sm font-semibold hover:text-primary transition-colors" href="#">Browse Experts</a>
+<a class="text-sm font-semibold hover:text-primary transition-colors" href="#">How it Works</a>
+<a class="text-sm font-semibold hover:text-primary transition-colors" href="#">Pricing</a>
+</nav>
+<div class="flex items-center gap-3">
+<button class="px-4 py-2 text-sm font-bold hover:text-primary transition-colors">Login</button>
+<button class="bg-primary hover:bg-primary/90 text-white px-5 py-2.5 rounded-lg text-sm font-bold shadow-lg shadow-primary/20 transition-all">
+                        Get Started
+                    </button>
+</div>
+</div>
+</header>
+<!-- Hero Section -->
+<main class="flex-grow">
+<section class="relative pt-20 pb-32 px-6 overflow-hidden">
+<div class="absolute inset-0 grid-pattern pointer-events-none"></div>
+<div class="absolute -top-24 left-1/2 -translate-x-1/2 w-[800px] h-[600px] hero-glow pointer-events-none"></div>
+<div class="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-16 relative z-10">
+<div class="flex-1 text-center lg:text-left">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold uppercase tracking-wider mb-6">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+</span>
+                            The Premium Marketplace for n8n
+                        </div>
+<h1 class="text-5xl lg:text-7xl font-black leading-[1.1] mb-6 tracking-tight">
+                            Build Your Future with <span class="text-primary">n8n Automation</span>
+</h1>
+<p class="text-lg lg:text-xl text-slate-600 dark:text-slate-400 max-w-2xl mb-10 leading-relaxed">
+                            Connect with top-tier n8n specialists to streamline your workflows, integrate complex APIs, and scale your business faster than ever before.
+                        </p>
+<div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+<button class="px-8 py-4 bg-primary hover:bg-primary/90 text-white rounded-xl font-bold text-lg shadow-xl shadow-primary/30 transition-all flex items-center justify-center gap-2">
+                                Hire an Expert
+                                <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+<button class="px-8 py-4 bg-transparent border-2 border-slate-200 dark:border-white/10 hover:border-primary/50 rounded-xl font-bold text-lg transition-all flex items-center justify-center">
+                                Become an Expert
+                            </button>
+</div>
+<div class="mt-12 flex items-center justify-center lg:justify-start gap-6 text-sm text-slate-500 font-medium">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-xl">verified</span>
+                                Vetted Talent
+                            </div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-xl">lock</span>
+                                Escrow Protection
+                            </div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-xl">bolt</span>
+                                24h Turnaround
+                            </div>
+</div>
+</div>
+<div class="flex-1 w-full max-w-xl">
+<div class="relative group">
+<div class="absolute -inset-1 bg-gradient-to-r from-primary to-purple-600 rounded-2xl blur opacity-25 group-hover:opacity-40 transition duration-1000"></div>
+<div class="relative glass-card rounded-2xl p-4 overflow-hidden shadow-2xl">
+<img class="w-full h-auto rounded-lg grayscale group-hover:grayscale-0 transition duration-500" data-alt="Abstract visualization of n8n automation nodes and workflow logic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDph0FUONS6_ITXw4QwrNsCYI4Q6jZGNYAszBMeIGLMlTwtc9qjoHr8AsW5Y0kNlJn5JfUootGivoy1zE5uJA8eSDJzK2nNUEKBXH-t1uO9yH4DwT0raWa8Y8qoMtb3tiIdEVJVySP15ppp93P2UcLwfQiAfGu4V4aUkEgPbgv2JCQ4imheRvdyxipQ-0mrDv-t0iajAZoC1m63aIHJUll2hmt2de85CoO24cb5PqbZ5kw8PAwPN3by4H3Pn9k6imjkokK2P_8zOtfC"/>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Features Section -->
+<section class="py-24 px-6 bg-white dark:bg-[#0c0c0c] relative">
+<div class="max-w-7xl mx-auto">
+<div class="text-center mb-16">
+<h2 class="text-3xl lg:text-4xl font-bold mb-4 tracking-tight">The most advanced automation network</h2>
+<p class="text-slate-500 dark:text-slate-400 max-w-2xl mx-auto">We connect enterprises with verified automation architects who specialize exclusively in the n8n ecosystem.</p>
+</div>
+<div class="grid md:grid-cols-3 gap-8">
+<div class="glass-card p-8 rounded-xl hover:translate-y-[-4px] transition-all group">
+<div class="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mb-6 border border-primary/20 group-hover:bg-primary group-hover:text-white transition-all">
+<span class="material-symbols-outlined text-primary text-3xl group-hover:text-white">verified_user</span>
+</div>
+<h3 class="text-xl font-bold mb-3">Vetted Experts</h3>
+<p class="text-slate-500 dark:text-slate-400 leading-relaxed">Only the top 3% of automation engineers pass our rigorous technical screening and workflow optimization exams.</p>
+</div>
+<div class="glass-card p-8 rounded-xl hover:translate-y-[-4px] transition-all group">
+<div class="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mb-6 border border-primary/20 group-hover:bg-primary group-hover:text-white transition-all">
+<span class="material-symbols-outlined text-primary text-3xl group-hover:text-white">payments</span>
+</div>
+<h3 class="text-xl font-bold mb-3">Secure Payments</h3>
+<p class="text-slate-500 dark:text-slate-400 leading-relaxed">Milestone-based payments for total peace of mind. Funds are only released when you're 100% satisfied with the delivery.</p>
+</div>
+<div class="glass-card p-8 rounded-xl hover:translate-y-[-4px] transition-all group">
+<div class="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center mb-6 border border-primary/20 group-hover:bg-primary group-hover:text-white transition-all">
+<span class="material-symbols-outlined text-primary text-3xl group-hover:text-white">settings_input_component</span>
+</div>
+<h3 class="text-xl font-bold mb-3">n8n Specialists</h3>
+<p class="text-slate-500 dark:text-slate-400 leading-relaxed">Deep expertise in self-hosted and cloud n8n deployments, including custom node development and Python/JS integration.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Testimonials Section -->
+<section class="py-24 px-6 relative overflow-hidden">
+<div class="max-w-7xl mx-auto">
+<div class="flex flex-col md:flex-row items-end justify-between mb-16 gap-4">
+<div class="text-left">
+<h2 class="text-3xl lg:text-4xl font-bold mb-4 tracking-tight">Trusted by Businesses Worldwide</h2>
+<p class="text-slate-500 dark:text-slate-400">Join over 500+ teams who have automated their success.</p>
+</div>
+<div class="flex gap-2">
+<button class="w-10 h-10 flex items-center justify-center rounded-full border border-white/10 hover:border-primary/50 text-slate-400 hover:text-primary transition-all">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-full border border-white/10 hover:border-primary/50 text-slate-400 hover:text-primary transition-all">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+<div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+<!-- Testimonial 1 -->
+<div class="bg-surface-dark/50 p-6 rounded-xl border border-white/5 flex flex-col justify-between">
+<div>
+<div class="flex text-primary mb-4">
+<span class="material-symbols-outlined fill-1">star</span>
+<span class="material-symbols-outlined fill-1">star</span>
+<span class="material-symbols-outlined fill-1">star</span>
+<span class="material-symbols-outlined fill-1">star</span>
+<span class="material-symbols-outlined fill-1">star</span>
+</div>
+<p class="text-sm italic text-slate-300 mb-6 leading-relaxed">
+                                    "The speed and reliability of the specialists we found here are unmatched. Truly transformed our daily data operations."
+                                </p>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-cover" data-alt="Portrait of a male business executive" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuD0JuyT58hRD7Kox3DEn2OPax1ni205cOz5G-4yUGr64z1rxLM-bjdVsF8-7SZjaorrm4K3GRUif1OM_DgqvmB_ti629ILwxZ76AhOXXGhqcSdL4AwTUBjSitVDMut1KT0CARypQESlpfhUqGcN3SMPVEcrLNKwSLLIYMSTd_0-mVlZqJTWiYApWbKKMXtCOAcc65k0mHRtpOTN9_A9Cbmp9UIIyuLME3j2ZCOeRpdjNa0Xyf8BH8iYXDzUB0EENo0gAeW2w8qMULX1')"></div>
+<div>
+<p class="text-sm font-bold">Alex Rivers</p>
+<p class="text-xs text-slate-500">CTO at TechFlow</p>
+</div>
+</div>
+</div>
+<!-- Testimonial 2 -->
+<div class="bg-surface-dark/50 p-6 rounded-xl border border-white/5 flex flex-col justify-between">
+<div>
+<div class="flex text-primary mb-4">
+<span class="material-symbols-outlined fill-1">star</span>
+<span class="material-symbols-outlined fill-1">star</span>
+<span class="material-symbols-outlined fill-1">star</span>
+<span class="material-symbols-outlined fill-1">star</span>
+<span class="material-symbols-outlined fill-1">star</span>
+</div>
+<p class="text-sm italic text-slate-300 mb-6 leading-relaxed">
+                                    "Post a project and get expert bids in hours. The milestone system makes the whole process completely stress-free."
+                                </p>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-cover" data-alt="Portrait of a female founder" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBWSo1kaKFJd9ex4yLiAkap7Y3d43G6smQ5Cc-Ff_nwF_JzLAV4a-CNF1h45kNQ8lHDDdLvaWwPs5wJB7oKY7cPs5rffcYIsLVw1qnRiVpZW85Bvc7w9hfc1BSyBO6ZHa5CSH3shpakmZ9Zw8AZYqKlzPfh5JG9rNsT-s-i_s-VBYc-20QLQZqtei76lewVSqhAScHaD5fJh2-3Lau_CZyaDED2Ogc9M8zbu66IzCD02gF0k85osYUdt_oAD2ybU5YlPLtHoiBXq-Jx')"></div>
+<div>
+<p class="text-sm font-bold">Sarah Chen</p>
+<p class="text-xs text-slate-500">Founder of Automate.io</p>
+</div>
+</div>
+</div>
+<!-- Testimonial 3 -->
+<div class="bg-surface-dark/50 p-6 rounded-xl border border-white/5 flex flex-col justify-between">
+<div>
+<div class="flex text-primary mb-4">
+<span class="material-symbols-outlined fill-1">star</span>
+<span class="material-symbols-outlined fill-1">star</span>
+<span class="material-symbols-outlined fill-1">star</span>
+<span class="material-symbols-outlined fill-1">star</span>
+<span class="material-symbols-outlined fill-1">star</span>
+</div>
+<p class="text-sm italic text-slate-300 mb-6 leading-relaxed">
+                                    "Best place for n8n experts who actually understand complex API integrations. We saved weeks of development time."
+                                </p>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-cover" data-alt="Portrait of a technical project manager" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDS9CuqWhIzbY57Ie83Fuks8QbED9Vz1MgwsgITq3y2E0Dj0fWbgQ-cR2I8WN6CLYgv5wPAtyATyAYQAHU7ZRmZ6w04r2GIDx3wYvacjFXChOZQuYEMuraonWTW-ZhDPC7fO_uNaAnpAPqumC3f91oP8Jgj3-MHWsx_JVwhGKyD0Jsbtge7ICOxfx-9BufIUD2gkZobFQB4_M4PsX-bP5i0VaMfMtr6kOsZpjU1aysHLUNmQyUsSKKLN9oZzBDiSdsJ4XpRvUujwGxk')"></div>
+<div>
+<p class="text-sm font-bold">Marcus Thorne</p>
+<p class="text-xs text-slate-500">Director at ScaleUp</p>
+</div>
+</div>
+</div>
+<!-- Testimonial 4 -->
+<div class="bg-surface-dark/50 p-6 rounded-xl border border-white/5 flex flex-col justify-between">
+<div>
+<div class="flex text-primary mb-4">
+<span class="material-symbols-outlined fill-1">star</span>
+<span class="material-symbols-outlined fill-1">star</span>
+<span class="material-symbols-outlined fill-1">star</span>
+<span class="material-symbols-outlined fill-1">star</span>
+<span class="material-symbols-outlined fill-1">star</span>
+</div>
+<p class="text-sm italic text-slate-300 mb-6 leading-relaxed">
+                                    "Our consultant built an entire customer onboarding flow in 48 hours. Absolute game changer for our SaaS."
+                                </p>
+</div>
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-cover" data-alt="Portrait of a startup entrepreneur" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBaTked_kfr-LXjdZcOAazzjFopfwZ3qWsMRfN22Ow-GouaUw_TrgZLe1kqpKGPKUl055V11ZyuJRrmxMEBcxB_AkrFVrnhl_b6VzpPCU8G6ozak8Fa3yKX8nfv60SNoCLmqTpFNejEUlHXMTHowMtn7c4H8_j9UhxW3Wk94mVQ0P_wIlskZ9rq6TbdUN_4fV4cjq7LY7M7WPt1K5EjPs74L8Jv30b56hZQ9ld3ZksleUpTf8kAIZOxOL83rNt-1qdKJYEjLg9g02jF')"></div>
+<div>
+<p class="text-sm font-bold">Elena Rodriguez</p>
+<p class="text-xs text-slate-500">CEO at CloudPath</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- CTA Section -->
+<section class="py-24 px-6">
+<div class="max-w-7xl mx-auto">
+<div class="bg-primary rounded-[2rem] p-10 lg:p-20 relative overflow-hidden shadow-2xl shadow-primary/40">
+<!-- Abstract BG shapes -->
+<div class="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl -mr-48 -mt-48"></div>
+<div class="absolute bottom-0 left-0 w-64 h-64 bg-black/10 rounded-full blur-2xl -ml-32 -mb-32"></div>
+<div class="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-12">
+<div class="text-center lg:text-left flex-1">
+<h2 class="text-4xl lg:text-6xl font-black text-white mb-6 leading-tight">Ready to Automate?</h2>
+<p class="text-white/80 text-lg lg:text-xl max-w-xl">
+                                    Join hundreds of businesses scaling with n8nExperts. Hire your first specialist today and reclaim your time.
+                                </p>
+</div>
+<div class="flex flex-col sm:flex-row gap-4 w-full lg:w-auto">
+<button class="px-10 py-5 bg-background-dark text-white rounded-xl font-black text-lg hover:scale-[1.02] transition-transform flex items-center justify-center gap-2">
+                                    Post a Project
+                                </button>
+<button class="px-10 py-5 bg-white text-primary rounded-xl font-black text-lg hover:scale-[1.02] transition-transform flex items-center justify-center gap-2 shadow-lg">
+                                    Browse Experts
+                                </button>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-white dark:bg-background-dark border-t border-white/5 pt-20 pb-10 px-6">
+<div class="max-w-7xl mx-auto">
+<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-12 mb-16">
+<div class="col-span-2">
+<div class="flex items-center gap-2 mb-6">
+<span class="material-symbols-outlined text-primary text-3xl">hub</span>
+<h2 class="text-2xl font-black">n8nExperts</h2>
+</div>
+<p class="text-slate-500 max-w-xs mb-8">
+                            The world's leading marketplace for certified n8n automation specialists and workflow architects.
+                        </p>
+<div class="flex gap-4">
+<a class="w-10 h-10 rounded-lg bg-surface-dark border border-white/5 flex items-center justify-center hover:border-primary transition-all" href="#">
+<img class="opacity-60" data-alt="Social Media Icon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCN_hAQcmk0LRR5VbCKZ1ttwwxL5WyBffOsqlfHhQGoxeHxoA2w1Hdy_aupqpKP1mTmjqy-j18o1uRzO4FadhJfD4Dq330aELtZ7Cta96JdFImnPe4RpXHO_PZ-k1yIuG123v62TlKBB4ulD2ixWVSEC2U87fXvNHujab3nytpDqACrNXpw_v9tnAlblBYXlM_KEbtkqz6MLE0Fen3Aua-nlMlXLgwwO8CimF01jqWT4KN_I90FiDrbhDe4T1f2KTh4vUmfXa25Sqio"/>
+</a>
+<a class="w-10 h-10 rounded-lg bg-surface-dark border border-white/5 flex items-center justify-center hover:border-primary transition-all" href="#">
+<img class="opacity-60" data-alt="Social Media Icon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDduP9eEZTwgVdI5aqtLDiV3CSFeCtKoisuHUBR-tNmCXhiX9HNucxiHfzqYuvqwiOI4K0D2BpfXwpN0ocTVw6n88fqZWPgf08_Qh82QDlOzQJXtK8BDKjmhgEH_zLgAAUFg1Tp8t8FXHTTDRuj64ILyy0CQ9WtAXM7HxisF1Y1s5nvEdnvOeYZwcvt8_kqz2wuBCtAU8y5xk7sBb1GT_MSnmmcws1t81Rj5NodGEnZEwod40yIWdfO0YZwOhgsByKPyBXWgMUP6_N1"/>
+</a>
+<a class="w-10 h-10 rounded-lg bg-surface-dark border border-white/5 flex items-center justify-center hover:border-primary transition-all" href="#">
+<img class="opacity-60" data-alt="Social Media Icon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCe8fOAFSjl7KZ4JvbGf7HdiyLvwyYnVpjckhJYUHUH9tM39UDBJ2QJXrbFaRO_IBZEh6LBTmdKl1Bu03MeUenOa4RXXqGqkyuy8LMnbGl6uXgdSHlhWIXqVKAa8i0auh2HbM2VPz1CemOynxfk6X-EwmelT8-VkYRguhKVEl_Tk_6Kv4BP5puSpOqL5vjOG8rBTgC_oCROT3fTonwh9PaGWr_MQwEikm3LKbucRgMh6KMxixlkomqoq5qt9f82QMaTevnUgQd-L5ay"/>
+</a>
+</div>
+</div>
+<div>
+<h4 class="font-bold mb-6 text-sm uppercase tracking-widest text-primary">Marketplace</h4>
+<ul class="space-y-4 text-slate-500 text-sm font-medium">
+<li><a class="hover:text-primary transition-colors" href="#">Browse Experts</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Project Board</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">How it Works</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Enterprise</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold mb-6 text-sm uppercase tracking-widest text-primary">Specialists</h4>
+<ul class="space-y-4 text-slate-500 text-sm font-medium">
+<li><a class="hover:text-primary transition-colors" href="#">Apply as Expert</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Expert Resources</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Success Stories</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Seller Protection</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold mb-6 text-sm uppercase tracking-widest text-primary">Company</h4>
+<ul class="space-y-4 text-slate-500 text-sm font-medium">
+<li><a class="hover:text-primary transition-colors" href="#">About Us</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Contact Support</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Terms of Service</a></li>
+<li><a class="hover:text-primary transition-colors" href="#">Privacy Policy</a></li>
+</ul>
+</div>
+</div>
+<div class="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-600">
+<p>© 2024 n8nExperts Marketplace. All rights reserved.</p>
+<div class="flex gap-8">
+<a class="hover:text-white transition-colors" href="#">Security</a>
+<a class="hover:text-white transition-colors" href="#">Sitemap</a>
+<a class="hover:text-white transition-colors" href="#">Status</a>
+</div>
+</div>
+</div>
+</footer>
+</div>
+</body></html>

@@ -10,7 +10,7 @@ import {
   UserRoundCheck,
   Workflow,
 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { ConversionRail } from "@/components/marketing/ConversionRail";
 import { HeroWorkflowScene } from "@/components/marketing/HeroWorkflowScene";
 import { SectionHeading } from "@/components/marketing/SectionHeading";
@@ -51,47 +51,13 @@ const heroInsightCards = [
 
 export default function Home() {
   const { user } = useAuth();
-  const heroActions = user
-    ? user.role === "expert"
-      ? [
-          { label: "Find Work", href: "/jobs", variant: "primary" as const },
-          { label: "My Applications", href: "/my-applications", variant: "secondary" as const },
-        ]
-      : [
-          { label: "Find Experts", href: "/find-experts", variant: "primary" as const },
-          { label: "Post a Job", href: "/post-project", variant: "secondary" as const },
-        ]
-    : homeContent.hero.actions;
-  const homeRail = user
-    ? user.role === "expert"
-      ? {
-          title: "Use the home page as your jump point into live work.",
-          description:
-            "Browse jobs, reply to invitations, update your profile proof, and keep conversations moving without losing the broader platform context.",
-          primaryAction: { label: "Find Work", href: "/jobs" },
-          secondaryAction: { label: "Open Profile", href: "/expert/setup" },
-          signals: [
-            "One home route for guests and members",
-            "Invitations and applications close at hand",
-            "Profile proof stays central",
-            "Messages stay tied to live work",
-          ],
-        }
-      : {
-          title: "Use the home page as your control surface for hiring.",
-          description:
-            "Jump from the market narrative into live hiring actions like browsing experts, posting jobs, and reviewing applicants without switching context.",
-          primaryAction: { label: "Find Experts", href: "/find-experts" },
-          secondaryAction: { label: "Open My Jobs", href: "/my-jobs" },
-          signals: [
-            "One home route for guests and members",
-            "Expert discovery and hiring flow connected",
-            "Shortlist and pipeline routes stay nearby",
-            "Trust narrative remains visible",
-          ],
-        }
-    : {
-        title: "Start with the side of the marketplace that matches your goal.",
+
+  if (user) {
+    return <Navigate to="/workspace" replace />;
+  }
+  const heroActions = homeContent.hero.actions;
+  const homeRail = {
+    title: "Start with the side of the marketplace that matches your goal.",
         description:
           "If you are hiring, browse experts or post a project. If you are an expert, create your account and show the kind of work you want to be hired for.",
         primaryAction: { label: "Browse Experts", href: "/find-experts" },

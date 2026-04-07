@@ -1,15 +1,10 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { BriefcaseBusiness, MoreVertical, Paperclip, Search, Send, X } from "lucide-react";
+import { BriefcaseBusiness, MoreVertical, Paperclip, Search, Send, X, Video } from "lucide-react";
 import { chatApi } from "@/lib/api";
 import { useAuth } from "@/hooks/useAuth";
 import { usePageMeta } from "@/hooks/usePageMeta";
 import type { WorkspaceMessage, WorkspaceThread } from "@/types";
-import { Avatar } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { AppPageHeader, EmptyState, StatStrip } from "@/components/layout/PagePrimitives";
 import { formatRelativeTime } from "@/lib/utils";
 
 const buildAttachmentFromUrl = (value: string) => {
@@ -29,22 +24,10 @@ const buildAttachmentFromUrl = (value: string) => {
   }
 };
 
-const threadContextVariant = (thread: WorkspaceThread) => {
-  if (thread.applicationId) return "success" as const;
-  if (thread.invitationId) return "warning" as const;
-  return "outline" as const;
-};
-
 const threadContextLabel = (thread: WorkspaceThread) => {
   if (thread.applicationId) return "Application context";
   if (thread.invitationId) return "Invitation context";
   return "Job context";
-};
-
-const jobStatusVariant = (status?: string) => {
-  if (status === "completed") return "success" as const;
-  if (status === "in_progress") return "warning" as const;
-  return "outline" as const;
 };
 
 export default function Inbox() {
@@ -64,7 +47,7 @@ export default function Inbox() {
   const [sending, setSending] = useState(false);
 
   usePageMeta({
-    title: "Inbox | n8nExperts",
+    title: "Messages | n8nExperts",
     description: "Job-scoped chat with application and invitation context for active workspace conversations.",
     canonicalPath: "/inbox",
     noIndex: true,
@@ -212,258 +195,369 @@ export default function Inbox() {
   };
 
   const selectedJob = selectedThread && typeof selectedThread.jobId !== "string" ? selectedThread.jobId : null;
-  const unreadTotal = threads.reduce((sum, thread) => sum + unreadCountForThread(thread), 0);
 
   return (
-    <div className="container py-8">
-      <AppPageHeader
-        eyebrow="Workspace inbox"
-        title="Inbox"
-        description="Job-scoped chat with clearer application or invitation context so each thread tells you what work it belongs to."
-      >
-        <StatStrip
-          items={[
-            { label: "Threads", value: threads.length },
-            { label: "Unread", value: unreadTotal, hint: "Unread count from your side of each thread." },
-            { label: "Selected", value: selectedThread ? threadContextLabel(selectedThread) : "None" },
-          ]}
-        />
-      </AppPageHeader>
-
-      {error && <div className="rounded-lg border border-red-400/30 bg-red-500/10 p-3 text-sm text-red-200 mt-6">{error}</div>}
-
-      <div className="grid lg:grid-cols-[340px_1fr] gap-6 mt-6">
-        <aside className="panel p-4 space-y-2 h-[calc(100vh-16rem)] overflow-y-auto">
-          <div className="relative mb-2">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
-            <Input className="pl-10" value={threadSearch} onChange={(event) => setThreadSearch(event.target.value)} placeholder="Search threads" />
+    <div className="flex h-[calc(100vh-80px)] w-full flex-col lg:flex-row overflow-hidden border-t border-white/10" style={{ background: '#121212' }}>
+      {/* Left Sidebar: Conversations List */}
+      <aside className="w-full lg:w-80 xl:w-[360px] flex flex-col border-r border-white/10 bg-white/5 z-10 shrink-0">
+        <div className="p-4 space-y-4 border-b border-white/5">
+          <div className="flex items-center justify-between">
+            <h1 className="text-xl font-bold text-white">Messages</h1>
+            <button className="text-primary hover:bg-primary/10 p-1 rounded-full transition-colors">
+              <span className="material-symbols-outlined font-light">edit_square</span>
+            </button>
           </div>
-          {loadingThreads && <p className="text-sm text-slate-300">Loading threads...</p>}
-          {!loadingThreads && threads.length === 0 && (
-            <EmptyState
-              title="No threads yet."
-              description="Threads appear after an invitation or application creates a real job-scoped conversation."
-              className="py-8"
+          
+          {/* Search */}
+          <div className="relative group">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-[18px] w-[18px] text-slate-400 group-focus-within:text-primary transition-colors" />
+            <input
+              className="w-full bg-[#1e1e1e] border-none rounded-xl pl-10 pr-4 py-2.5 text-sm focus:ring-1 focus:ring-primary transition-all placeholder:text-slate-500 text-white outline-none"
+              placeholder="Search conversations..."
+              value={threadSearch}
+              onChange={(event) => setThreadSearch(event.target.value)}
             />
+          </div>
+        </div>
+
+        {/* List of Chats */}
+        <div className="flex-1 overflow-y-auto custom-scrollbar">
+          {loadingThreads && <p className="text-sm text-slate-400 p-4 text-center">Loading threads...</p>}
+          {!loadingThreads && threads.length === 0 && (
+             <div className="p-8 text-center">
+               <span className="material-symbols-outlined text-4xl text-slate-600 mb-2">forum</span>
+               <p className="text-sm font-semibold text-white">No messages yet</p>
+               <p className="text-xs text-slate-500 mt-1">Threads appear after an invitation or application.</p>
+             </div>
           )}
           {threads.map((thread) => {
             const peer = getPeer(thread);
             const job = typeof thread.jobId === "string" ? null : thread.jobId;
             const unread = unreadCountForThread(thread);
+            const isSelected = selectedThreadId === thread._id;
 
             return (
-              <button
+              <div
                 key={thread._id}
                 onClick={() => setSelectedThreadId(thread._id)}
-                className={`w-full rounded-lg border px-3 py-3 text-left transition ${
-                  selectedThreadId === thread._id ? "border-primary bg-primary/10" : "border-white/10 bg-white/5 hover:bg-white/10"
+                className={`flex items-center gap-3 px-4 py-4 cursor-pointer transition-colors border-l-4 ${
+                  isSelected 
+                    ? "bg-primary/10 border-primary" 
+                    : "border-transparent hover:bg-white/5"
                 }`}
               >
-                <div className="flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-2">
-                    <Avatar src={peer?.img} fallback={peer?.username || "U"} className="h-8 w-8" />
-                    <div>
-                      <p className="text-sm font-semibold text-white">{peer?.username || "Participant"}</p>
-                      <p className="mt-1 text-[11px] text-slate-400 line-clamp-1">{job?.title || "Job thread"}</p>
+                <div className="relative shrink-0">
+                  <div
+                    className="aspect-square bg-cover bg-center rounded-full size-12"
+                    style={{
+                      backgroundImage: peer?.img ? `url('${peer.img}')` : undefined,
+                      backgroundColor: !peer?.img ? (isSelected ? 'rgba(244,37,89,0.2)' : '#1e1e1e') : undefined
+                    }}
+                  >
+                     {!peer?.img && (
+                        <div className="w-full h-full flex items-center justify-center font-bold text-slate-300">
+                          {peer?.username?.charAt(0)?.toUpperCase() || "U"}
+                        </div>
+                     )}
+                  </div>
+                  <div className={`absolute bottom-0 right-0 size-3.5 rounded-full border-2 border-[#121212] ${
+                    unread > 0 ? "bg-green-500" : "bg-slate-500"
+                  }`}></div>
+                </div>
+
+                <div className="flex-1 min-w-0">
+                  <div className="flex justify-between items-center mb-1">
+                    <h3 className={`font-bold text-sm truncate ${isSelected ? "text-primary" : "text-white"}`}>
+                      {peer?.username || "Participant"}
+                    </h3>
+                    <span className={`text-[11px] font-semibold ${unread > 0 ? "text-primary" : "text-slate-400"}`}>
+                      {formatRelativeTime(thread.updatedAt)}
+                    </span>
+                  </div>
+                  <p className={`text-xs truncate ${unread > 0 ? "text-slate-300 font-medium" : "text-slate-500"}`}>
+                    {job?.title ? `Re: ${job.title}` : thread.lastMessage || "No messages yet."}
+                  </p>
+                </div>
+
+                {unread > 0 && (
+                  <div className="flex flex-col items-end gap-1">
+                    <div className="bg-primary text-white text-[10px] font-bold size-5 rounded-full flex items-center justify-center">
+                      {unread}
                     </div>
                   </div>
-                  {unread > 0 && <span className="rounded-full bg-primary px-2 py-0.5 text-xs font-bold text-white">{unread}</span>}
-                </div>
-                <div className="mt-3 flex flex-wrap gap-2">
-                  <Badge variant={threadContextVariant(thread)}>{threadContextLabel(thread)}</Badge>
-                  {job?.status && <Badge variant={jobStatusVariant(job.status)}>{job.status}</Badge>}
-                  <Badge variant="outline">{formatRelativeTime(thread.updatedAt)}</Badge>
-                </div>
-                <p className="mt-2 text-xs text-slate-300 line-clamp-2">{thread.lastMessage || "No messages yet."}</p>
-              </button>
+                )}
+              </div>
             );
           })}
-        </aside>
+        </div>
+      </aside>
 
-        <section className="panel p-4 flex flex-col h-[calc(100vh-16rem)]">
-          {!selectedThread && (
-            <EmptyState
-              title="Select a thread to start chatting."
-              description="Once you pick a thread, the header will show the related job, current context, and next route back into the workspace."
-              className="py-12"
-            />
-          )}
-          {selectedThread && (
-            <>
-              <div className="rounded-lg border border-white/10 bg-white/5 p-3">
-                <div className="flex items-start justify-between gap-3">
-                  <div className="space-y-3">
-                    <div>
-                      <p className="text-sm font-semibold text-white">
-                        {(() => {
-                          const peer = getPeer(selectedThread);
-                          return peer?.username || "Thread";
-                        })()}
-                      </p>
-                      <div className="mt-2 flex flex-wrap gap-2">
-                        <Badge variant={threadContextVariant(selectedThread)}>{threadContextLabel(selectedThread)}</Badge>
-                        {selectedJob?.status && <Badge variant={jobStatusVariant(selectedJob.status)}>{selectedJob.status}</Badge>}
-                      </div>
-                    </div>
-                    <div className="rounded-xl border border-white/10 bg-black/10 p-3 text-sm text-slate-300">
-                      <p className="inline-flex items-center gap-2 font-semibold text-white">
-                        <BriefcaseBusiness className="h-4 w-4" />
-                        {selectedJob?.title || "Job"}
-                      </p>
-                      <p className="mt-2 text-xs text-slate-400">
-                        {selectedThread.applicationId
-                          ? "This thread is attached to an application, so proposal context already exists in the workspace."
-                          : selectedThread.invitationId
-                            ? "This thread was opened from an invitation context."
-                            : "This thread is tied to a specific job even if the application metadata is light."}
-                      </p>
-                      <div className="mt-3 flex flex-wrap gap-3 text-xs">
-                        {selectedJob?._id && (
-                          <Link
-                            to={user?.role === "expert" ? `/jobs?jobId=${selectedJob._id}` : `/my-jobs?jobId=${selectedJob._id}`}
-                            className="text-sky-300 hover:underline"
-                          >
-                            Open job
-                          </Link>
-                        )}
-                        <Link to={user?.role === "expert" ? "/my-applications" : "/my-jobs"} className="text-sky-300 hover:underline">
-                          Open {user?.role === "expert" ? "my applications" : "my jobs"}
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="relative">
-                    <Button size="sm" variant="outline" onClick={() => setShowThreadTools((prev) => !prev)}>
-                      <MoreVertical className="h-4 w-4" />
-                    </Button>
-                    {showThreadTools && (
-                      <div className="absolute right-0 z-20 mt-2 w-72 rounded-xl border border-white/10 bg-[var(--color-bg-elevated)] p-3 shadow-xl">
-                        <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">Thread tools</p>
-                        <div className="relative mt-2">
-                          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
-                          <Input
-                            className="pl-10"
-                            value={messageSearch}
-                            onChange={(event) => setMessageSearch(event.target.value)}
-                            placeholder="Search messages"
-                          />
+      {/* Main Chat Window */}
+      <section className="flex-1 flex flex-col relative bg-[#121212]">
+        {!selectedThread ? (
+          <div className="flex-1 flex flex-col items-center justify-center text-center p-8 border-l border-white/5">
+            <div className="size-20 rounded-full bg-white/5 flex items-center justify-center mb-4">
+               <span className="material-symbols-outlined text-4xl text-slate-500">mark_email_unread</span>
+            </div>
+            <h2 className="text-xl font-bold text-white mb-2">Your Messages</h2>
+            <p className="text-sm text-slate-400 max-w-sm">
+              Select a thread to start chatting. The header will show the related job and context.
+            </p>
+          </div>
+        ) : (
+          <>
+            {/* Chat Header */}
+            <header className="h-16 flex items-center justify-between px-6 border-b border-white/10 bg-[#1e1e1e]/50 backdrop-blur-md z-10 shrink-0">
+              <div className="flex items-center gap-3">
+                <div className="relative">
+                  <div
+                    className="aspect-square bg-cover bg-center rounded-full size-10"
+                    style={{
+                      backgroundImage: getPeer(selectedThread)?.img ? `url('${getPeer(selectedThread)?.img}')` : undefined,
+                      backgroundColor: !getPeer(selectedThread)?.img ? '#2a2a2a' : undefined
+                    }}
+                  >
+                     {!getPeer(selectedThread)?.img && (
+                        <div className="w-full h-full flex items-center justify-center font-bold text-slate-300 text-sm">
+                          {getPeer(selectedThread)?.username?.charAt(0)?.toUpperCase() || "U"}
                         </div>
-                        {messageSearch && (
-                          <Button size="sm" variant="outline" className="mt-2 w-full" onClick={() => setMessageSearch("")}>
-                            Clear message search
-                          </Button>
-                        )}
-                      </div>
+                     )}
+                  </div>
+                  <div className="absolute bottom-0 right-0 size-2.5 bg-green-500 rounded-full border border-[#121212]"></div>
+                </div>
+                <div>
+                  <h2 className="text-sm font-bold text-white flex items-center gap-2">
+                    {getPeer(selectedThread)?.username || "Participant"}
+                    <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-white/10 text-slate-300">
+                       {threadContextLabel(selectedThread)}
+                    </span>
+                  </h2>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[11px] text-green-500 font-medium">Online</span>
+                    {selectedJob && (
+                      <>
+                        <span className="text-slate-600 text-[10px]">•</span>
+                        <span className="text-[11px] text-slate-400 truncate max-w-[200px]" title={selectedJob.title}>
+                          {selectedJob.title}
+                        </span>
+                      </>
                     )}
                   </div>
                 </div>
               </div>
 
-              <div className="mt-4 flex-1 overflow-y-auto space-y-3 pr-1">
-                {loadingMessages && <p className="text-sm text-slate-300">Loading messages...</p>}
-                {!loadingMessages && messages.length === 0 && (
-                  <EmptyState
-                    title="No messages yet."
-                    description="Send the first reply when you are ready to move the job conversation forward."
-                    className="py-10"
-                  />
+              <div className="flex items-center gap-4">
+                {selectedJob && (
+                  <Link
+                    to={user?.role === "expert" ? `/jobs?jobId=${selectedJob._id}` : `/my-jobs?jobId=${selectedJob._id}`}
+                    className="text-primary text-xs font-bold hover:underline hidden sm:block"
+                  >
+                    View Job Context
+                  </Link>
                 )}
-                {messages.map((message) => {
-                  const sender = typeof message.senderId === "string" ? null : message.senderId;
-                  const mine = (typeof message.senderId === "string" ? message.senderId : message.senderId._id) === user?._id;
-                  return (
-                    <div key={message._id} className={`flex ${mine ? "justify-end" : "justify-start"}`}>
-                      <div className={`max-w-[78%] rounded-xl px-3 py-2 ${mine ? "bg-primary text-white" : "bg-white/10 text-slate-200"}`}>
-                        {message.body && <p className="text-[13px] whitespace-pre-wrap">{message.body}</p>}
+                <div className="h-6 w-[1px] bg-white/10 hidden sm:block"></div>
+                <button className="text-slate-500 hover:text-primary transition-colors">
+                  <Video className="h-5 w-5" />
+                </button>
+                <div className="relative">
+                  <button 
+                    onClick={() => setShowThreadTools(!showThreadTools)}
+                    className="text-slate-500 hover:text-primary transition-colors"
+                  >
+                    <MoreVertical className="h-5 w-5" />
+                  </button>
+                  {showThreadTools && (
+                    <div className="absolute right-0 top-full mt-2 z-20 w-64 rounded-xl border border-white/10 bg-[#1e1e1e] p-3 shadow-xl">
+                      <p className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Search Thread</p>
+                      <div className="relative">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-500" />
+                        <input
+                          className="w-full bg-white/5 border border-white/10 rounded-lg pl-9 pr-3 py-1.5 text-sm text-white focus:ring-1 focus:ring-primary outline-none"
+                          value={messageSearch}
+                          onChange={(e) => setMessageSearch(e.target.value)}
+                          placeholder="Search messages..."
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </header>
+
+            {/* Message Area Thread */}
+            <div className="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar flex flex-col bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-fixed" style={{ backgroundBlendMode: 'overlay', backgroundColor: 'rgba(18,18,18,0.98)' }}>
+              
+              {loadingMessages && <p className="text-sm text-slate-400 text-center">Loading messages...</p>}
+              {error && <div className="rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 p-2 text-xs text-center">{error}</div>}
+
+              {messages.map((message, i) => {
+                const mine = (typeof message.senderId === "string" ? message.senderId : message.senderId._id) === user?._id;
+                const senderPeer = mine ? null : getPeer(selectedThread);
+                
+                // Show date separator if first message or if day changed
+                const showDate = i === 0 || new Date(messages[i-1].createdAt).toDateString() !== new Date(message.createdAt).toDateString();
+
+                return (
+                  <div key={message._id}>
+                    {showDate && (
+                      <div className="flex justify-center my-6">
+                        <span className="text-[10px] uppercase tracking-widest text-slate-400 font-bold bg-white/5 px-3 py-1 rounded-full backdrop-blur-sm">
+                          {new Date(message.createdAt).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })}
+                        </span>
+                      </div>
+                    )}
+                    
+                    <div className={`flex gap-3 max-w-[80%] ${mine ? 'self-end flex-row-reverse float-right clear-both' : 'self-start float-left clear-both'} mb-6`}>
+                      {!mine && (
+                        <div
+                          className="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-8 shrink-0 self-end mb-4"
+                          style={{
+                            backgroundImage: senderPeer?.img ? `url('${senderPeer.img}')` : undefined,
+                            backgroundColor: !senderPeer?.img ? '#2a2a2a' : undefined
+                          }}
+                        >
+                           {!senderPeer?.img && (
+                              <div className="w-full h-full flex items-center justify-center font-bold text-slate-300 text-xs">
+                                {senderPeer?.username?.charAt(0)?.toUpperCase() || "U"}
+                              </div>
+                           )}
+                        </div>
+                      )}
+                      
+                      <div className={`flex flex-col gap-1 ${mine ? 'items-end' : 'items-start'}`}>
+                        {message.body && (
+                          <div className={`
+                            px-4 py-3 text-sm shadow-sm
+                            ${mine 
+                              ? 'bg-primary text-white rounded-2xl rounded-br-none shadow-lg shadow-primary/20' 
+                              : 'bg-[#2a2a2a]/80 backdrop-blur-md rounded-2xl rounded-bl-none text-slate-100 border border-white/5'}
+                          `}>
+                            {message.body}
+                          </div>
+                        )}
+                        
                         {(message.attachments || []).length > 0 && (
-                          <div className={`${message.body ? "mt-2" : ""} space-y-1`}>
-                            {message.attachments?.map((attachment) => (
+                          <div className="flex flex-col gap-1">
+                            {message.attachments?.map(att => (
                               <a
-                                key={`${message._id}-${attachment.url}`}
-                                href={attachment.url}
+                                key={att.url}
+                                href={att.url}
                                 target="_blank"
                                 rel="noreferrer"
-                                className={`inline-flex items-center gap-1 text-xs underline ${
-                                  mine ? "text-white/90 hover:text-white" : "text-sky-300 hover:text-sky-200"
-                                }`}
+                                className={`
+                                  flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-medium transition-colors
+                                  ${mine 
+                                    ? 'bg-primary/20 text-white hover:bg-primary/30 border border-primary/30 rounded-br-none' 
+                                    : 'bg-white/5 text-slate-300 hover:bg-white/10 hover:text-white border border-white/10 rounded-bl-none'}
+                                `}
                               >
-                                <Paperclip className="h-3 w-3" />
-                                {attachment.name}
+                                <Paperclip className="h-3 w-3 opacity-70" />
+                                <span className="truncate max-w-[200px]">{att.name}</span>
                               </a>
                             ))}
                           </div>
                         )}
-                        <p className={`mt-1 text-[10px] ${mine ? "text-white/75" : "text-slate-400"}`}>
-                          {sender?.username || "User"} | {new Date(message.createdAt).toLocaleTimeString()}
-                        </p>
+
+                        <div className="flex items-center gap-1 mt-0.5">
+                          {mine && <span className="material-symbols-outlined text-[14px] text-primary">done_all</span>}
+                          <span className="text-[10px] text-slate-500">
+                            {new Date(message.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                          </span>
+                        </div>
                       </div>
                     </div>
-                  );
-                })}
-              </div>
+                  </div>
+                );
+              })}
+              <div className="clear-both"></div>
+            </div>
 
-              <div className="mt-3 flex gap-2">
-                <Input
-                  value={attachmentUrl}
-                  onChange={(event) => setAttachmentUrl(event.target.value)}
-                  placeholder="Attachment URL (optional)"
-                  onKeyDown={(event) => {
-                    if (event.key === "Enter") {
-                      event.preventDefault();
-                      addAttachment();
-                    }
-                  }}
-                />
-                <Button type="button" variant="outline" onClick={addAttachment}>
-                  <Paperclip className="h-4 w-4 mr-1" />
-                  Add
-                </Button>
-              </div>
-              {pendingAttachments.length > 0 && (
-                <div className="mt-2 flex flex-wrap gap-2">
-                  {pendingAttachments.map((attachment) => (
-                    <span
-                      key={attachment.url}
-                      className="inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/5 px-2 py-1 text-xs text-slate-200"
+            {/* Input Area */}
+            <footer className="p-4 sm:p-6 bg-[#121212] border-t border-white/10 shrink-0">
+              <div className="max-w-4xl mx-auto">
+                {/* Pending attachments preview */}
+                {pendingAttachments.length > 0 && (
+                  <div className="flex flex-wrap gap-2 mb-3">
+                    {pendingAttachments.map(att => (
+                      <div key={att.url} className="flex items-center gap-1 bg-white/10 rounded-full pl-3 pr-1 py-1 border border-white/5 text-xs text-white">
+                        <Paperclip className="h-3 w-3 text-slate-400" />
+                        <span className="truncate max-w-[150px]">{att.name}</span>
+                        <button 
+                          onClick={() => removeAttachment(att.url)}
+                          className="p-1 rounded-full hover:bg-white/20 text-slate-400 hover:text-white transition-colors"
+                        >
+                          <X className="h-3 w-3" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                
+                {/* Attachment URL Input (hidden by default, triggered by paperclip) */}
+                <div className="mb-3 flex gap-2">
+                  <div className="flex-1 max-w-sm flex bg-[#1e1e1e] rounded-xl overflow-hidden border border-white/10 focus-within:border-primary/50 transition-colors">
+                    <input
+                      value={attachmentUrl}
+                      onChange={(e) => setAttachmentUrl(e.target.value)}
+                      placeholder="Paste attachment link & press Enter..."
+                      className="flex-1 bg-transparent border-none text-xs text-white px-3 py-2 outline-none placeholder:text-slate-500"
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" && attachmentUrl) {
+                          e.preventDefault();
+                          addAttachment();
+                        }
+                      }}
+                    />
+                    <button 
+                      onClick={addAttachment}
+                      disabled={!attachmentUrl}
+                      className="px-3 py-2 bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white disabled:opacity-50 transition-colors text-xs font-medium"
                     >
-                      {attachment.name}
-                      <button
-                        type="button"
-                        aria-label={`Remove ${attachment.name}`}
-                        onClick={() => removeAttachment(attachment.url)}
-                        className="text-slate-400 hover:text-white"
-                      >
-                        <X className="h-3 w-3" />
-                      </button>
-                    </span>
-                  ))}
+                      Add
+                    </button>
+                  </div>
                 </div>
-              )}
 
-              <div className="mt-4 flex gap-2">
-                <Input
-                  value={messageText}
-                  onChange={(event) => setMessageText(event.target.value)}
-                  placeholder="Type a message"
-                  onKeyDown={(event) => {
-                    if (event.key === "Enter") {
-                      event.preventDefault();
-                      sendMessage();
-                    }
-                  }}
-                />
-                <Button
-                  aria-label="Send message"
-                  onClick={sendMessage}
-                  disabled={sending || (!messageText.trim() && pendingAttachments.length === 0)}
-                >
-                  <Send className="h-4 w-4" />
-                </Button>
+                <div className="flex items-end gap-3">
+                  <div className="flex-1 bg-[#1e1e1e] rounded-2xl p-2 flex items-end transition-all focus-within:ring-2 focus-within:ring-primary/30 border border-white/5">
+                    <label className="p-2 text-slate-400 hover:text-primary transition-colors cursor-pointer" title="Add attachment link above">
+                      <Paperclip className="h-5 w-5" />
+                    </label>
+                    <textarea
+                      value={messageText}
+                      onChange={(e) => setMessageText(e.target.value)}
+                      className="flex-1 bg-transparent border-none focus:ring-0 resize-none py-2 px-2 text-sm text-white placeholder:text-slate-500 custom-scrollbar outline-none max-h-32 min-h-[40px]"
+                      placeholder="Type a message..."
+                      rows={1}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" && !e.shiftKey) {
+                          e.preventDefault();
+                          sendMessage();
+                        }
+                      }}
+                    />
+                  </div>
+                  <button
+                    onClick={sendMessage}
+                    disabled={sending || (!messageText.trim() && pendingAttachments.length === 0)}
+                    className="size-[52px] rounded-full bg-primary text-white flex items-center justify-center shadow-lg shadow-primary/30 hover:bg-primary/90 hover:scale-105 active:scale-95 transition-all disabled:opacity-50 disabled:hover:scale-100 shrink-0"
+                  >
+                    {sending ? (
+                      <div className="size-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    ) : (
+                      <Send className="h-5 w-5 ml-0.5" />
+                    )}
+                  </button>
+                </div>
+                
+                <div className="mt-2 flex items-center justify-between px-2">
+                  <p className="text-[10px] text-slate-500">Press Enter to send, Shift + Enter for new line</p>
+                </div>
               </div>
-            </>
-          )}
-        </section>
-      </div>
+            </footer>
+          </>
+        )}
+      </section>
     </div>
   );
 }

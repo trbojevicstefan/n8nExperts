@@ -13,7 +13,6 @@ import { Badge } from "@/components/ui/badge";
 import { errorFieldClassName, FieldErrorText, FormBanner } from "@/components/forms/FormFeedback";
 import { usePageMeta } from "@/hooks/usePageMeta";
 import { useRouteFlash } from "@/hooks/useRouteFlash";
-import { AppPageHeader, ContextAside, StatStrip } from "@/components/layout/PagePrimitives";
 import { getFieldFeedback, getFormFeedback } from "@/lib/form-feedback";
 import { cn } from "@/lib/utils";
 import type { FormFeedbackState } from "@/types";
@@ -88,8 +87,11 @@ const initialFormState: PostProjectFormState = {
   },
 };
 
-const sectionCardClassName = "rounded-[28px] border border-white/8 bg-white/5 p-5 md:p-6";
-const helperTextClassName = "text-sm leading-6 text-[var(--color-text-secondary)]";
+const sectionCardClassName = "rounded-2xl border border-white/10 bg-white/[0.02] p-6 lg:p-8 relative overflow-hidden transition-all hover:border-white/20";
+const helperTextClassName = "text-sm text-slate-400 font-medium";
+
+// Custom dark styled inputs
+const customInputClasses = "w-full bg-black/40 border-white/10 text-white rounded-xl focus:ring-primary focus:border-transparent placeholder:text-slate-600 transition-all";
 
 export default function PostProject() {
   const navigate = useNavigate();
@@ -186,434 +188,463 @@ export default function PostProject() {
   const fieldError = (field: string, aliases: string[] = []) => getFieldFeedback(feedback, field, aliases);
 
   return (
-    <div className="container py-8">
-      {flash && (
-        <div
-          className={`mb-6 rounded-lg px-3 py-2 text-sm ${
-            flash.tone === "success"
-              ? "border border-emerald-500/20 bg-emerald-500/10 text-emerald-200"
-              : flash.tone === "error"
-                ? "border border-red-500/20 bg-red-500/10 text-red-200"
-                : "border border-sky-500/20 bg-sky-500/10 text-sky-200"
-          }`}
-        >
-          {flash.text}
+    <div className="relative min-h-screen bg-[#0a0a0a] text-white overflow-hidden py-10 pb-24">
+      {/* Dynamic Dot Grid Background tailored to Pro Max styling */}
+      <div 
+        className="absolute inset-0 pointer-events-none opacity-50 z-0"
+        style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, rgba(255, 255, 255, 0.05) 1px, transparent 0)', backgroundSize: '40px 40px' }}
+      ></div>
+      
+      <div className="absolute top-0 right-0 w-1/2 h-[500px] bg-primary/10 blur-[150px] pointer-events-none rounded-full transform translate-x-1/3 -translate-y-1/2 z-0"></div>
+
+      <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-8">
+        
+        {/* Header Text matching the Stitch mock */}
+        <div className="text-center mb-12 flex flex-col items-center">
+          <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/5 border border-white/10 rounded-full text-xs font-bold uppercase tracking-widest text-primary mb-6">
+             <PencilRuler className="h-4 w-4" /> Client Workspace
+          </div>
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-white via-white to-gray-500 tracking-tight">
+            Post a Project
+          </h1>
+          <p className="text-gray-400 text-lg max-w-xl mx-auto">
+            Describe your automation needs to find the perfect n8n specialist. A clearer brief gets better proposals faster.
+          </p>
         </div>
-      )}
-      <AppPageHeader
-        eyebrow={
-          <>
-            <PencilRuler className="h-4 w-4" />
-            Client workspace
-          </>
-        }
-        title="Post a better brief"
-        description="Turn one big text box into a sharper hiring brief with a clear goal, named systems, timing, and realistic handoff expectations."
-      >
-        <StatStrip
-          items={[
-            { label: "Start with", value: "The outcome", hint: "What should work better once the automation is live?" },
-            { label: "Include", value: "Systems + timing", hint: "Name the stack and the urgency, not just the idea." },
-            { label: "Result", value: "Better fit", hint: "Specialists can self-select faster when the brief is specific." },
-          ]}
-        />
-      </AppPageHeader>
 
-      <div className="mt-6 grid gap-6 xl:grid-cols-[minmax(0,1fr)_340px]">
-        <form onSubmit={handleSubmit} className="panel p-6 md:p-8">
-          <div className="grid gap-5">
+        {flash && (
+          <div className={`mb-6 max-w-3xl mx-auto rounded-xl px-4 py-3 text-sm font-semibold border ${
+            flash.tone === "success" ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-300" :
+            flash.tone === "error" ? "border-red-500/30 bg-red-500/10 text-red-300" : "border-sky-500/30 bg-sky-500/10 text-sky-300"
+          }`}>
+            {flash.text}
+          </div>
+        )}
+
+        <div className="grid gap-8 xl:grid-cols-[minmax(0,1fr)_380px] items-start">
+          
+          {/* Main Form Area */}
+          <form onSubmit={handleSubmit} className="w-full glass-card bg-zinc-900/40 backdrop-blur-xl border border-white/10 rounded-3xl p-6 lg:p-10 shadow-2xl space-y-8">
             <FormBanner message={feedback?.summary} />
+            
             <section className={sectionCardClassName}>
-              <div className="flex flex-wrap items-center justify-between gap-3">
-                <div>
-                  <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-sky-300">
-                    <Target className="h-4 w-4" />
-                    Goal and context
-                  </p>
-                  <h2 className="mt-2 text-xl font-bold text-white">Lead with the business outcome.</h2>
+              <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
+                <div className="flex items-center gap-3">
+                  <div className="size-10 bg-primary/10 rounded-xl flex items-center justify-center border border-primary/20">
+                    <Target className="h-5 w-5 text-primary" />
+                  </div>
+                  <div>
+                    <h2 className="text-lg font-bold text-white leading-tight">Goal & Context</h2>
+                    <p className="text-xs text-slate-400 font-semibold uppercase tracking-wider">Lead with the business outcome</p>
+                  </div>
                 </div>
-                <Badge variant={sectionProgress.goal >= 3 ? "success" : "outline"}>{sectionProgress.goal}/4 complete</Badge>
+                <Badge variant={sectionProgress.goal >= 3 ? "success" : "secondary"} className="bg-black/30 border-white/10">
+                  {sectionProgress.goal}/4 complete
+                </Badge>
               </div>
-              <p className={`mt-2 ${helperTextClassName}`}>
-                Example: "Reduce manual lead routing from 30 minutes to 5 minutes and alert sales in Slack when priority accounts arrive."
-              </p>
 
-              <div className="mt-5 grid gap-5">
+              <div className="grid gap-6">
                 <div className="space-y-2">
-                  <Label htmlFor="title">Project title</Label>
+                  <Label htmlFor="title" className="text-slate-300 uppercase text-xs tracking-wider font-bold">Project Title</Label>
                   <Input
                     id="title"
-                    className={fieldError("title") ? errorFieldClassName : undefined}
-                    placeholder="Build n8n workflow for support ticket triage"
+                    className={cn(customInputClasses, "h-14 text-lg font-medium", fieldError("title") && errorFieldClassName)}
+                    placeholder="e.g. Automate CRM lead syncing with n8n and Airtable"
                     value={formData.title}
                     onChange={(event) => updateField("title", event.target.value)}
                     aria-invalid={Boolean(fieldError("title"))}
                     required
                   />
                   <FieldErrorText message={fieldError("title")} />
-                  <p className={helperTextClassName}>Say what is being built, not just the department asking for it.</p>
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="outcome">Primary outcome</Label>
+                  <Label htmlFor="outcome" className="text-slate-300 uppercase text-xs tracking-wider font-bold">Primary Outcome</Label>
                   <Textarea
                     id="outcome"
-                    className={cn("min-h-[110px]", fieldError("brief.outcome") && errorFieldClassName)}
-                    placeholder="What should happen automatically when the workflow is working well?"
+                    className={cn(customInputClasses, "min-h-[100px] resize-none pt-4", fieldError("brief.outcome") && errorFieldClassName)}
+                    placeholder="e.g. Reduce manual lead routing from 30 minutes to 5 minutes..."
                     value={formData.brief.outcome}
                     onChange={(event) => updateBriefField("outcome", event.target.value)}
                     aria-invalid={Boolean(fieldError("brief.outcome"))}
                   />
                   <FieldErrorText message={fieldError("brief.outcome")} />
-                  <p className={helperTextClassName}>Example: "Qualify inbound tickets, assign owners, and log the result back into HubSpot without manual triage."</p>
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="description">Overview / additional context</Label>
+                  <Label htmlFor="description" className="text-slate-300 uppercase text-xs tracking-wider font-bold">Detailed Description</Label>
                   <Textarea
                     id="description"
-                    className={cn("min-h-[170px]", fieldError("description") && errorFieldClassName)}
-                    placeholder="Share current process, stakeholders, edge cases, or background that helps an expert scope the work."
+                    className={cn(customInputClasses, "min-h-[160px] resize-vertical pt-4", fieldError("description") && errorFieldClassName)}
+                    placeholder="Describe current process, stakeholders, edge cases, and background..."
                     value={formData.description}
                     onChange={(event) => updateField("description", event.target.value)}
                     aria-invalid={Boolean(fieldError("description"))}
                     required
                   />
                   <FieldErrorText message={fieldError("description")} />
-                  <p className={helperTextClassName}>Use this for context and edge cases. The structured fields below should carry the main scope.</p>
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="successCriteria">Success criteria</Label>
+                  <Label htmlFor="successCriteria" className="text-slate-300 uppercase text-xs tracking-wider font-bold">Success Criteria</Label>
                   <Textarea
                     id="successCriteria"
-                    className={cn("min-h-[120px]", fieldError("brief.successCriteria") && errorFieldClassName)}
-                    placeholder={"One item per line\nErrors are retried automatically\nOps sees Slack alerts within 2 minutes\nHandover doc explains failure recovery"}
+                    className={cn(customInputClasses, "min-h-[100px] resize-none pt-4", fieldError("brief.successCriteria") && errorFieldClassName)}
+                    placeholder={"One item per line\nErrors are retried automatically\nOps sees Slack alerts within 2 mins"}
                     value={formData.brief.successCriteria}
                     onChange={(event) => updateBriefField("successCriteria", event.target.value)}
                     aria-invalid={Boolean(fieldError("brief.successCriteria"))}
                   />
                   <FieldErrorText message={fieldError("brief.successCriteria")} />
-                  <p className={helperTextClassName}>List the results you will use to say "yes, this is done."</p>
                 </div>
               </div>
             </section>
 
             <section className={sectionCardClassName}>
-              <div className="flex flex-wrap items-center justify-between gap-3">
-                <div>
-                  <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-sky-300">
-                    <Workflow className="h-4 w-4" />
-                    Systems and scope
-                  </p>
-                  <h2 className="mt-2 text-xl font-bold text-white">Name the tools, flows, and outputs.</h2>
+              <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
+                <div className="flex items-center gap-3">
+                  <div className="size-10 bg-primary/10 rounded-xl flex items-center justify-center border border-primary/20">
+                    <Workflow className="h-5 w-5 text-primary" />
+                  </div>
+                  <div>
+                    <h2 className="text-lg font-bold text-white leading-tight">Systems & Scope</h2>
+                    <p className="text-xs text-slate-400 font-semibold uppercase tracking-wider">Name the tools and outputs</p>
+                  </div>
                 </div>
-                <Badge variant={sectionProgress.systems >= 2 ? "success" : "outline"}>{sectionProgress.systems}/3 complete</Badge>
+                <Badge variant={sectionProgress.systems >= 2 ? "success" : "secondary"} className="bg-black/30 border-white/10">
+                  {sectionProgress.systems}/3 complete
+                </Badge>
               </div>
-              <p className={`mt-2 ${helperTextClassName}`}>
-                Example: "n8n, HubSpot, Slack, Gmail, and a Postgres table for retry state."
-              </p>
 
-              <div className="mt-5 grid gap-5 md:grid-cols-2">
+              <div className="grid gap-6 md:grid-cols-2">
                 <div className="space-y-2">
-                  <Label htmlFor="systems">Core systems</Label>
+                  <Label htmlFor="systems" className="text-slate-300 uppercase text-xs tracking-wider font-bold">Core Systems</Label>
                   <Input
                     id="systems"
-                    className={fieldError("brief.systems") ? errorFieldClassName : undefined}
-                    placeholder="n8n, HubSpot, Slack, Postgres"
+                    className={cn(customInputClasses, "h-12", fieldError("brief.systems") && errorFieldClassName)}
+                    placeholder="n8n, HubSpot, Slack..."
                     value={formData.brief.systems}
                     onChange={(event) => updateBriefField("systems", event.target.value)}
                     aria-invalid={Boolean(fieldError("brief.systems"))}
                   />
                   <FieldErrorText message={fieldError("brief.systems")} />
-                  <p className={helperTextClassName}>List the main systems the expert will need to understand.</p>
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="integrations">Integrations or external dependencies</Label>
+                  <Label htmlFor="integrations" className="text-slate-300 uppercase text-xs tracking-wider font-bold">Custom Integrations</Label>
                   <Input
                     id="integrations"
-                    className={fieldError("brief.integrations") ? errorFieldClassName : undefined}
-                    placeholder="Stripe API, Zendesk webhooks, internal REST API"
+                    className={cn(customInputClasses, "h-12", fieldError("brief.integrations") && errorFieldClassName)}
+                    placeholder="Stripe API, internal REST..."
                     value={formData.brief.integrations}
                     onChange={(event) => updateBriefField("integrations", event.target.value)}
                     aria-invalid={Boolean(fieldError("brief.integrations"))}
                   />
                   <FieldErrorText message={fieldError("brief.integrations")} />
-                  <p className={helperTextClassName}>Call out third-party APIs, custom services, or legacy tools.</p>
                 </div>
 
                 <div className="space-y-2 md:col-span-2">
-                  <Label htmlFor="deliverables">Expected deliverables</Label>
-                  <Textarea
-                    id="deliverables"
-                    className={cn("min-h-[120px]", fieldError("brief.deliverables") && errorFieldClassName)}
-                    placeholder={"One item per line\nProduction-ready workflow\nTesting checklist\nRunbook for the ops team"}
-                    value={formData.brief.deliverables}
-                    onChange={(event) => updateBriefField("deliverables", event.target.value)}
-                    aria-invalid={Boolean(fieldError("brief.deliverables"))}
-                  />
-                  <FieldErrorText message={fieldError("brief.deliverables")} />
-                  <p className={helperTextClassName}>Be explicit about what should exist at handoff, not just the end state.</p>
-                </div>
-
-                <div className="space-y-2 md:col-span-2">
-                  <Label htmlFor="skills">Relevant skills</Label>
+                  <Label htmlFor="skills" className="text-slate-300 uppercase text-xs tracking-wider font-bold">Relevant Skills (comma separated)</Label>
                   <Input
                     id="skills"
-                    className={fieldError("skills") ? errorFieldClassName : undefined}
-                    placeholder="n8n, Slack, HubSpot, OpenAI"
+                    className={cn(customInputClasses, "h-12", fieldError("skills") && errorFieldClassName)}
+                    placeholder="n8n, Postgres, JSON..."
                     value={formData.skills}
                     onChange={(event) => updateField("skills", event.target.value)}
                     aria-invalid={Boolean(fieldError("skills"))}
                   />
                   <FieldErrorText message={fieldError("skills")} />
-                  <p className={helperTextClassName}>This still helps discovery and filtering, even though the brief carries more of the scope now.</p>
+                </div>
+
+                <div className="space-y-2 md:col-span-2">
+                  <Label htmlFor="deliverables" className="text-slate-300 uppercase text-xs tracking-wider font-bold">Expected Deliverables</Label>
+                  <Textarea
+                    id="deliverables"
+                    className={cn(customInputClasses, "min-h-[100px] pt-4 resize-none", fieldError("brief.deliverables") && errorFieldClassName)}
+                    placeholder={"One item per line\nProduction-ready workflow\nRunbook for the ops team..."}
+                    value={formData.brief.deliverables}
+                    onChange={(event) => updateBriefField("deliverables", event.target.value)}
+                    aria-invalid={Boolean(fieldError("brief.deliverables"))}
+                  />
+                  <FieldErrorText message={fieldError("brief.deliverables")} />
                 </div>
               </div>
             </section>
 
             <section className={sectionCardClassName}>
-              <div className="flex flex-wrap items-center justify-between gap-3">
-                <div>
-                  <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-sky-300">
-                    <ShieldAlert className="h-4 w-4" />
-                    Constraints and timing
-                  </p>
-                  <h2 className="mt-2 text-xl font-bold text-white">Make risk, budget, and urgency visible.</h2>
-                </div>
-                <Badge variant={sectionProgress.timing >= 2 ? "success" : "outline"}>{sectionProgress.timing}/3 complete</Badge>
-              </div>
-              <p className={`mt-2 ${helperTextClassName}`}>
-                Example: "Must work with existing approval rules, stay inside EU data residency, and be ready for a pilot by May 15."
-              </p>
-
-              <div className="mt-5 grid gap-5">
-                <div className="space-y-2">
-                  <Label htmlFor="constraints">Constraints or known risks</Label>
-                  <Textarea
-                    id="constraints"
-                    className={cn("min-h-[120px]", fieldError("brief.constraints") && errorFieldClassName)}
-                    placeholder={"One item per line\nCannot change Salesforce object model\nNeeds audit logging\nMust avoid downtime during rollout"}
-                    value={formData.brief.constraints}
-                    onChange={(event) => updateBriefField("constraints", event.target.value)}
-                    aria-invalid={Boolean(fieldError("brief.constraints"))}
-                  />
-                  <FieldErrorText message={fieldError("brief.constraints")} />
-                  <p className={helperTextClassName}>Add anything that will shape architecture, delivery order, or approval flow.</p>
-                </div>
-
-                <div className="grid gap-4 md:grid-cols-2">
-                  <div className="space-y-2">
-                    <Label>Budget model</Label>
-                    <select
-                      className={cn(
-                        "w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] px-4 py-3 text-sm text-white",
-                        fieldError("budgetType") && errorFieldClassName
-                      )}
-                      value={formData.budgetType}
-                      onChange={(event) => updateField("budgetType", event.target.value as "hourly" | "fixed")}
-                      aria-invalid={Boolean(fieldError("budgetType"))}
-                    >
-                      <option value="fixed">Fixed price</option>
-                      <option value="hourly">Hourly</option>
-                    </select>
-                    <FieldErrorText message={fieldError("budgetType")} />
+              <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
+                <div className="flex items-center gap-3">
+                  <div className="size-10 bg-primary/10 rounded-xl flex items-center justify-center border border-primary/20">
+                    <ShieldAlert className="h-5 w-5 text-primary" />
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="budgetAmount">Budget ({formData.budgetType === "hourly" ? "$/hour" : "total $"})</Label>
+                  <div>
+                    <h2 className="text-lg font-bold text-white leading-tight">Constraints & Timing</h2>
+                    <p className="text-xs text-slate-400 font-semibold uppercase tracking-wider">Risk, budget, and urgency</p>
+                  </div>
+                </div>
+                <Badge variant={sectionProgress.timing >= 2 ? "success" : "secondary"} className="bg-black/30 border-white/10">
+                  {sectionProgress.timing}/3 complete
+                </Badge>
+              </div>
+
+              <div className="grid gap-6">
+                <div className="space-y-2">
+                  <Label className="text-slate-300 uppercase text-xs tracking-wider font-bold">Budget Structure</Label>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                    {/* Fixed Price Toggle */}
+                    <label className="relative cursor-pointer group">
+                      <input 
+                        type="radio" 
+                        name="budgetType" 
+                        className="peer hidden" 
+                        checked={formData.budgetType === "fixed"} 
+                        onChange={() => updateField("budgetType", "fixed")} 
+                      />
+                      <div className="p-4 rounded-xl border border-white/10 bg-black/40 peer-checked:border-primary peer-checked:bg-primary/5 transition-all flex items-start gap-3">
+                        <div className="size-5 shrink-0 rounded-full border-2 border-white/20 flex items-center justify-center peer-checked:border-primary mt-0.5">
+                          <div className="size-2 bg-primary rounded-full opacity-0 peer-checked:opacity-100 transition-opacity"></div>
+                        </div>
+                        <div>
+                          <p className="font-bold text-white">Fixed Price</p>
+                          <p className="text-xs text-gray-500 mt-1">Set a total price for the project.</p>
+                        </div>
+                      </div>
+                    </label>
+                    {/* Hourly Toggle */}
+                    <label className="relative cursor-pointer group">
+                      <input 
+                        type="radio" 
+                        name="budgetType" 
+                        className="peer hidden" 
+                        checked={formData.budgetType === "hourly"} 
+                        onChange={() => updateField("budgetType", "hourly")} 
+                      />
+                      <div className="p-4 rounded-xl border border-white/10 bg-black/40 peer-checked:border-primary peer-checked:bg-primary/5 transition-all flex items-start gap-3">
+                        <div className="size-5 shrink-0 rounded-full border-2 border-white/20 flex items-center justify-center peer-checked:border-primary mt-0.5">
+                          <div className="size-2 bg-primary rounded-full opacity-0 peer-checked:opacity-100 transition-opacity"></div>
+                        </div>
+                        <div>
+                          <p className="font-bold text-white">Hourly Rate</p>
+                          <p className="text-xs text-gray-500 mt-1">Pay for the hours worked.</p>
+                        </div>
+                      </div>
+                    </label>
+                  </div>
+                </div>
+
+                <div className="space-y-2 relative max-w-sm">
+                  <Label htmlFor="budgetAmount" className="text-slate-300 uppercase text-xs tracking-wider font-bold">Amount ({formData.budgetType === "hourly" ? "$/hour" : "Total $"})</Label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                      <span className="text-primary font-bold text-lg">$</span>
+                    </div>
                     <Input
                       id="budgetAmount"
                       type="number"
                       min="1"
-                      className={fieldError("budgetAmount") ? errorFieldClassName : undefined}
+                      className={cn(customInputClasses, "h-14 pl-10 text-lg font-bold", fieldError("budgetAmount") && errorFieldClassName)}
+                      placeholder="0.00"
                       value={formData.budgetAmount}
                       onChange={(event) => updateField("budgetAmount", event.target.value)}
                       aria-invalid={Boolean(fieldError("budgetAmount"))}
                       required
                     />
-                    <FieldErrorText message={fieldError("budgetAmount")} />
                   </div>
+                  <FieldErrorText message={fieldError("budgetAmount")} />
                 </div>
 
-                <div className="grid gap-4 md:grid-cols-2">
+                <div className="grid gap-6 md:grid-cols-2">
                   <div className="space-y-2">
-                    <Label htmlFor="timeline">Timeline or urgency</Label>
+                    <Label htmlFor="timeline" className="text-slate-300 uppercase text-xs tracking-wider font-bold">Timeline / Urgency</Label>
                     <Textarea
                       id="timeline"
-                      className={cn("min-h-[100px]", fieldError("brief.timeline") && errorFieldClassName)}
-                      placeholder="Need shortlist this week, implementation next sprint, and handoff before quarter-end."
+                      className={cn(customInputClasses, "min-h-[100px] resize-none pt-4", fieldError("brief.timeline") && errorFieldClassName)}
+                      placeholder="E.g. Need implementation next sprint..."
                       value={formData.brief.timeline}
                       onChange={(event) => updateBriefField("timeline", event.target.value)}
                       aria-invalid={Boolean(fieldError("brief.timeline"))}
                     />
                     <FieldErrorText message={fieldError("brief.timeline")} />
-                    <p className={helperTextClassName}>A deadline, milestone, or "start soon" note is better than silence.</p>
                   </div>
 
                   <div className="space-y-2">
-                    <Label>Visibility</Label>
-                    <select
-                      className={cn(
-                        "w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] px-4 py-3 text-sm text-white",
-                        fieldError("visibility") && errorFieldClassName
-                      )}
-                      value={formData.visibility}
-                      onChange={(event) => updateField("visibility", event.target.value as "public" | "invite_only")}
-                      aria-invalid={Boolean(fieldError("visibility"))}
-                    >
-                      <option value="public">Public</option>
-                      <option value="invite_only">Invite only</option>
-                    </select>
-                    <FieldErrorText message={fieldError("visibility")} />
-                    <p className={helperTextClassName}>Use public for open discovery or invite-only if you already know who you want to approach.</p>
+                    <Label htmlFor="constraints" className="text-slate-300 uppercase text-xs tracking-wider font-bold">Risks & Constraints</Label>
+                    <Textarea
+                      id="constraints"
+                      className={cn(customInputClasses, "min-h-[100px] resize-none pt-4", fieldError("brief.constraints") && errorFieldClassName)}
+                      placeholder="E.g. Must avoid downtime during rollout..."
+                      value={formData.brief.constraints}
+                      onChange={(event) => updateBriefField("constraints", event.target.value)}
+                      aria-invalid={Boolean(fieldError("brief.constraints"))}
+                    />
+                    <FieldErrorText message={fieldError("brief.constraints")} />
                   </div>
                 </div>
               </div>
             </section>
 
             <section className={sectionCardClassName}>
-              <div className="flex flex-wrap items-center justify-between gap-3">
-                <div>
-                  <p className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-sky-300">
-                    <Users className="h-4 w-4" />
-                    Hiring preferences
-                  </p>
-                  <h2 className="mt-2 text-xl font-bold text-white">Set expectations for the kind of expert you want.</h2>
+               <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
+                <div className="flex items-center gap-3">
+                  <div className="size-10 bg-primary/10 rounded-xl flex items-center justify-center border border-primary/20">
+                    <Users className="h-5 w-5 text-primary" />
+                  </div>
+                  <div>
+                    <h2 className="text-lg font-bold text-white leading-tight">Hiring Preferences</h2>
+                    <p className="text-xs text-slate-400 font-semibold uppercase tracking-wider">Expert type and handoff</p>
+                  </div>
                 </div>
-                <Badge variant={sectionProgress.hiring === 2 ? "success" : "outline"}>{sectionProgress.hiring}/2 complete</Badge>
+                <Badge variant={sectionProgress.hiring === 2 ? "success" : "secondary"} className="bg-black/30 border-white/10">
+                  {sectionProgress.hiring}/2 complete
+                </Badge>
               </div>
-              <p className={`mt-2 ${helperTextClassName}`}>
-                Example: "Need a builder who can ship the first version and leave clear docs plus one training session for internal ops."
-              </p>
 
-              <div className="mt-5 grid gap-4 md:grid-cols-2">
+              <div className="grid gap-6 md:grid-cols-2">
                 <div className="space-y-2">
-                  <Label htmlFor="expertTypeNeeded">Best-fit expert type</Label>
+                  <Label htmlFor="expertTypeNeeded" className="text-slate-300 uppercase text-xs tracking-wider font-bold">Best-Fit Expert Type</Label>
                   <select
                     id="expertTypeNeeded"
                     className={cn(
-                      "w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] px-4 py-3 text-sm text-white",
+                      customInputClasses, "h-14 px-4 appearance-none [&>option]:bg-zinc-900 border-white/10",
                       fieldError("brief.hiringPreferences.expertTypeNeeded") && errorFieldClassName
                     )}
                     value={formData.brief.expertTypeNeeded}
                     onChange={(event) => updateBriefField("expertTypeNeeded", event.target.value as BriefExpertType | "")}
-                    aria-invalid={Boolean(fieldError("brief.hiringPreferences.expertTypeNeeded"))}
                   >
-                    <option value="">Select one</option>
-                    <option value="builder">Builder</option>
-                    <option value="consultant">Consultant</option>
-                    <option value="maintainer">Maintainer</option>
+                    <option value="">Select type</option>
+                    <option value="builder">Builder (Implementer)</option>
+                    <option value="consultant">Consultant (Advisor)</option>
+                    <option value="maintainer">Maintainer (Support)</option>
                   </select>
                   <FieldErrorText message={fieldError("brief.hiringPreferences.expertTypeNeeded")} />
-                  <p className={helperTextClassName}>Builder = implement, consultant = advise, maintainer = improve and support an existing system.</p>
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="handoffExpectation">Handoff / training expectation</Label>
+                  <Label htmlFor="handoffExpectation" className="text-slate-300 uppercase text-xs tracking-wider font-bold">Handoff Expectation</Label>
                   <select
                     id="handoffExpectation"
                     className={cn(
-                      "w-full rounded-xl border border-[var(--color-border)] bg-[var(--color-bg-elevated)] px-4 py-3 text-sm text-white",
+                       customInputClasses, "h-14 px-4 appearance-none [&>option]:bg-zinc-900 border-white/10",
                       fieldError("brief.hiringPreferences.handoffExpectation") && errorFieldClassName
                     )}
                     value={formData.brief.handoffExpectation}
-                    onChange={(event) =>
-                      updateBriefField("handoffExpectation", event.target.value as BriefHandoffExpectation | "")
-                    }
-                    aria-invalid={Boolean(fieldError("brief.hiringPreferences.handoffExpectation"))}
+                    onChange={(event) => updateBriefField("handoffExpectation", event.target.value as BriefHandoffExpectation | "")}
                   >
-                    <option value="">Select one</option>
+                    <option value="">Select expectation</option>
                     <option value="none">No handoff needed</option>
                     <option value="documentation">Documentation handoff</option>
                     <option value="training">Training only</option>
-                    <option value="documentation_and_training">Documentation and training</option>
+                    <option value="documentation_and_training">Documentation & Training</option>
                   </select>
                   <FieldErrorText message={fieldError("brief.hiringPreferences.handoffExpectation")} />
-                  <p className={helperTextClassName}>This keeps delivery expectations clear before you start comparing proposals.</p>
+                </div>
+                
+                <div className="space-y-2 md:col-span-2 pt-2">
+                    <Label className="text-slate-300 uppercase text-xs tracking-wider font-bold">Visibility Settings</Label>
+                    <div className="flex items-center justify-between p-5 rounded-xl bg-black/40 border border-white/10">
+                      <div className="flex items-center gap-4">
+                        <div className="size-10 bg-white/5 rounded-lg flex items-center justify-center">
+                          <span className="material-symbols-outlined text-gray-400">public</span>
+                        </div>
+                        <div>
+                          <p className="font-bold text-white text-sm">Public Project</p>
+                          <p className="text-xs text-gray-500">Visible to all verified experts on the marketplace.</p>
+                        </div>
+                      </div>
+                      <label className="relative inline-flex items-center cursor-pointer">
+                        <input 
+                          type="checkbox" 
+                          className="sr-only peer" 
+                          checked={formData.visibility === "public"}
+                          onChange={(e) => updateField("visibility", e.target.checked ? "public" : "invite_only")}
+                        />
+                        <div className="w-12 h-6 bg-zinc-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                      </label>
+                    </div>
                 </div>
               </div>
             </section>
 
-            <div className="flex flex-wrap items-center justify-between gap-3 pt-2">
-              <p className="inline-flex items-center gap-2 text-xs text-slate-400">
-                <Sparkles className="h-4 w-4 text-amber-300" />
-                Stronger briefs reduce generic bidding and make your shortlist easier to trust.
-              </p>
-              <Button type="submit" disabled={isSubmitting}>
-                {isSubmitting ? "Publishing..." : "Publish project"}
-              </Button>
+            {/* CTA Button styled precisely as the Stitch mock */}
+            <div className="pt-6 relative w-full overflow-hidden">
+               {/* Background glow on button hover */}
+               <div className="absolute inset-0 bg-primary/20 blur-2xl group-hover:bg-primary/40 transition-all rounded-full pointer-events-none"></div>
+               <button 
+                  type="submit" 
+                  disabled={isSubmitting}
+                  className="group relative w-full bg-primary hover:bg-primary/90 text-white font-extrabold text-lg py-5 rounded-2xl shadow-[0_0_30px_rgba(244,37,89,0.3)] transition-all flex items-center justify-center gap-3 overflow-hidden"
+                >
+                  <span className="relative z-10">{isSubmitting ? "Publishing..." : "Post Project Now"}</span>
+                  {!isSubmitting && <span className="material-symbols-outlined relative z-10 group-hover:scale-110 transition-transform">rocket_launch</span>}
+                  
+                  {/* Subtle shine effect */}
+                  <div className="absolute top-0 -left-[100%] w-1/2 h-full bg-gradient-to-r from-transparent via-white/20 to-transparent skew-x-[-20deg] group-hover:left-[200%] transition-all duration-1000 ease-out"></div>
+               </button>
+               <p className="text-center text-sm text-zinc-500 flex items-center justify-center gap-1.5 mt-4 font-semibold">
+                  <span className="material-symbols-outlined text-[16px] text-green-400">verified_user</span>
+                   Your project will be accessible instantly after posting.
+               </p>
+            </div>
+          </form>
+
+          {/* Sticky Health Tracker Sidebar (Styled as glass panel) */}
+          <div className="hidden xl:block sticky top-24 space-y-6">
+            <div 
+              className="rounded-3xl border border-white/10 p-6 shadow-2xl space-y-6 relative overflow-hidden"
+              style={{ background: 'rgba(24, 24, 27, 0.4)', backdropFilter: 'blur(20px)' }}
+            >
+               {/* Decorative background circle */}
+               <div className="absolute -top-10 -right-10 size-40 bg-primary/10 rounded-full blur-[40px]"></div>
+               
+               <div>
+                 <p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-500 mb-1">Brief Health</p>
+                 <div className="flex items-end justify-between">
+                    <h3 className="text-4xl font-black text-white">{briefQuality.score}%</h3>
+                    <p className="text-sm text-slate-400 font-medium mb-1">
+                      {briefQuality.completed} / {briefQuality.total} Signals
+                    </p>
+                 </div>
+                 
+                 <div className="mt-4 h-2.5 overflow-hidden rounded-full bg-black/50 border border-white/5 relative">
+                   <div 
+                     className="absolute top-0 left-0 h-full rounded-full bg-gradient-to-r from-primary to-primary transition-all duration-500 ease-out" 
+                     style={{ width: `${briefQuality.percent}%` }} 
+                   />
+                 </div>
+               </div>
+
+               <div className="pt-4 border-t border-white/10">
+                 <p className="font-bold text-white text-sm mb-3 flex items-center gap-2">
+                    <Sparkles className="h-4 w-4 text-emerald-400" /> Improvement Suggestions
+                 </p>
+                 <div className="space-y-3">
+                   {briefQuality.checklist.map((item) => (
+                     <div key={item.key} className="flex gap-3 bg-black/20 p-3 rounded-lg border border-white/5">
+                       <div className="shrink-0 mt-0.5">
+                         {item.complete ? (
+                           <CheckCircle2 className="h-4 w-4 text-emerald-400" />
+                         ) : (
+                           <CircleDashed className="h-4 w-4 text-slate-600" />
+                         )}
+                       </div>
+                       <div>
+                         <p className={`text-sm font-semibold ${item.complete ? "text-slate-200" : "text-slate-400"}`}>{item.label}</p>
+                         {!item.complete && <p className="text-xs text-slate-500 mt-1 leading-relaxed">{item.hint}</p>}
+                       </div>
+                     </div>
+                   ))}
+                 </div>
+               </div>
+
+               <div className="pt-4 border-t border-white/10">
+                 <p className="font-bold text-white text-sm mb-3">Live Preview</p>
+                 <div className="bg-black/30 rounded-xl p-4 border border-white/5">
+                    <JobBriefSignals job={{ brief: briefPayload, budgetAmount }} className="mb-2" showScore={false} />
+                 </div>
+               </div>
             </div>
           </div>
-        </form>
-
-        <ContextAside
-          eyebrow="Brief health"
-          title="Make the brief easy to evaluate."
-          description="Experts should be able to tell whether the scope fits their skills, budget, and delivery style within a minute."
-        >
-          <div className="space-y-4 text-sm text-[var(--color-text-secondary)]">
-            <div className="rounded-2xl border border-white/8 bg-white/5 p-4">
-              <div className="flex items-center justify-between gap-3">
-                <div>
-                  <p className="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Completion</p>
-                  <p className="mt-1 text-2xl font-bold text-white">{briefQuality.score}%</p>
-                </div>
-                <div className="text-right text-xs text-slate-400">
-                  <p>{briefQuality.completed} of {briefQuality.total} hiring signals</p>
-                  <p className="mt-1">Budget counts too, so pricing helps the score.</p>
-                </div>
-              </div>
-              <div className="mt-4 h-2 overflow-hidden rounded-full bg-white/10">
-                <div className="h-full rounded-full bg-[var(--color-primary)] transition-[width] duration-300" style={{ width: `${briefQuality.percent}%` }} />
-              </div>
-            </div>
-
-            <div className="rounded-2xl border border-white/8 bg-white/5 p-4">
-              <p className="font-semibold text-white">Primary signals</p>
-              <JobBriefSignals job={{ brief: briefPayload, budgetAmount }} className="mt-3" showScore={false} />
-            </div>
-
-            <div className="rounded-2xl border border-white/8 bg-white/5 p-4">
-              <p className="font-semibold text-white">What is still missing?</p>
-              <div className="mt-3 space-y-2">
-                {briefQuality.checklist.map((item) => (
-                  <div key={item.key} className="flex items-start gap-3">
-                    {item.complete ? (
-                      <CheckCircle2 className="mt-0.5 h-4 w-4 text-emerald-300" />
-                    ) : (
-                      <CircleDashed className="mt-0.5 h-4 w-4 text-slate-500" />
-                    )}
-                    <div>
-                      <p className={item.complete ? "text-white" : "text-slate-300"}>{item.label}</p>
-                      <p className="text-xs text-slate-500">{item.hint}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="rounded-2xl border border-white/8 bg-white/5 p-4">
-              <p className="font-semibold text-white">Current snapshot</p>
-              <div className="mt-3 space-y-2 text-sm text-slate-300">
-                <p>
-                  <span className="text-slate-500">Outcome:</span> {briefPayload?.outcome || "Not added yet"}
-                </p>
-                <p>
-                  <span className="text-slate-500">Systems named:</span>{" "}
-                  {(briefPayload?.systems?.length || 0) + (briefPayload?.integrations?.length || 0)}
-                </p>
-                <p>
-                  <span className="text-slate-500">Timeline:</span> {briefPayload?.timeline || "No urgency shown yet"}
-                </p>
-                <p className="inline-flex items-center gap-2 text-xs text-slate-400">
-                  <Clock3 className="h-4 w-4 text-sky-300" />
-                  The more specific your timing and constraints, the fewer "need more info" replies you will get.
-                </p>
-              </div>
-            </div>
-          </div>
-        </ContextAside>
+        </div>
       </div>
     </div>
   );

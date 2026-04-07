@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>n8nExperts - Expert Onboarding Wizard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#f42559",
+                        "background-light": "#f8f5f6",
+                        "background-dark": "#12080a",
+                        "card-dark": "rgba(34, 16, 20, 0.7)",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        .glassmorphism {
+            background: rgba(39, 27, 30, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(244, 37, 89, 0.1);
+        }
+        .glow-pink {
+            filter: drop-shadow(0 0 8px rgba(244, 37, 89, 0.6));
+        }
+        .stepper-line {
+            height: 2px;
+            flex-grow: 1;
+            background: #39282c;
+        }
+        .stepper-line.active {
+            background: #f42559;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-white min-h-screen flex flex-col">
+<!-- Top Navigation Bar / Stepper Header -->
+<header class="w-full border-b border-white/5 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md sticky top-0 z-50">
+<div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="bg-primary p-1.5 rounded-lg">
+<span class="material-symbols-outlined text-white text-2xl">hub</span>
+</div>
+<h1 class="text-xl font-bold tracking-tight">n8nExperts</h1>
+</div>
+<!-- Progress Stepper -->
+<div class="hidden md:flex items-center gap-2 flex-1 max-w-2xl px-12">
+<div class="flex flex-col items-center gap-1 group">
+<div class="size-10 rounded-full bg-primary flex items-center justify-center glow-pink border-2 border-primary">
+<span class="material-symbols-outlined text-white text-xl">person</span>
+</div>
+<span class="text-[10px] uppercase tracking-wider font-bold text-primary">Profile</span>
+</div>
+<div class="stepper-line mb-4"></div>
+<div class="flex flex-col items-center gap-1 opacity-40">
+<div class="size-10 rounded-full bg-[#271b1e] border border-white/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-xl">payments</span>
+</div>
+<span class="text-[10px] uppercase tracking-wider font-bold">Rate</span>
+</div>
+<div class="stepper-line mb-4"></div>
+<div class="flex flex-col items-center gap-1 opacity-40">
+<div class="size-10 rounded-full bg-[#271b1e] border border-white/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-xl">work</span>
+</div>
+<span class="text-[10px] uppercase tracking-wider font-bold">Portfolio</span>
+</div>
+<div class="stepper-line mb-4"></div>
+<div class="flex flex-col items-center gap-1 opacity-40">
+<div class="size-10 rounded-full bg-[#271b1e] border border-white/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-xl">account_balance_wallet</span>
+</div>
+<span class="text-[10px] uppercase tracking-wider font-bold">Payment</span>
+</div>
+<div class="stepper-line mb-4"></div>
+<div class="flex flex-col items-center gap-1 opacity-40">
+<div class="size-10 rounded-full bg-[#271b1e] border border-white/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-xl">check_circle</span>
+</div>
+<span class="text-[10px] uppercase tracking-wider font-bold">Done</span>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<button class="size-10 flex items-center justify-center rounded-lg hover:bg-white/5 transition-colors">
+<span class="material-symbols-outlined">help_outline</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="flex-1 max-w-7xl mx-auto w-full px-6 py-12 relative">
+<div class="flex flex-col lg:flex-row gap-12">
+<!-- Form Container -->
+<div class="flex-1 max-w-2xl mx-auto lg:mx-0">
+<div class="mb-10 text-center lg:text-left">
+<h2 class="text-3xl md:text-4xl font-extrabold text-white mb-4">Create Your Professional Profile</h2>
+<p class="text-slate-400 text-lg leading-relaxed">Let's set up your identity on the platform. High-quality profiles receive 3x more invitations from premium clients.</p>
+</div>
+<div class="flex flex-col gap-8">
+<!-- Profile Picture Upload -->
+<div class="flex flex-col items-center lg:items-start gap-4">
+<label class="text-sm font-semibold text-slate-300 uppercase tracking-widest">Profile Picture</label>
+<div class="relative group cursor-pointer">
+<div class="size-36 rounded-full border-2 border-dashed border-white/20 flex items-center justify-center bg-[#1a0c0e] hover:border-primary/50 transition-all overflow-hidden">
+<span class="material-symbols-outlined text-4xl text-primary glow-pink">add_a_photo</span>
+</div>
+<div class="absolute bottom-1 right-1 size-10 rounded-full bg-primary flex items-center justify-center text-white shadow-lg shadow-primary/40 border-4 border-background-dark">
+<span class="material-symbols-outlined text-xl">add</span>
+</div>
+</div>
+<p class="text-xs text-slate-500 font-medium">Recommended: Square PNG/JPG, min 500x500px</p>
+</div>
+<!-- Input Fields -->
+<div class="flex flex-col gap-6">
+<div class="flex flex-col gap-2">
+<label class="text-sm font-semibold text-slate-300 uppercase tracking-widest">Job Title</label>
+<input class="w-full glassmorphism h-14 rounded-xl px-4 text-white placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" placeholder="e.g. n8n Automation Architect" type="text"/>
+</div>
+<div class="flex flex-col gap-2">
+<div class="flex justify-between items-end mb-1">
+<label class="text-sm font-semibold text-slate-300 uppercase tracking-widest">Professional Bio</label>
+<span class="text-[10px] text-slate-500 uppercase font-bold">324 / 1000 characters</span>
+</div>
+<textarea class="w-full glassmorphism rounded-xl p-4 text-white placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all resize-none" placeholder="Describe your experience with n8n, specific nodes you've built, and complex workflows you've managed..." rows="6"></textarea>
+</div>
+</div>
+</div>
+</div>
+<!-- Pro Tip Sidebar -->
+<aside class="w-full lg:w-80 flex-shrink-0">
+<div class="glassmorphism rounded-2xl p-6 sticky top-32 border-l-4 border-l-primary">
+<div class="flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-primary">lightbulb</span>
+<h3 class="font-bold text-white text-lg">Pro Tip</h3>
+</div>
+<p class="text-sm text-slate-300 leading-relaxed mb-4">
+                        To attract high-value n8n clients, focus your bio on <span class="text-primary font-semibold">results</span> rather than just tools. 
+                    </p>
+<ul class="text-sm text-slate-400 space-y-3">
+<li class="flex gap-2">
+<span class="material-symbols-outlined text-primary text-sm">check_circle</span>
+<span>Mention specific integrations (e.g., Salesforce, Stripe).</span>
+</li>
+<li class="flex gap-2">
+<span class="material-symbols-outlined text-primary text-sm">check_circle</span>
+<span>Highlight time or money saved for past clients.</span>
+</li>
+<li class="flex gap-2">
+<span class="material-symbols-outlined text-primary text-sm">check_circle</span>
+<span>List custom node development skills if applicable.</span>
+</li>
+</ul>
+<div class="mt-6 pt-6 border-t border-white/5">
+<div class="bg-primary/10 rounded-lg p-3">
+<p class="text-[11px] text-primary font-bold uppercase tracking-tighter">Profile Strength</p>
+<div class="w-full bg-white/10 h-1.5 rounded-full mt-2">
+<div class="bg-primary h-full rounded-full w-1/4"></div>
+</div>
+</div>
+</div>
+</div>
+</aside>
+</div>
+</main>
+<!-- Fixed Bottom Navigation -->
+<footer class="w-full border-t border-white/5 bg-background-light/90 dark:bg-background-dark/90 backdrop-blur-xl py-6 px-6 mt-12 sticky bottom-0">
+<div class="max-w-7xl mx-auto flex items-center justify-between">
+<button class="px-8 py-3 rounded-xl border border-white/10 text-slate-400 font-bold hover:bg-white/5 hover:text-white transition-all flex items-center gap-2 group">
+<span class="material-symbols-outlined text-lg group-hover:-translate-x-1 transition-transform">arrow_back</span>
+                Back
+            </button>
+<div class="flex items-center gap-6">
+<span class="hidden sm:inline text-xs text-slate-500 font-medium uppercase tracking-widest">Step 1 of 5</span>
+<button class="px-10 py-3 rounded-xl bg-primary text-white font-bold hover:bg-primary/90 transition-all shadow-xl shadow-primary/20 flex items-center gap-2 group">
+                    Continue to Next Step
+                    <span class="material-symbols-outlined text-lg group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</button>
+</div>
+</div>
+</footer>
+<!-- Background Decoration -->
+<div class="fixed top-0 right-0 -z-10 w-1/3 h-1/2 bg-primary/5 blur-[120px] rounded-full pointer-events-none"></div>
+<div class="fixed bottom-0 left-0 -z-10 w-1/4 h-1/3 bg-primary/10 blur-[100px] rounded-full pointer-events-none"></div>
+</body></html>

@@ -1,11 +1,9 @@
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { ArrowRight, BriefcaseBusiness, UserRoundCog } from "lucide-react";
 import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { usePageMeta } from "@/hooks/usePageMeta";
 import { cn } from "@/lib/utils";
 import type { Role } from "@/types";
-import { ContextAside } from "@/components/layout/PagePrimitives";
 import { errorFieldClassName, FieldErrorText, FormBanner } from "@/components/forms/FormFeedback";
 import { createLocalFormFeedback, getFieldFeedback, getFormFeedback } from "@/lib/form-feedback";
 import { buildLoginPath, readAuthIntent, resolvePostAuthPath } from "@/lib/auth-intent";
@@ -91,181 +89,231 @@ export default function Register() {
   const confirmPasswordError = getFieldFeedback(feedback, "confirmPassword");
 
   return (
-    <div className="min-h-[calc(100vh-4rem)] px-4 py-10">
-      <div className="container grid gap-6 lg:grid-cols-[0.95fr_0.8fr]">
-        <section className="glass rounded-3xl p-7 md:p-8">
-          <h2 className="text-2xl font-extrabold text-white">{role === "expert" ? "Create expert account" : "Create client account"}</h2>
-          <p className="mt-2 text-sm text-slate-300">
-            {role === "expert"
-              ? "Set up your profile, show proof of your work, and start applying to jobs."
-              : "Post projects, compare experts, and manage applicants from one workflow."}
-          </p>
+    <div className="min-h-screen flex flex-col font-display text-white relative" style={{
+      backgroundImage: `
+        radial-gradient(circle at 0% 0%, rgba(244, 37, 89, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 100% 100%, rgba(244, 37, 89, 0.08) 0%, transparent 40%),
+        linear-gradient(to right, rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255,255,255,0.02) 1px, transparent 1px)`,
+      backgroundSize: '100% 100%, 100% 100%, 40px 40px, 40px 40px',
+    }}>
 
-          <div className="mt-5 grid gap-3 sm:grid-cols-2">
+      <main className="flex-1 flex flex-col items-center justify-center px-4 py-12">
+        <div className="w-full max-w-[640px] flex flex-col gap-8">
+          {/* Hero Header */}
+          <div className="text-center space-y-2">
+            <h1 className="text-white tracking-tight text-4xl font-extrabold leading-tight">Create your account</h1>
+            <p className="text-slate-400 text-lg font-medium">Join the world&apos;s leading n8n automation marketplace.</p>
+          </div>
+
+          {/* Role Selection Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Client Card */}
             <button
               type="button"
               onClick={() => setRole("client")}
-              className={`flex items-center justify-between rounded-2xl border px-4 py-3 text-left transition ${
+              className={cn(
+                "p-6 rounded-xl cursor-pointer flex flex-col gap-4 transition-all text-left",
+                "backdrop-blur-xl border",
                 role === "client"
-                  ? "border-primary/45 bg-primary/12 text-white"
-                  : "border-white/10 bg-white/6 text-slate-300 hover:border-white/25 hover:text-white"
-              }`}
+                  ? "border-primary shadow-[0_0_20px_rgba(244,37,89,0.15),inset_0_0_10px_rgba(244,37,89,0.05)]"
+                  : "border-white/5 hover:border-white/20"
+              )}
+              style={{ background: 'rgba(22, 17, 18, 0.7)' }}
             >
-              <span>
-                <p className="text-sm font-semibold">Client Workspace</p>
-                <p className="mt-1 text-xs text-[var(--color-text-secondary)]">Post jobs and hire experts</p>
-              </span>
-              <BriefcaseBusiness className="h-4 w-4" />
+              <div className="flex justify-between items-start">
+                <div className={cn(
+                  "size-12 rounded-lg flex items-center justify-center",
+                  role === "client" ? "bg-primary/20 text-primary" : "bg-white/5 text-slate-300"
+                )}>
+                  <span className="material-symbols-outlined text-3xl">person</span>
+                </div>
+                <div className={cn(
+                  "size-5 rounded-full border-2 flex items-center justify-center",
+                  role === "client" ? "border-primary" : "border-white/10"
+                )}>
+                  {role === "client" && <div className="size-2.5 rounded-full bg-primary"></div>}
+                </div>
+              </div>
+              <div>
+                <h3 className="text-white text-lg font-bold">I&apos;m a Client</h3>
+                <p className="text-slate-400 text-sm leading-relaxed mt-1">I want to hire an expert to build my workflows.</p>
+              </div>
             </button>
+
+            {/* Expert Card */}
             <button
               type="button"
               onClick={() => setRole("expert")}
-              className={`flex items-center justify-between rounded-2xl border px-4 py-3 text-left transition ${
+              className={cn(
+                "p-6 rounded-xl cursor-pointer flex flex-col gap-4 transition-all text-left",
+                "backdrop-blur-xl border",
                 role === "expert"
-                  ? "border-primary/45 bg-primary/12 text-white"
-                  : "border-white/10 bg-white/6 text-slate-300 hover:border-white/25 hover:text-white"
-              }`}
+                  ? "border-primary shadow-[0_0_20px_rgba(244,37,89,0.15),inset_0_0_10px_rgba(244,37,89,0.05)]"
+                  : "border-white/5 hover:border-white/20"
+              )}
+              style={{ background: 'rgba(22, 17, 18, 0.7)' }}
             >
-              <span>
-                <p className="text-sm font-semibold">Expert Workspace</p>
-                <p className="mt-1 text-xs text-[var(--color-text-secondary)]">Show your work and apply to jobs</p>
-              </span>
-              <UserRoundCog className="h-4 w-4" />
+              <div className="flex justify-between items-start">
+                <div className={cn(
+                  "size-12 rounded-lg flex items-center justify-center",
+                  role === "expert" ? "bg-primary/20 text-primary" : "bg-white/5 text-slate-300"
+                )}>
+                  <span className="material-symbols-outlined text-3xl">business_center</span>
+                </div>
+                <div className={cn(
+                  "size-5 rounded-full border-2 flex items-center justify-center",
+                  role === "expert" ? "border-primary" : "border-white/10"
+                )}>
+                  {role === "expert" && <div className="size-2.5 rounded-full bg-primary"></div>}
+                </div>
+              </div>
+              <div>
+                <h3 className="text-white text-lg font-bold">I&apos;m an Expert</h3>
+                <p className="text-slate-400 text-sm leading-relaxed mt-1">I want to offer my n8n automation services.</p>
+              </div>
             </button>
           </div>
 
-          <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
-            <div>
-              <label className="text-xs font-bold uppercase tracking-[0.16em] text-slate-400">Username</label>
-              <input
-                className={cn(
-                  "mt-1.5 w-full rounded-xl border border-white/10 bg-white/5 px-3.5 py-2.5 text-white outline-none transition focus:border-primary/70 focus:ring-1 focus:ring-primary/60",
-                  usernameError && errorFieldClassName
-                )}
-                value={formData.username}
-                onChange={(e) => {
-                  setFormData((prev) => ({ ...prev, username: e.target.value }));
-                  if (feedback) {
-                    setFeedback(null);
-                  }
-                }}
-                aria-invalid={Boolean(usernameError)}
-                required
-              />
-              <FieldErrorText message={usernameError} className="mt-2" />
-            </div>
-            <div>
-              <label className="text-xs font-bold uppercase tracking-[0.16em] text-slate-400">Email</label>
-              <input
-                type="email"
-                className={cn(
-                  "mt-1.5 w-full rounded-xl border border-white/10 bg-white/5 px-3.5 py-2.5 text-white outline-none transition focus:border-primary/70 focus:ring-1 focus:ring-primary/60",
-                  emailError && errorFieldClassName
-                )}
-                value={formData.email}
-                onChange={(e) => {
-                  setFormData((prev) => ({ ...prev, email: e.target.value }));
-                  if (feedback) {
-                    setFeedback(null);
-                  }
-                }}
-                aria-invalid={Boolean(emailError)}
-                required
-              />
-              <FieldErrorText message={emailError} className="mt-2" />
-            </div>
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div>
-                <label className="text-xs font-bold uppercase tracking-[0.16em] text-slate-400">Password</label>
+          {/* Social Auth */}
+          <button className="w-full flex items-center justify-center gap-3 h-12 rounded-lg bg-white/5 border border-white/10 text-white font-bold hover:bg-white/10 transition">
+            <svg className="w-5 h-5" viewBox="0 0 24 24">
+              <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
+              <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
+              <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05" />
+              <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
+            </svg>
+            Continue with Google
+          </button>
+
+          {/* Separator */}
+          <div className="flex items-center gap-4">
+            <div className="h-px flex-1 bg-white/10"></div>
+            <span className="text-slate-500 text-xs font-bold uppercase tracking-widest">or continue with email</span>
+            <div className="h-px flex-1 bg-white/10"></div>
+          </div>
+
+          {/* Registration Form */}
+          <form className="grid grid-cols-1 md:grid-cols-2 gap-4" onSubmit={handleSubmit}>
+            <div className="md:col-span-2 flex flex-col gap-1.5">
+              <label className="text-sm font-bold text-slate-300 ml-1">Username</label>
+              <div className="relative group">
+                <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-xl group-focus-within:text-primary transition">person</span>
                 <input
-                  type="password"
                   className={cn(
-                    "mt-1.5 w-full rounded-xl border border-white/10 bg-white/5 px-3.5 py-2.5 text-white outline-none transition focus:border-primary/70 focus:ring-1 focus:ring-primary/60",
+                    "w-full bg-white/5 border border-white/10 rounded-lg h-12 pl-11 pr-4 text-white focus:ring-2 focus:ring-primary focus:border-transparent transition placeholder:text-slate-600 outline-none",
+                    usernameError && errorFieldClassName
+                  )}
+                  placeholder="johndoe"
+                  type="text"
+                  value={formData.username}
+                  onChange={(e) => {
+                    setFormData((prev) => ({ ...prev, username: e.target.value }));
+                    if (feedback) setFeedback(null);
+                  }}
+                  aria-invalid={Boolean(usernameError)}
+                  required
+                />
+              </div>
+              <FieldErrorText message={usernameError} className="mt-1" />
+            </div>
+
+            <div className="md:col-span-2 flex flex-col gap-1.5">
+              <label className="text-sm font-bold text-slate-300 ml-1">Email Address</label>
+              <div className="relative group">
+                <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-xl group-focus-within:text-primary transition">mail</span>
+                <input
+                  className={cn(
+                    "w-full bg-white/5 border border-white/10 rounded-lg h-12 pl-11 pr-4 text-white focus:ring-2 focus:ring-primary focus:border-transparent transition placeholder:text-slate-600 outline-none",
+                    emailError && errorFieldClassName
+                  )}
+                  placeholder="john@example.com"
+                  type="email"
+                  value={formData.email}
+                  onChange={(e) => {
+                    setFormData((prev) => ({ ...prev, email: e.target.value }));
+                    if (feedback) setFeedback(null);
+                  }}
+                  aria-invalid={Boolean(emailError)}
+                  required
+                />
+              </div>
+              <FieldErrorText message={emailError} className="mt-1" />
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <label className="text-sm font-bold text-slate-300 ml-1">Password</label>
+              <div className="relative group">
+                <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-xl group-focus-within:text-primary transition">lock</span>
+                <input
+                  className={cn(
+                    "w-full bg-white/5 border border-white/10 rounded-lg h-12 pl-11 pr-4 text-white focus:ring-2 focus:ring-primary focus:border-transparent transition placeholder:text-slate-600 outline-none",
                     passwordError && errorFieldClassName
                   )}
+                  placeholder="••••••••"
+                  type="password"
                   value={formData.password}
                   onChange={(e) => {
                     setFormData((prev) => ({ ...prev, password: e.target.value }));
-                    if (feedback) {
-                      setFeedback(null);
-                    }
+                    if (feedback) setFeedback(null);
                   }}
                   aria-invalid={Boolean(passwordError)}
                   required
                 />
-                <FieldErrorText message={passwordError} className="mt-2" />
               </div>
-              <div>
-                <label className="text-xs font-bold uppercase tracking-[0.16em] text-slate-400">Confirm Password</label>
+              <FieldErrorText message={passwordError} className="mt-1" />
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <label className="text-sm font-bold text-slate-300 ml-1">Confirm Password</label>
+              <div className="relative group">
+                <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-xl group-focus-within:text-primary transition">lock_clock</span>
                 <input
-                  type="password"
                   className={cn(
-                    "mt-1.5 w-full rounded-xl border border-white/10 bg-white/5 px-3.5 py-2.5 text-white outline-none transition focus:border-primary/70 focus:ring-1 focus:ring-primary/60",
+                    "w-full bg-white/5 border border-white/10 rounded-lg h-12 pl-11 pr-4 text-white focus:ring-2 focus:ring-primary focus:border-transparent transition placeholder:text-slate-600 outline-none",
                     confirmPasswordError && errorFieldClassName
                   )}
+                  placeholder="••••••••"
+                  type="password"
                   value={formData.confirmPassword}
                   onChange={(e) => {
                     setFormData((prev) => ({ ...prev, confirmPassword: e.target.value }));
-                    if (feedback) {
-                      setFeedback(null);
-                    }
+                    if (feedback) setFeedback(null);
                   }}
                   aria-invalid={Boolean(confirmPasswordError)}
                   required
                 />
-                <FieldErrorText message={confirmPasswordError} className="mt-2" />
               </div>
+              <FieldErrorText message={confirmPasswordError} className="mt-1" />
             </div>
 
-            <FormBanner message={feedback?.summary} />
-
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3 text-sm font-bold text-white shadow-[0_8px_25px_var(--color-primary-glow)] transition hover:bg-primary-hover disabled:opacity-60"
-            >
-              {isLoading ? "Creating account..." : `Sign up as ${role}`}
-              <ArrowRight className="h-4 w-4" />
-            </button>
+            {/* Submit Action */}
+            <div className="md:col-span-2 mt-4">
+              <FormBanner message={feedback?.summary} />
+              <button
+                className="w-full h-14 bg-primary text-white font-extrabold rounded-lg text-lg shadow-lg shadow-primary/20 hover:scale-[1.01] hover:brightness-110 active:scale-[0.99] transition-all disabled:opacity-60"
+                type="submit"
+                disabled={isLoading}
+              >
+                {isLoading ? "Creating account..." : `Sign up as ${role === "client" ? "Client" : "Expert"}`}
+              </button>
+            </div>
           </form>
 
-          <div className="mt-6 rounded-2xl border border-white/8 bg-white/5 p-4 text-sm text-[var(--color-text-secondary)]">
-            <p className="font-semibold text-white">After signup</p>
-            <p className="mt-2">
-              {intent.redirectPath
-                ? `After signup, we will return you to ${intent.redirectPath}.`
-                : role === "expert"
-                  ? "You will land on your profile setup page and fill in the basics first."
-                  : "You will land in the post-project flow and can publish your brief right away."}
+          {/* Footer */}
+          <footer className="text-center pb-12">
+            <p className="text-slate-500 text-sm">
+              By clicking &quot;Sign up&quot;, you agree to our{" "}
+              <a className="text-primary hover:underline" href="#">Terms of Service</a> and{" "}
+              <a className="text-primary hover:underline" href="#">Privacy Policy</a>.
             </p>
-          </div>
-
-          <p className="mt-5 text-sm text-slate-300">
-            Already have an account?
-            <Link to={buildLoginPath(intent)} className="ml-1.5 font-semibold text-primary hover:underline">
-              Log in
-            </Link>
-          </p>
-        </section>
-
-        <ContextAside
-          eyebrow="Create account"
-          title="Choose the side of the platform you need first."
-          description="Think of this as choosing your starting point. Clients start in hiring. Experts start in profile setup and job search."
-          className="self-start"
-        >
-          <div className="space-y-3">
-            <div className="rounded-2xl border border-white/8 bg-white/5 p-4">
-              <p className="text-sm font-semibold text-white">Client accounts</p>
-              <p className="mt-2 text-sm text-[var(--color-text-secondary)]">Best for posting jobs, reviewing applicants, and talking to experts.</p>
-            </div>
-            <div className="rounded-2xl border border-white/8 bg-white/5 p-4">
-              <p className="text-sm font-semibold text-white">Expert accounts</p>
-              <p className="mt-2 text-sm text-[var(--color-text-secondary)]">Best for building a profile, publishing services, and applying to jobs.</p>
-            </div>
-          </div>
-        </ContextAside>
-      </div>
+            <p className="mt-4 text-slate-400 text-sm">
+              Already have an account?{" "}
+              <Link to={buildLoginPath(intent)} className="text-primary font-bold hover:underline">Log in</Link>
+            </p>
+          </footer>
+        </div>
+      </main>
     </div>
   );
 }
