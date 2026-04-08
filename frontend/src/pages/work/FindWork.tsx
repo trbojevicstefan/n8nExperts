@@ -7,15 +7,12 @@ import { usePageMeta } from "@/hooks/usePageMeta";
 import { useRouteFlash } from "@/hooks/useRouteFlash";
 import type { FormFeedbackState, Job } from "@/types";
 import { ProposalComposer } from "@/components/jobs/ProposalComposer";
-import { JobBriefDetails, JobBriefSignals } from "@/components/jobs/JobBriefView";
+import { JobBriefDetails } from "@/components/jobs/JobBriefView";
 import { FormBanner } from "@/components/forms/FormFeedback";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import {
-  ContextAside,
-  DenseListCard,
   EmptyState,
 } from "@/components/layout/PagePrimitives";
 import { getFormFeedback } from "@/lib/form-feedback";
@@ -39,35 +36,7 @@ const isSortOption = (value: string | null): value is SortOption =>
   value === "mostDetailed" ||
   value === "bestFit";
 
-const seriousnessVariant = (score: number) => {
-  if (score >= 70) return "success" as const;
-  if (score >= 45) return "warning" as const;
-  return "outline" as const;
-};
 
-const detailBadge = (tone: "strong" | "mixed" | "weak") => {
-  if (tone === "strong") {
-    return {
-      label: "Strong brief",
-      variant: "success" as const,
-      cardClassName: "border-emerald-400/25 bg-[linear-gradient(180deg,rgba(16,185,129,0.08),rgba(2,6,23,0.92))]",
-    };
-  }
-
-  if (tone === "mixed") {
-    return {
-      label: "Some detail",
-      variant: "warning" as const,
-      cardClassName: "border-amber-400/20 bg-[linear-gradient(180deg,rgba(245,158,11,0.06),rgba(2,6,23,0.92))]",
-    };
-  }
-
-  return {
-    label: "Needs detail",
-    variant: "outline" as const,
-    cardClassName: "border-white/10 bg-white/5",
-  };
-};
 
 export default function FindWork() {
   usePageMeta({
@@ -239,10 +208,7 @@ export default function FindWork() {
     return sorted;
   }, [jobsWithSummary, sortFilter]);
 
-  const selectedJobSummary = useMemo(
-    () => (selectedJob ? getJobMarketplaceSummary(selectedJob, expertSkills) : null),
-    [expertSkills, selectedJob]
-  );
+
 
   const saveCurrentSearch = async () => {
     if (!user || user.role !== "expert") {

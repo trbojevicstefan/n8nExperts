@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import { BriefcaseBusiness, MoreVertical, Paperclip, Search, Send, X, Video } from "lucide-react";
+import { MoreVertical, Paperclip, Search, Send, X, Video } from "lucide-react";
 import { chatApi } from "@/lib/api";
 import { useAuth } from "@/hooks/useAuth";
 import { usePageMeta } from "@/hooks/usePageMeta";

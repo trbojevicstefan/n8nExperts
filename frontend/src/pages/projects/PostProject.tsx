@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { CheckCircle2, CircleDashed, Clock3, PencilRuler, ShieldAlert, Sparkles, Target, Users, Workflow } from "lucide-react";
+import { CheckCircle2, CircleDashed, PencilRuler, ShieldAlert, Sparkles, Target, Users, Workflow } from "lucide-react";
 import { jobApi } from "@/lib/api";
 import { getJobBriefQuality } from "@/lib/hiring-signals";
 import type { BriefExpertType, BriefHandoffExpectation, JobBrief } from "@/types";
@@ -8,7 +8,6 @@ import { JobBriefSignals } from "@/components/jobs/JobBriefView";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { errorFieldClassName, FieldErrorText, FormBanner } from "@/components/forms/FormFeedback";
 import { usePageMeta } from "@/hooks/usePageMeta";
@@ -88,7 +87,6 @@ const initialFormState: PostProjectFormState = {
 };
 
 const sectionCardClassName = "rounded-2xl border border-white/10 bg-white/[0.02] p-6 lg:p-8 relative overflow-hidden transition-all hover:border-white/20";
-const helperTextClassName = "text-sm text-slate-400 font-medium";
 
 // Custom dark styled inputs
 const customInputClasses = "w-full bg-black/40 border-white/10 text-white rounded-xl focus:ring-primary focus:border-transparent placeholder:text-slate-600 transition-all";

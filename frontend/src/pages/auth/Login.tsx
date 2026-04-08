@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { usePageMeta } from "@/hooks/usePageMeta";
 import { cn } from "@/lib/utils";
-import { errorFieldClassName, FieldErrorText, FormBanner } from "@/components/forms/FormFeedback";
+import { FieldErrorText, FormBanner } from "@/components/forms/FormFeedback";
 import { getFieldFeedback, getFormFeedback } from "@/lib/form-feedback";
 import { buildRegisterPath, readAuthIntent, resolvePostAuthPath } from "@/lib/auth-intent";
 import type { FormFeedbackState } from "@/types";

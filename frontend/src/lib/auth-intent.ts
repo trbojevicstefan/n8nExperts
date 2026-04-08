@@ -9,11 +9,13 @@ export type AuthIntent = {
 const DEFAULT_POST_LOGIN_PATH: Record<Role, string> = {
   client: "/my-jobs",
   expert: "/my-applications",
+  admin: "/admin",
 };
 
 const DEFAULT_POST_REGISTER_PATH: Record<Role, string> = {
   client: "/post-project",
   expert: "/expert/setup",
+  admin: "/admin",
 };
 
 const routeActionLabels: Record<string, string> = {

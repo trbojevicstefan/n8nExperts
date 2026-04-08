@@ -1,11 +1,10 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Briefcase, CalendarDays, Globe2, Link2, Send, ShieldCheck, Star } from "lucide-react";
+import { Briefcase, Send, Star } from "lucide-react";
 import { expertApi, jobApi } from "@/lib/api";
 import { useAuth } from "@/hooks/useAuth";
 import { getServiceIncludedItems, resolveServiceShortDesc, resolveServiceShortTitle } from "@/lib/servicePresentation";
 import type { ExpertProfile as ExpertProfileType, Job, JobReview, PortfolioItem, ProfileCompleteness, Service } from "@/types";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
@@ -27,7 +26,7 @@ export default function ExpertProfile() {
   const [services, setServices] = useState<Service[]>([]);
   const [reviews, setReviews] = useState<JobReview[]>([]);
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [profileCompleteness, setProfileCompleteness] = useState<ProfileCompleteness | null>(null);
+  const [, setProfileCompleteness] = useState<ProfileCompleteness | null>(null);
   const [clientJobs, setClientJobs] = useState<Job[]>([]);
   const [selectedJobId, setSelectedJobId] = useState("");
   const [inviteMessage, setInviteMessage] = useState("");
@@ -309,8 +308,8 @@ export default function ExpertProfile() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       {portfolio.map((item) => (
                         <div key={item._id} className="group relative overflow-hidden rounded-2xl bg-[#161618] border border-white/5 hover:border-primary/50 transition-all shadow-lg flex flex-col">
-                          {item.mediaUrl ? (
-                            <div className="aspect-video bg-[#1e1e1e] bg-cover bg-center transition-transform duration-500 group-hover:scale-105" style={{ backgroundImage: `url(${item.mediaUrl})` }}></div>
+                          {(item as any).mediaUrl ? (
+                            <div className="aspect-video bg-[#1e1e1e] bg-cover bg-center transition-transform duration-500 group-hover:scale-105" style={{ backgroundImage: `url(${(item as any).mediaUrl})` }}></div>
                           ) : (
                             <div className="aspect-video bg-[#1e1e1e] border-b border-white/5 flex items-center justify-center">
                               <span className="material-symbols-outlined text-5xl text-slate-700">image</span>
