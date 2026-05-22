@@ -30,7 +30,8 @@ function ShellLayout({
   const { user } = useAuth();
   const location = useLocation();
   const chromeMode: ShellMode = user && mode === "public" ? "app" : mode;
-  const resolvedFooterVariant = user && mode === "public" ? "compact" : footerVariant;
+  const isInboxRoute = chromeMode === "app" && location.pathname === "/inbox";
+  const resolvedFooterVariant = isInboxRoute ? "none" : user && mode === "public" ? "compact" : footerVariant;
 
   useEffect(() => {
     if (chromeMode === "app" || chromeMode === "auth") {
@@ -39,20 +40,21 @@ function ShellLayout({
   }, [chromeMode, location.pathname]);
 
   return (
-    <div className={cn("app-shell", `shell-${mode}`)}>
+    <div className={cn("app-shell", `shell-${mode}`, isInboxRoute && "shell-inbox")}>
       <Navbar mode={chromeMode} />
       <main
         className={cn(
           "shell-main flex-1",
+          isInboxRoute && "min-h-0 overflow-hidden pt-0 pb-0",
           chromeMode === "public" && "pt-8 pb-22 md:pt-10 md:pb-10",
           chromeMode === "auth" && "pt-8 pb-10 md:pt-10",
-          chromeMode === "app" && "pt-8 pb-22 md:pt-10 md:pb-10"
+          chromeMode === "app" && !isInboxRoute && "pt-8 pb-22 md:pt-10 md:pb-10"
         )}
       >
         <Outlet />
       </main>
       {resolvedFooterVariant !== "none" && <Footer tone={resolvedFooterVariant} />}
-      {showMobileNav && chromeMode === "app" && <MobileNav />}
+      {showMobileNav && chromeMode === "app" && !isInboxRoute && <MobileNav />}
     </div>
   );
 }

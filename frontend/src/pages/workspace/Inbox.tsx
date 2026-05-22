@@ -197,12 +197,12 @@ export default function Inbox() {
   const selectedJob = selectedThread && typeof selectedThread.jobId !== "string" ? selectedThread.jobId : null;
 
   return (
-    <div className="flex h-[calc(100vh-80px)] w-full flex-col lg:flex-row overflow-hidden border-t border-white/10" style={{ background: '#121212' }}>
+    <div className="flex h-full min-h-0 w-full flex-col overflow-hidden border-t border-slate-200 bg-white lg:flex-row">
       {/* Left Sidebar: Conversations List */}
-      <aside className="w-full lg:w-80 xl:w-[360px] flex flex-col border-r border-white/10 bg-white/5 z-10 shrink-0">
-        <div className="p-4 space-y-4 border-b border-white/5">
+      <aside className="z-10 flex w-full shrink-0 flex-col border-r border-slate-200 bg-slate-50/70 lg:w-80 xl:w-[360px]">
+        <div className="space-y-4 border-b border-slate-200 p-4">
           <div className="flex items-center justify-between">
-            <h1 className="text-xl font-bold text-white">Messages</h1>
+            <h1 className="text-xl font-bold text-slate-900">Messages</h1>
             <button className="text-primary hover:bg-primary/10 p-1 rounded-full transition-colors">
               <span className="material-symbols-outlined font-light">edit_square</span>
             </button>
@@ -213,7 +213,7 @@ export default function Inbox() {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-[18px] w-[18px] text-slate-400 group-focus-within:text-primary transition-colors" />
             <input
               aria-label="Search threads"
-              className="w-full bg-[#1e1e1e] border-none rounded-xl pl-10 pr-4 py-2.5 text-sm focus:ring-1 focus:ring-primary transition-all placeholder:text-slate-500 text-white outline-none"
+              className="w-full rounded-xl border border-slate-200 bg-white py-2.5 pl-10 pr-4 text-sm text-slate-900 outline-none transition-all placeholder:text-slate-400 focus:border-primary/60 focus:ring-1 focus:ring-primary/25"
               placeholder="Search conversations..."
               value={threadSearch}
               onChange={(event) => setThreadSearch(event.target.value)}
@@ -227,7 +227,7 @@ export default function Inbox() {
           {!loadingThreads && threads.length === 0 && (
              <div className="p-8 text-center">
                <span className="material-symbols-outlined text-4xl text-slate-600 mb-2">forum</span>
-               <p className="text-sm font-semibold text-white">No messages yet</p>
+               <p className="text-sm font-semibold text-slate-900">No messages yet</p>
                <p className="text-xs text-slate-500 mt-1">Threads appear after an invitation or application.</p>
              </div>
           )}
@@ -244,7 +244,7 @@ export default function Inbox() {
                 className={`flex items-center gap-3 px-4 py-4 cursor-pointer transition-colors border-l-4 ${
                   isSelected 
                     ? "bg-primary/10 border-primary" 
-                    : "border-transparent hover:bg-white/5"
+                    : "border-transparent hover:bg-slate-100"
                 }`}
               >
                 <div className="relative shrink-0">
@@ -252,7 +252,7 @@ export default function Inbox() {
                     className="aspect-square bg-cover bg-center rounded-full size-12"
                     style={{
                       backgroundImage: peer?.img ? `url('${peer.img}')` : undefined,
-                      backgroundColor: !peer?.img ? (isSelected ? 'rgba(244,37,89,0.2)' : '#1e1e1e') : undefined
+                      backgroundColor: !peer?.img ? (isSelected ? "rgba(244, 37, 89, 0.15)" : "#e2e8f0") : undefined,
                     }}
                   >
                      {!peer?.img && (
@@ -261,14 +261,14 @@ export default function Inbox() {
                         </div>
                      )}
                   </div>
-                  <div className={`absolute bottom-0 right-0 size-3.5 rounded-full border-2 border-[#121212] ${
+                  <div className={`absolute bottom-0 right-0 size-3.5 rounded-full border-2 border-white ${
                     unread > 0 ? "bg-green-500" : "bg-slate-500"
                   }`}></div>
                 </div>
 
                 <div className="flex-1 min-w-0">
                   <div className="flex justify-between items-center mb-1">
-                    <h3 className={`font-bold text-sm truncate ${isSelected ? "text-primary" : "text-white"}`}>
+                    <h3 className={`font-bold text-sm truncate ${isSelected ? "text-primary" : "text-slate-900"}`}>
                       {peer?.username || "Participant"}
                     </h3>
                     <span className={`text-[11px] font-semibold ${unread > 0 ? "text-primary" : "text-slate-400"}`}>
@@ -294,13 +294,13 @@ export default function Inbox() {
       </aside>
 
       {/* Main Chat Window */}
-      <section className="flex-1 flex flex-col relative bg-[#121212]">
+      <section className="relative flex min-h-0 flex-1 flex-col bg-white">
         {!selectedThread ? (
-          <div className="flex-1 flex flex-col items-center justify-center text-center p-8 border-l border-white/5">
-            <div className="size-20 rounded-full bg-white/5 flex items-center justify-center mb-4">
+          <div className="flex flex-1 flex-col items-center justify-center border-l border-slate-200 p-8 text-center">
+            <div className="mb-4 flex size-20 items-center justify-center rounded-full bg-slate-100">
                <span className="material-symbols-outlined text-4xl text-slate-500">mark_email_unread</span>
             </div>
-            <h2 className="text-xl font-bold text-white mb-2">Your Messages</h2>
+            <h2 className="mb-2 text-xl font-bold text-slate-900">Your Messages</h2>
             <p className="text-sm text-slate-400 max-w-sm">
               Select a thread to start chatting. The header will show the related job and context.
             </p>
@@ -308,14 +308,14 @@ export default function Inbox() {
         ) : (
           <>
             {/* Chat Header */}
-            <header className="h-16 flex items-center justify-between px-6 border-b border-white/10 bg-[#1e1e1e]/50 backdrop-blur-md z-10 shrink-0">
+            <header className="z-10 flex h-16 shrink-0 items-center justify-between border-b border-slate-200 bg-white/95 px-6">
               <div className="flex items-center gap-3">
                 <div className="relative">
                   <div
                     className="aspect-square bg-cover bg-center rounded-full size-10"
                     style={{
                       backgroundImage: getPeer(selectedThread)?.img ? `url('${getPeer(selectedThread)?.img}')` : undefined,
-                      backgroundColor: !getPeer(selectedThread)?.img ? '#2a2a2a' : undefined
+                      backgroundColor: !getPeer(selectedThread)?.img ? "#e2e8f0" : undefined,
                     }}
                   >
                      {!getPeer(selectedThread)?.img && (
@@ -324,12 +324,12 @@ export default function Inbox() {
                         </div>
                      )}
                   </div>
-                  <div className="absolute bottom-0 right-0 size-2.5 bg-green-500 rounded-full border border-[#121212]"></div>
+                  <div className="absolute bottom-0 right-0 size-2.5 rounded-full border border-white bg-green-500"></div>
                 </div>
                 <div>
-                  <h2 className="text-sm font-bold text-white flex items-center gap-2">
+                  <h2 className="flex items-center gap-2 text-sm font-bold text-slate-900">
                     {getPeer(selectedThread)?.username || "Participant"}
-                    <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-white/10 text-slate-300">
+                    <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-medium text-slate-600">
                        {threadContextLabel(selectedThread)}
                     </span>
                   </h2>
@@ -356,7 +356,7 @@ export default function Inbox() {
                     View Job Context
                   </Link>
                 )}
-                <div className="h-6 w-[1px] bg-white/10 hidden sm:block"></div>
+                <div className="hidden h-6 w-[1px] bg-slate-200 sm:block"></div>
                 <button className="text-slate-500 hover:text-primary transition-colors">
                   <Video className="h-5 w-5" />
                 </button>
@@ -368,12 +368,12 @@ export default function Inbox() {
                     <MoreVertical className="h-5 w-5" />
                   </button>
                   {showThreadTools && (
-                    <div className="absolute right-0 top-full mt-2 z-20 w-64 rounded-xl border border-white/10 bg-[#1e1e1e] p-3 shadow-xl">
+                    <div className="absolute right-0 top-full z-20 mt-2 w-64 rounded-xl border border-slate-200 bg-white p-3 shadow-xl">
                       <p className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Search Thread</p>
                       <div className="relative">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-500" />
                         <input
-                          className="w-full bg-white/5 border border-white/10 rounded-lg pl-9 pr-3 py-1.5 text-sm text-white focus:ring-1 focus:ring-primary outline-none"
+                          className="w-full rounded-lg border border-slate-200 bg-slate-50 py-1.5 pl-9 pr-3 text-sm text-slate-800 outline-none focus:ring-1 focus:ring-primary"
                           value={messageSearch}
                           onChange={(e) => setMessageSearch(e.target.value)}
                           placeholder="Search messages..."
@@ -386,7 +386,7 @@ export default function Inbox() {
             </header>
 
             {/* Message Area Thread */}
-            <div className="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar flex flex-col bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-fixed" style={{ backgroundBlendMode: 'overlay', backgroundColor: 'rgba(18,18,18,0.98)' }}>
+            <div className="custom-scrollbar flex min-h-0 flex-1 flex-col space-y-6 overflow-y-auto bg-slate-50/70 p-6">
               
               {loadingMessages && <p className="text-sm text-slate-400 text-center">Loading messages...</p>}
               {error && <div className="rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 p-2 text-xs text-center">{error}</div>}
@@ -402,36 +402,37 @@ export default function Inbox() {
                   <div key={message._id}>
                     {showDate && (
                       <div className="flex justify-center my-6">
-                        <span className="text-[10px] uppercase tracking-widest text-slate-400 font-bold bg-white/5 px-3 py-1 rounded-full backdrop-blur-sm">
-                          {new Date(message.createdAt).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })}
+                        <span className="rounded-full bg-slate-100 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-slate-500">
+                          {new Date(message.createdAt).toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" })}
                         </span>
                       </div>
                     )}
                     
-                    <div className={`flex gap-3 max-w-[80%] ${mine ? 'self-end flex-row-reverse float-right clear-both' : 'self-start float-left clear-both'} mb-6`}>
-                      {!mine && (
-                        <div
-                          className="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-8 shrink-0 self-end mb-4"
-                          style={{
-                            backgroundImage: senderPeer?.img ? `url('${senderPeer.img}')` : undefined,
-                            backgroundColor: !senderPeer?.img ? '#2a2a2a' : undefined
-                          }}
-                        >
-                           {!senderPeer?.img && (
-                              <div className="w-full h-full flex items-center justify-center font-bold text-slate-300 text-xs">
-                                {senderPeer?.username?.charAt(0)?.toUpperCase() || "U"}
-                              </div>
-                           )}
-                        </div>
-                      )}
-                      
-                      <div className={`flex flex-col gap-1 ${mine ? 'items-end' : 'items-start'}`}>
+                    <div className={`mb-6 flex w-full ${mine ? "justify-end" : "justify-start"}`}>
+                      <div className={`flex max-w-[80%] gap-3 ${mine ? "flex-row-reverse" : "flex-row"}`}>
+                        {!mine && (
+                          <div
+                            className="mb-4 aspect-square size-8 shrink-0 self-end rounded-full bg-cover bg-center bg-no-repeat"
+                            style={{
+                              backgroundImage: senderPeer?.img ? `url('${senderPeer.img}')` : undefined,
+                              backgroundColor: !senderPeer?.img ? "#e2e8f0" : undefined,
+                            }}
+                          >
+                             {!senderPeer?.img && (
+                                <div className="flex h-full w-full items-center justify-center text-xs font-bold text-slate-600">
+                                  {senderPeer?.username?.charAt(0)?.toUpperCase() || "U"}
+                                </div>
+                             )}
+                          </div>
+                        )}
+                        
+                        <div className={`flex flex-col gap-1 ${mine ? "items-end" : "items-start"}`}>
                         {message.body && (
                           <div className={`
                             px-4 py-3 text-sm shadow-sm
                             ${mine 
-                              ? 'bg-primary text-white rounded-2xl rounded-br-none shadow-lg shadow-primary/20' 
-                              : 'bg-[#2a2a2a]/80 backdrop-blur-md rounded-2xl rounded-bl-none text-slate-100 border border-white/5'}
+                              ? "rounded-2xl rounded-br-none bg-primary text-white shadow-lg shadow-primary/20"
+                              : "rounded-2xl rounded-bl-none border border-slate-200 bg-white text-slate-800"}
                           `}>
                             {message.body}
                           </div>
@@ -448,8 +449,8 @@ export default function Inbox() {
                                 className={`
                                   flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-medium transition-colors
                                   ${mine 
-                                    ? 'bg-primary/20 text-white hover:bg-primary/30 border border-primary/30 rounded-br-none' 
-                                    : 'bg-white/5 text-slate-300 hover:bg-white/10 hover:text-white border border-white/10 rounded-bl-none'}
+                                    ? "rounded-br-none border border-primary/30 bg-primary/10 text-primary hover:bg-primary/20"
+                                    : "rounded-bl-none border border-slate-200 bg-slate-100 text-slate-700 hover:bg-slate-200 hover:text-slate-900"}
                                 `}
                               >
                                 <Paperclip className="h-3 w-3 opacity-70" />
@@ -462,30 +463,30 @@ export default function Inbox() {
                         <div className="flex items-center gap-1 mt-0.5">
                           {mine && <span className="material-symbols-outlined text-[14px] text-primary">done_all</span>}
                           <span className="text-[10px] text-slate-500">
-                            {new Date(message.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            {new Date(message.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                           </span>
                         </div>
                       </div>
                     </div>
+                    </div>
                   </div>
                 );
               })}
-              <div className="clear-both"></div>
             </div>
 
             {/* Input Area */}
-            <footer className="p-4 sm:p-6 bg-[#121212] border-t border-white/10 shrink-0">
+            <footer className="shrink-0 border-t border-slate-200 bg-white p-4 sm:p-6">
               <div className="max-w-4xl mx-auto">
                 {/* Pending attachments preview */}
                 {pendingAttachments.length > 0 && (
                   <div className="flex flex-wrap gap-2 mb-3">
                     {pendingAttachments.map(att => (
-                      <div key={att.url} className="flex items-center gap-1 bg-white/10 rounded-full pl-3 pr-1 py-1 border border-white/5 text-xs text-white">
+                      <div key={att.url} className="flex items-center gap-1 rounded-full border border-slate-200 bg-slate-100 py-1 pl-3 pr-1 text-xs text-slate-700">
                         <Paperclip className="h-3 w-3 text-slate-400" />
                         <span className="truncate max-w-[150px]">{att.name}</span>
                         <button 
                           onClick={() => removeAttachment(att.url)}
-                          className="p-1 rounded-full hover:bg-white/20 text-slate-400 hover:text-white transition-colors"
+                          className="rounded-full p-1 text-slate-400 transition-colors hover:bg-slate-200 hover:text-slate-800"
                         >
                           <X className="h-3 w-3" />
                         </button>
@@ -496,12 +497,12 @@ export default function Inbox() {
                 
                 {/* Attachment URL Input (hidden by default, triggered by paperclip) */}
                 <div className="mb-3 flex gap-2">
-                  <div className="flex-1 max-w-sm flex bg-[#1e1e1e] rounded-xl overflow-hidden border border-white/10 focus-within:border-primary/50 transition-colors">
+                  <div className="flex max-w-sm flex-1 overflow-hidden rounded-xl border border-slate-200 bg-white transition-colors focus-within:border-primary/50">
                     <input
                       value={attachmentUrl}
                       onChange={(e) => setAttachmentUrl(e.target.value)}
                       placeholder="Paste attachment link & press Enter..."
-                      className="flex-1 bg-transparent border-none text-xs text-white px-3 py-2 outline-none placeholder:text-slate-500"
+                      className="flex-1 border-none bg-transparent px-3 py-2 text-xs text-slate-900 outline-none placeholder:text-slate-400"
                       onKeyDown={(e) => {
                         if (e.key === "Enter" && attachmentUrl) {
                           e.preventDefault();
@@ -512,7 +513,7 @@ export default function Inbox() {
                     <button 
                       onClick={addAttachment}
                       disabled={!attachmentUrl}
-                      className="px-3 py-2 bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white disabled:opacity-50 transition-colors text-xs font-medium"
+                      className="bg-slate-100 px-3 py-2 text-xs font-medium text-slate-600 transition-colors hover:bg-slate-200 hover:text-slate-900 disabled:opacity-50"
                     >
                       Add
                     </button>
@@ -520,14 +521,14 @@ export default function Inbox() {
                 </div>
 
                 <div className="flex items-end gap-3">
-                  <div className="flex-1 bg-[#1e1e1e] rounded-2xl p-2 flex items-end transition-all focus-within:ring-2 focus-within:ring-primary/30 border border-white/5">
+                  <div className="flex flex-1 items-end rounded-2xl border border-slate-200 bg-white p-2 transition-all focus-within:ring-2 focus-within:ring-primary/30">
                     <label className="p-2 text-slate-400 hover:text-primary transition-colors cursor-pointer" title="Add attachment link above">
                       <Paperclip className="h-5 w-5" />
                     </label>
                     <textarea
                       value={messageText}
                       onChange={(e) => setMessageText(e.target.value)}
-                      className="flex-1 bg-transparent border-none focus:ring-0 resize-none py-2 px-2 text-sm text-white placeholder:text-slate-500 custom-scrollbar outline-none max-h-32 min-h-[40px]"
+                      className="custom-scrollbar max-h-32 min-h-[40px] flex-1 resize-none border-none bg-transparent px-2 py-2 text-sm text-slate-900 outline-none placeholder:text-slate-400 focus:ring-0"
                       placeholder="Type a message..."
                       rows={1}
                       onKeyDown={(e) => {
