@@ -1,0 +1,151 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  merge_group:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Validate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.19.0"
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            frontend/package-lock.json
+            api/package-lock.json
+
+      - name: Install root dependencies
+        run: npm ci
+
+      - name: Install frontend dependencies
+        run: npm --prefix frontend ci
+
+      - name: Install API dependencies
+        run: npm --prefix api ci
+
+      - name: Run full validation
+        run: npm run validate:all
+
+  smoke-public:
+    name: Smoke (Public)
+    runs-on: ubuntu-latest
+    needs: validate
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.19.0"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install frontend dependencies
+        run: npm --prefix frontend ci
+
+      - name: Install Playwright Chromium
+        run: npm --prefix frontend exec playwright install --with-deps chromium
+
+      - name: Run public smoke
+        run: npm run smoke:e2e:public
+
+      - name: Upload public smoke artifacts on failure
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-public-smoke-artifacts
+          path: |
+            frontend/test-results
+            frontend/playwright-report
+          if-no-files-found: ignore
+          retention-days: 7
+
+  smoke-seeded:
+    name: Smoke (Seeded)
+    runs-on: ubuntu-latest
+    needs: validate
+    if: ${{ secrets.E2E_BASE_URL != '' && secrets.E2E_CLIENT_USER != '' && secrets.E2E_CLIENT_PASS != '' && secrets.E2E_EXPERT_USER != '' && secrets.E2E_EXPERT_PASS != '' }}
+    env:
+      E2E_BASE_URL: ${{ secrets.E2E_BASE_URL }}
+      E2E_CLIENT_USER: ${{ secrets.E2E_CLIENT_USER }}
+      E2E_CLIENT_PASS: ${{ secrets.E2E_CLIENT_PASS }}
+      E2E_EXPERT_USER: ${{ secrets.E2E_EXPERT_USER }}
+      E2E_EXPERT_PASS: ${{ secrets.E2E_EXPERT_PASS }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.19.0"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install frontend dependencies
+        run: npm --prefix frontend ci
+
+      - name: Install Playwright Chromium
+        run: npm --prefix frontend exec playwright install --with-deps chromium
+
+      - name: Run seeded smoke
+        run: npm run smoke:e2e:seeded
+
+      - name: Upload seeded smoke artifacts on failure
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-seeded-smoke-artifacts
+          path: |
+            frontend/test-results
+            frontend/playwright-report
+          if-no-files-found: ignore
+          retention-days: 7
+
+  required-checks:
+    name: Required Checks
+    runs-on: ubuntu-latest
+    needs:
+      - validate
+      - smoke-public
+      - smoke-seeded
+    if: ${{ always() }}
+    steps:
+      - name: Enforce required CI outcomes
+        run: |
+          echo "validate=${{ needs.validate.result }}"
+          echo "smoke-public=${{ needs.smoke-public.result }}"
+          echo "smoke-seeded=${{ needs.smoke-seeded.result }}"
+
+          if [ "${{ needs.validate.result }}" != "success" ]; then
+            echo "Validate job must succeed."
+            exit 1
+          fi
+
+          if [ "${{ needs.smoke-public.result }}" != "success" ]; then
+            echo "Public smoke job must succeed."
+            exit 1
+          fi
+
+          if [ "${{ needs.smoke-seeded.result }}" != "success" ] && [ "${{ needs.smoke-seeded.result }}" != "skipped" ]; then
+            echo "Seeded smoke must either succeed or be skipped due to missing secrets."
+            exit 1
+          fi
+
+          echo "All required checks are in an acceptable state."

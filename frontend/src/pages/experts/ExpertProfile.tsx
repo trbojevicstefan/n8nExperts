@@ -25,7 +25,6 @@ export default function ExpertProfile() {
   const [portfolio, setPortfolio] = useState<PortfolioItem[]>([]);
   const [services, setServices] = useState<Service[]>([]);
   const [reviews, setReviews] = useState<JobReview[]>([]);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [, setProfileCompleteness] = useState<ProfileCompleteness | null>(null);
   const [clientJobs, setClientJobs] = useState<Job[]>([]);
   const [selectedJobId, setSelectedJobId] = useState("");
@@ -306,26 +305,29 @@ export default function ExpertProfile() {
                     </h3>
                     {portfolio.length === 0 && <p className="text-slate-400">No portfolio items published yet.</p>}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      {portfolio.map((item) => (
-                        <div key={item._id} className="group relative overflow-hidden rounded-2xl bg-[#161618] border border-white/5 hover:border-primary/50 transition-all shadow-lg flex flex-col">
-                          {(item as any).mediaUrl ? (
-                            <div className="aspect-video bg-[#1e1e1e] bg-cover bg-center transition-transform duration-500 group-hover:scale-105" style={{ backgroundImage: `url(${(item as any).mediaUrl})` }}></div>
-                          ) : (
-                            <div className="aspect-video bg-[#1e1e1e] border-b border-white/5 flex items-center justify-center">
-                              <span className="material-symbols-outlined text-5xl text-slate-700">image</span>
-                            </div>
-                          )}
-                          <div className="p-6 flex-1 flex flex-col">
-                            <h4 className="font-bold text-lg mb-2 text-white">{item.title}</h4>
-                            <p className="text-sm text-slate-400 mb-6 line-clamp-3 flex-1">{item.summary}</p>
-                            {item.link && (
-                              <a href={item.link} target="_blank" rel="noreferrer" className="flex items-center gap-2 text-xs font-bold text-primary group-hover:gap-3 transition-all uppercase tracking-wider">
-                                View Case Study <span className="material-symbols-outlined text-base">arrow_forward</span>
-                              </a>
+                      {portfolio.map((item) => {
+                        const imageUrl = item.imageUrl ?? (item as PortfolioItem & { mediaUrl?: string }).mediaUrl;
+                        return (
+                          <div key={item._id} className="group relative overflow-hidden rounded-2xl bg-[#161618] border border-white/5 hover:border-primary/50 transition-all shadow-lg flex flex-col">
+                            {imageUrl ? (
+                              <div className="aspect-video bg-[#1e1e1e] bg-cover bg-center transition-transform duration-500 group-hover:scale-105" style={{ backgroundImage: `url(${imageUrl})` }}></div>
+                            ) : (
+                              <div className="aspect-video bg-[#1e1e1e] border-b border-white/5 flex items-center justify-center">
+                                <span className="material-symbols-outlined text-5xl text-slate-700">image</span>
+                              </div>
                             )}
+                            <div className="p-6 flex-1 flex flex-col">
+                              <h4 className="font-bold text-lg mb-2 text-white">{item.title}</h4>
+                              <p className="text-sm text-slate-400 mb-6 line-clamp-3 flex-1">{item.summary}</p>
+                              {item.link && (
+                                <a href={item.link} target="_blank" rel="noreferrer" className="flex items-center gap-2 text-xs font-bold text-primary group-hover:gap-3 transition-all uppercase tracking-wider">
+                                  View Case Study <span className="material-symbols-outlined text-base">arrow_forward</span>
+                                </a>
+                              )}
+                            </div>
                           </div>
-                        </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   </div>
 

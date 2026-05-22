@@ -1,16 +1,46 @@
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import { ArrowRight, BriefcaseBusiness, CheckCircle2, Sparkles, Workflow } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { usePageMeta } from "@/hooks/usePageMeta";
 import { buildLoginPath, buildRegisterPath, readAuthIntent } from "@/lib/auth-intent";
 
-type Role = "client" | "expert" | null;
+type SelectableRole = "client" | "expert";
+
+const roleCards: Array<{
+  role: SelectableRole;
+  ariaLabel: string;
+  eyebrow: string;
+  title: string;
+  description: string;
+  icon: typeof BriefcaseBusiness;
+  bullets: string[];
+}> = [
+  {
+    role: "client",
+    ariaLabel: "I need to hire",
+    eyebrow: "For clients",
+    title: "I need to hire",
+    description: "Post a sharper n8n brief, compare proof, invite experts, and keep applicants organized.",
+    icon: BriefcaseBusiness,
+    bullets: ["Structured project briefs", "Expert proof and services", "Pipeline, notes, and inbox"],
+  },
+  {
+    role: "expert",
+    ariaLabel: "I want to offer services",
+    eyebrow: "For experts",
+    title: "I want to offer services",
+    description: "Build a profile clients can trust, package services, and apply to serious n8n work.",
+    icon: Sparkles,
+    bullets: ["Profile and portfolio setup", "Service offers with clear scope", "Jobs, invitations, and saved views"],
+  },
+];
 
 export default function RoleSelection() {
-  const [selectedRole, setSelectedRole] = useState<Role>(null);
+  const [selectedRole, setSelectedRole] = useState<SelectableRole | null>(null);
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const intent = readAuthIntent(searchParams);
+  const intent = useMemo(() => readAuthIntent(searchParams), [searchParams]);
 
   usePageMeta({
     title: "Choose Your Role | n8nExperts",
@@ -19,176 +49,145 @@ export default function RoleSelection() {
     noIndex: true,
   });
 
+  const continueLabel = selectedRole ? `Continue as ${selectedRole === "client" ? "Client" : "Expert"}` : "Choose a role to continue";
+
   return (
-    <div className="min-h-screen flex flex-col font-display text-white relative" style={{
-      background: `radial-gradient(circle at top right, rgba(244, 37, 89, 0.15), transparent 40%),
-                   radial-gradient(circle at bottom left, rgba(244, 37, 89, 0.1), transparent 40%)`,
-    }}>
-      <main className="flex-1 flex flex-col items-center justify-center px-4 py-12">
-        {/* Header */}
-        <div className="max-w-[800px] w-full text-center mb-12">
-          <h1 className="text-white tracking-tight text-4xl md:text-5xl font-extrabold leading-tight mb-4">
-            Join n8nExperts
-          </h1>
-          <p className="text-gray-400 text-lg md:text-xl font-medium max-w-xl mx-auto">
-            Select how you would like to use the platform to start building or hiring.
-          </p>
-        </div>
+    <div className="container py-4 md:py-8">
+      <section className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-[linear-gradient(145deg,rgba(8,11,19,0.96),rgba(15,22,35,0.88))] p-5 shadow-[0_24px_70px_rgba(0,0,0,0.28)] md:p-8 lg:p-10">
+        <div className="hero-glow hero-glow-left" />
+        <div className="hero-glow hero-glow-right" />
 
-        {/* Selection Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-[960px] w-full px-4 mb-12">
-          {/* Client Card */}
-          <button
-            type="button"
-            onClick={() => setSelectedRole("client")}
-            className={cn(
-              "relative overflow-hidden flex flex-col p-8 rounded-2xl cursor-pointer transition-all duration-300 hover:scale-[1.02] text-left",
-              "backdrop-blur-xl border",
-              selectedRole === "client"
-                ? "border-primary shadow-[0_0_20px_rgba(244,37,89,0.2)]"
-                : "border-[rgba(244,37,89,0.1)] opacity-80 hover:opacity-100 hover:border-primary/40"
-            )}
-            style={{ background: 'rgba(22, 17, 18, 0.7)' }}
-          >
-            {/* Grid pattern overlay */}
-            <div className="absolute inset-0 pointer-events-none" style={{
-              backgroundImage: 'radial-gradient(circle at 2px 2px, rgba(244, 37, 89, 0.05) 1px, transparent 0)',
-              backgroundSize: '24px 24px',
-            }}></div>
+        <div className="relative z-10 grid gap-10 lg:grid-cols-[0.82fr_1.18fr] lg:items-center">
+          <div>
+            <p className="eyebrow">Choose your path</p>
+            <h1 className="mt-5 max-w-[11ch] text-4xl font-black leading-[0.95] tracking-[-0.05em] text-white md:text-6xl">
+              Join n8nExperts
+            </h1>
+            <p className="mt-5 max-w-xl text-base leading-8 text-[var(--color-text-secondary)] md:text-lg">
+              Pick the side of the marketplace that matches what you want to do next. We will route your account setup and workspace around that choice.
+            </p>
 
-            {/* Selection Indicator */}
-            {selectedRole === "client" && (
-              <div className="absolute top-4 right-4 h-6 w-6 bg-primary rounded-full flex items-center justify-center shadow-[0_0_10px_rgba(244,37,89,0.5)]">
-                <span className="material-symbols-outlined text-white text-sm font-bold">check</span>
-              </div>
-            )}
+            <div className="mt-7 grid gap-3 rounded-[1.5rem] border border-white/10 bg-white/[0.035] p-4">
+              {[
+                "Clients start with a project brief or expert search.",
+                "Experts start with profile proof and services.",
+                "Your intended protected route is preserved through auth.",
+              ].map((item) => (
+                <div key={item} className="flex items-start gap-3 text-sm text-[var(--color-text-secondary)]">
+                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[var(--color-success)]" />
+                  <span>{item}</span>
+                </div>
+              ))}
+            </div>
+          </div>
 
-            {/* Icon */}
-            <div className={cn(
-              "relative z-10 size-16 mb-8 rounded-xl flex items-center justify-center",
-              selectedRole === "client"
-                ? "bg-primary/20 shadow-[0_0_30px_rgba(244,37,89,0.2)] border border-primary/30"
-                : "bg-white/5 border border-white/10"
-            )}>
-              <span className={cn(
-                "material-symbols-outlined text-4xl",
-                selectedRole === "client" ? "text-primary" : "text-gray-400"
-              )}>group</span>
+          <div className="grid gap-4">
+            <div className="grid gap-4 md:grid-cols-2">
+              {roleCards.map((card) => {
+                const selected = selectedRole === card.role;
+                const Icon = card.icon;
+
+                return (
+                  <button
+                    key={card.role}
+                    type="button"
+                    aria-label={card.ariaLabel}
+                    aria-pressed={selected}
+                    onClick={() => setSelectedRole(card.role)}
+                    className={cn(
+                      "group relative min-h-[23rem] overflow-hidden rounded-[1.75rem] border p-6 text-left transition duration-300",
+                      "bg-[linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.025))]",
+                      selected
+                        ? "border-[var(--color-primary)] shadow-[0_24px_60px_var(--color-primary-glow)]"
+                        : "border-white/10 opacity-90 hover:-translate-y-1 hover:border-white/25 hover:opacity-100"
+                    )}
+                  >
+                    <div className="absolute inset-x-0 top-0 h-28 bg-[radial-gradient(circle_at_50%_0%,rgba(132,216,255,0.16),transparent_65%)] opacity-80" />
+                    <div className="relative z-10 flex h-full flex-col">
+                      <div className="flex items-start justify-between gap-4">
+                        <span
+                          className={cn(
+                            "inline-flex h-14 w-14 items-center justify-center rounded-2xl border transition",
+                            selected
+                              ? "border-[var(--color-primary)] bg-[var(--color-primary)] text-white"
+                              : "border-white/10 bg-white/6 text-[var(--color-accent-cool)] group-hover:border-white/20"
+                          )}
+                        >
+                          <Icon className="h-6 w-6" />
+                        </span>
+                        <span
+                          className={cn(
+                            "inline-flex h-7 w-7 items-center justify-center rounded-full border transition",
+                            selected ? "border-[var(--color-primary)] bg-[var(--color-primary)] text-white" : "border-white/15 text-transparent"
+                          )}
+                        >
+                          <CheckCircle2 className="h-4 w-4" />
+                        </span>
+                      </div>
+
+                      <p className="mt-7 text-[11px] font-black uppercase tracking-[0.24em] text-[var(--color-text-muted)]">{card.eyebrow}</p>
+                      <h2 className="mt-3 text-2xl font-black tracking-[-0.04em] text-white">{card.title}</h2>
+                      <p className="mt-4 text-sm leading-7 text-[var(--color-text-secondary)]">{card.description}</p>
+
+                      <ul className="mt-6 space-y-3">
+                        {card.bullets.map((bullet) => (
+                          <li key={bullet} className="flex items-start gap-3 text-sm font-medium text-slate-300">
+                            <span className={cn("mt-2 h-1.5 w-1.5 shrink-0 rounded-full", selected ? "bg-[var(--color-primary)]" : "bg-[var(--color-accent-cool)]")} />
+                            <span>{bullet}</span>
+                          </li>
+                        ))}
+                      </ul>
+
+                      <div className="mt-auto pt-7 text-sm font-bold text-white">
+                        {selected ? "Selected path" : "Select this path"}
+                      </div>
+                    </div>
+                  </button>
+                );
+              })}
             </div>
 
-            <div className="relative z-10 flex-1">
-              <h3 className="text-2xl font-bold text-white mb-2">I am a Client</h3>
-              <p className="text-gray-400 mb-8 text-base">Looking to automate my business workflows with expert help.</p>
-              <ul className="space-y-4">
-                <li className="flex items-center gap-3 text-gray-300 font-medium">
-                  <span className={cn("material-symbols-outlined text-xl", selectedRole === "client" ? "text-primary" : "text-gray-600")}>check_circle</span>
-                  Hire top automation talent
-                </li>
-                <li className="flex items-center gap-3 text-gray-300 font-medium">
-                  <span className={cn("material-symbols-outlined text-xl", selectedRole === "client" ? "text-primary" : "text-gray-600")}>check_circle</span>
-                  Secure Escrow payments
-                </li>
-                <li className="flex items-center gap-3 text-gray-300 font-medium">
-                  <span className={cn("material-symbols-outlined text-xl", selectedRole === "client" ? "text-primary" : "text-gray-600")}>check_circle</span>
-                  Fast delivery &amp; support
-                </li>
-              </ul>
+            <div className="rounded-[1.5rem] border border-white/10 bg-black/20 p-4 md:p-5">
+              <button
+                type="button"
+                disabled={!selectedRole}
+                onClick={() => selectedRole && navigate(buildRegisterPath(selectedRole, intent))}
+                className={cn(
+                  "flex h-14 w-full items-center justify-center gap-2 rounded-full px-6 text-base font-black transition",
+                  selectedRole
+                    ? "bg-[var(--color-primary)] text-white shadow-[0_18px_45px_var(--color-primary-glow)] hover:bg-[var(--color-primary-hover)] active:scale-[0.98]"
+                    : "cursor-not-allowed border border-white/10 bg-white/6 text-[var(--color-text-muted)]"
+                )}
+              >
+                <span>{continueLabel}</span>
+                {selectedRole && <ArrowRight className="h-4 w-4" />}
+              </button>
+
+              {!selectedRole && (
+                <p className="mt-3 text-center text-sm text-[var(--color-text-muted)]">
+                  Choose client or expert first so the next screen matches your workflow.
+                </p>
+              )}
+
+              <p className="mt-5 text-center text-sm text-[var(--color-text-secondary)]">
+                Already have an account?{" "}
+                <Link to={buildLoginPath(intent)} className="font-bold text-white underline decoration-[var(--color-primary)]/50 underline-offset-4 hover:text-[var(--color-accent-cool)]">
+                  Log in
+                </Link>
+              </p>
             </div>
-          </button>
-
-          {/* Expert Card */}
-          <button
-            type="button"
-            onClick={() => setSelectedRole("expert")}
-            className={cn(
-              "relative overflow-hidden flex flex-col p-8 rounded-2xl cursor-pointer transition-all duration-300 hover:scale-[1.02] text-left",
-              "backdrop-blur-xl border",
-              selectedRole === "expert"
-                ? "border-primary shadow-[0_0_20px_rgba(244,37,89,0.2)]"
-                : "border-[rgba(244,37,89,0.1)] opacity-80 hover:opacity-100 hover:border-primary/40"
-            )}
-            style={{ background: 'rgba(22, 17, 18, 0.7)' }}
-          >
-            <div className="absolute inset-0 pointer-events-none" style={{
-              backgroundImage: 'radial-gradient(circle at 2px 2px, rgba(244, 37, 89, 0.05) 1px, transparent 0)',
-              backgroundSize: '24px 24px',
-            }}></div>
-
-            {selectedRole === "expert" && (
-              <div className="absolute top-4 right-4 h-6 w-6 bg-primary rounded-full flex items-center justify-center shadow-[0_0_10px_rgba(244,37,89,0.5)]">
-                <span className="material-symbols-outlined text-white text-sm font-bold">check</span>
-              </div>
-            )}
-
-            <div className={cn(
-              "relative z-10 size-16 mb-8 rounded-xl flex items-center justify-center",
-              selectedRole === "expert"
-                ? "bg-primary/20 shadow-[0_0_30px_rgba(244,37,89,0.2)] border border-primary/30"
-                : "bg-white/5 border border-white/10"
-            )}>
-              <span className={cn(
-                "material-symbols-outlined text-4xl",
-                selectedRole === "expert" ? "text-primary" : "text-gray-400"
-              )}>work</span>
-            </div>
-
-            <div className="relative z-10 flex-1">
-              <h3 className="text-2xl font-bold text-white mb-2">I am an Expert</h3>
-              <p className="text-gray-400 mb-8 text-base">Looking to provide professional n8n automation services.</p>
-              <ul className="space-y-4">
-                <li className="flex items-center gap-3 text-gray-300 font-medium">
-                  <span className={cn("material-symbols-outlined text-xl", selectedRole === "expert" ? "text-primary" : "text-gray-600")}>check_circle</span>
-                  Find high-paying gigs
-                </li>
-                <li className="flex items-center gap-3 text-gray-300 font-medium">
-                  <span className={cn("material-symbols-outlined text-xl", selectedRole === "expert" ? "text-primary" : "text-gray-600")}>check_circle</span>
-                  Work on your own terms
-                </li>
-                <li className="flex items-center gap-3 text-gray-300 font-medium">
-                  <span className={cn("material-symbols-outlined text-xl", selectedRole === "expert" ? "text-primary" : "text-gray-600")}>check_circle</span>
-                  Showcase your portfolio
-                </li>
-              </ul>
-            </div>
-          </button>
+          </div>
         </div>
 
-        {/* Action Buttons */}
-        <div className="w-full max-w-[440px] px-4 space-y-4">
-          <button
-            type="button"
-            disabled={!selectedRole}
-            onClick={() => selectedRole && navigate(buildRegisterPath(selectedRole, intent))}
-            className={cn(
-              "w-full flex items-center justify-center rounded-xl h-14 px-6 text-lg font-bold transition-all",
-              selectedRole
-                ? "bg-primary text-white shadow-xl shadow-primary/20 hover:brightness-110 active:scale-95"
-                : "bg-white/10 text-slate-400 cursor-not-allowed"
-            )}
-          >
-            {selectedRole ? `Continue as ${selectedRole === "client" ? "Client" : "Expert"}` : "Choose a role to continue"}
-          </button>
-          <button className="w-full flex items-center justify-center rounded-xl h-14 px-6 bg-transparent border-2 border-primary/40 text-white text-lg font-bold hover:bg-primary/5 active:scale-95 transition-all">
-            <svg className="size-5 mr-3" viewBox="0 0 24 24">
-              <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
-              <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
-              <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05" />
-              <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" />
-            </svg>
-            Continue with Google
-          </button>
+        <div className="relative z-10 mt-8 flex flex-wrap items-center gap-3 border-t border-white/10 pt-5 text-xs font-bold uppercase tracking-[0.2em] text-[var(--color-text-muted)]">
+          <Workflow className="h-4 w-4 text-[var(--color-accent-cool)]" />
+          <span>Role-aware onboarding</span>
+          <span className="h-1 w-1 rounded-full bg-white/30" />
+          <span>Protected route recovery</span>
+          <span className="h-1 w-1 rounded-full bg-white/30" />
+          <span>Built by n8nlab.io</span>
         </div>
-
-        {/* Footer */}
-        <div className="mt-10 text-center">
-          <p className="text-gray-500 text-base">
-            Already have an account?
-            <Link to={buildLoginPath(intent)} className="text-primary font-bold hover:underline ml-1">Log in</Link>
-          </p>
-        </div>
-      </main>
-
-      <div className="fixed bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent"></div>
+      </section>
     </div>
   );
 }

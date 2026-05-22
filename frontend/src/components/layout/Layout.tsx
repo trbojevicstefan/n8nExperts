@@ -54,7 +54,7 @@ function ShellLayout({
         <Outlet />
       </main>
       {resolvedFooterVariant !== "none" && <Footer tone={resolvedFooterVariant} />}
-      {showMobileNav && chromeMode !== "auth" && <MobileNav />}
+      {showMobileNav && chromeMode === "app" && <MobileNav />}
     </div>
   );
 }

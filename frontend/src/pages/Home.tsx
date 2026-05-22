@@ -51,19 +51,15 @@ const heroInsightCards = [
 
 export default function Home() {
   const { user } = useAuth();
-
-  if (user) {
-    return <Navigate to="/workspace" replace />;
-  }
   const heroActions = homeContent.hero.actions;
   const homeRail = {
     title: "Start with the side of the marketplace that matches your goal.",
-        description:
-          "If you are hiring, browse experts or post a project. If you are an expert, create your account and show the kind of work you want to be hired for.",
-        primaryAction: { label: "Browse Experts", href: "/find-experts" },
-        secondaryAction: { label: "Create Account", href: "/auth/role-select" },
-        signals: ["Browse proof before outreach", "Post jobs with clearer context", "Show services and work samples", "Built by n8nlab.io"],
-      };
+    description:
+      "If you are hiring, browse experts or post a project. If you are an expert, create your account and show the kind of work you want to be hired for.",
+    primaryAction: { label: "Browse Experts", href: "/find-experts" },
+    secondaryAction: { label: "Create Account", href: "/auth/role-select" },
+    signals: ["Browse proof before outreach", "Post jobs with clearer context", "Show services and work samples", "Built by n8nlab.io"],
+  };
 
   usePageMeta({
     title: "n8nExperts | Hire n8n experts with clearer trust and workflow context",
@@ -71,6 +67,10 @@ export default function Home() {
       "n8nExperts is a trust-first marketplace for teams hiring n8n specialists and experts presenting stronger delivery proof.",
     canonicalPath: "/",
   });
+
+  if (user) {
+    return <Navigate to="/workspace" replace />;
+  }
 
   return (
     <div className="container page-stack">

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import { BookmarkPlus, Briefcase, Clock3, Search, Send, Star } from "lucide-react";
+import { BadgeCheck, BookmarkPlus, Briefcase, Clock3, DollarSign, Search, Send, ShieldCheck, SlidersHorizontal, Star } from "lucide-react";
 import { expertApi, jobApi, savedApi } from "@/lib/api";
 import { useAuth } from "@/hooks/useAuth";
 import { usePageMeta } from "@/hooks/usePageMeta";
@@ -12,9 +12,7 @@ import { FormBanner } from "@/components/forms/FormFeedback";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle } from "@/components/ui/sheet";
-import {
-  EmptyState,
-} from "@/components/layout/PagePrimitives";
+import { EmptyState } from "@/components/layout/PagePrimitives";
 import { getFormFeedback } from "@/lib/form-feedback";
 import { getJobMarketplaceSummary } from "@/lib/hiring-signals";
 import { formatRelativeTime } from "@/lib/utils";
@@ -35,8 +33,6 @@ const isSortOption = (value: string | null): value is SortOption =>
   value === "budgetAsc" ||
   value === "mostDetailed" ||
   value === "bestFit";
-
-
 
 export default function FindWork() {
   usePageMeta({
@@ -207,9 +203,6 @@ export default function FindWork() {
 
     return sorted;
   }, [jobsWithSummary, sortFilter]);
-
-
-
   const saveCurrentSearch = async () => {
     if (!user || user.role !== "expert") {
       return;
@@ -239,6 +232,11 @@ export default function FindWork() {
     } catch (err: unknown) {
       setPageError(getFormFeedback(err, "We could not save this search right now.")?.summary || "We could not save this search right now.");
     }
+  };
+
+  const openJobDetails = (job: Job) => {
+    setSelectedJob(job);
+    updateSearch({ jobId: job._id });
   };
 
   const handleApply = async () => {
@@ -301,12 +299,107 @@ export default function FindWork() {
         style={{ backgroundImage: 'radial-gradient(rgba(244, 37, 89, 0.1) 1px, transparent 1px)', backgroundSize: '30px 30px' }}
       ></div>
 
-      <div className="max-w-7xl mx-auto px-4 py-8 flex gap-8 relative z-10 w-full">
+      <div className="max-w-[1540px] mx-auto px-4 py-8 flex gap-6 relative z-10 w-full">
+        <aside className="hidden lg:block w-72 shrink-0">
+          <div className="context-aside sticky top-[var(--chrome-sticky-offset)]">
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <p className="text-xs font-black uppercase tracking-[0.22em] text-[var(--color-text-muted)]">Filters</p>
+                <h2 className="mt-2 text-lg font-black text-white">Find jobs</h2>
+              </div>
+              <SlidersHorizontal className="h-5 w-5 text-[var(--color-accent-cool)]" />
+            </div>
+
+            <div className="mt-6 space-y-6">
+              <div>
+                <label className="text-xs font-black uppercase tracking-[0.18em] text-[var(--color-text-muted)]" htmlFor="jobs-search-side">
+                  Search jobs
+                </label>
+                <div className="relative mt-2">
+                  <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--color-text-muted)]" />
+                  <Input
+                    id="jobs-search-side"
+                    className="h-11 rounded-2xl border-white/10 bg-black/25 pl-10 text-sm text-white placeholder:text-slate-600 focus:border-[var(--color-primary)] focus:ring-[var(--color-primary)]"
+                    placeholder="n8n, webhook, CRM..."
+                    value={searchText}
+                    onChange={(event) => updateSearch({ search: event.target.value })}
+                  />
+                </div>
+              </div>
+
+              <div>
+                <p className="text-xs font-black uppercase tracking-[0.18em] text-[var(--color-text-muted)]">Budget</p>
+                <div className="mt-2 grid grid-cols-2 gap-2">
+                  <Input
+                    className="h-11 rounded-2xl border-white/10 bg-black/25 text-sm text-white placeholder:text-slate-600 focus:border-[var(--color-primary)] focus:ring-[var(--color-primary)]"
+                    placeholder="Min $"
+                    inputMode="numeric"
+                    value={minBudget}
+                    onChange={(event) => updateSearch({ min: event.target.value })}
+                  />
+                  <Input
+                    className="h-11 rounded-2xl border-white/10 bg-black/25 text-sm text-white placeholder:text-slate-600 focus:border-[var(--color-primary)] focus:ring-[var(--color-primary)]"
+                    placeholder="Max $"
+                    inputMode="numeric"
+                    value={maxBudget}
+                    onChange={(event) => updateSearch({ max: event.target.value })}
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="text-xs font-black uppercase tracking-[0.18em] text-[var(--color-text-muted)]" htmlFor="jobs-skills-side">
+                  Skills
+                </label>
+                <Input
+                  id="jobs-skills-side"
+                  className="mt-2 h-11 rounded-2xl border-white/10 bg-black/25 text-sm text-white placeholder:text-slate-600 focus:border-[var(--color-primary)] focus:ring-[var(--color-primary)]"
+                  placeholder="Comma separated"
+                  value={skillsFilter}
+                  onChange={(event) => updateSearch({ skills: event.target.value })}
+                />
+              </div>
+
+              <div>
+                <label className="text-xs font-black uppercase tracking-[0.18em] text-[var(--color-text-muted)]" htmlFor="jobs-sort-side">
+                  Sort
+                </label>
+                <select
+                  id="jobs-sort-side"
+                  className="mt-2 h-11 w-full rounded-2xl border border-white/10 bg-black/25 px-3 text-sm font-bold text-white outline-none focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary-glow)] [&>option]:bg-[#101624]"
+                  value={sortFilter}
+                  onChange={(event) => updateSearch({ sort: event.target.value })}
+                >
+                  <option value="newest">Newest</option>
+                  <option value="oldest">Oldest</option>
+                  <option value="budgetDesc">Budget high to low</option>
+                  <option value="budgetAsc">Budget low to high</option>
+                  <option value="mostDetailed">Most detailed</option>
+                  <option value="bestFit">Best fit</option>
+                </select>
+              </div>
+
+              <div className="grid gap-2 border-t border-white/10 pt-5">
+                {user?.role === "expert" && (
+                  <Button size="sm" variant="outline" onClick={saveCurrentSearch} className="w-full rounded-full">
+                    <BookmarkPlus className="mr-1 h-4 w-4" />
+                    Save search
+                  </Button>
+                )}
+                <button type="button" className="text-sm font-bold text-[var(--color-text-muted)] transition hover:text-white" onClick={() => setSearchParams(new URLSearchParams(), { replace: true })}>
+                  Clear all filters
+                </button>
+              </div>
+            </div>
+          </div>
+        </aside>
+
         {/* Job Feed Content */}
-        <div className="flex-1 max-w-3xl xl:max-w-4xl mx-auto w-full">
+        <div className="flex-1 min-w-0 max-w-3xl xl:max-w-4xl mx-auto w-full">
           <div className="mb-10 text-center xl:text-left">
-            <h1 className="text-4xl font-extrabold tracking-tight mb-2 text-white">Find Work</h1>
-            <p className="text-slate-400 text-lg">Browse open projects and submit proposals to top clients.</p>
+            <p className="eyebrow">Job marketplace</p>
+            <h1 className="mt-4 text-4xl font-extrabold tracking-tight mb-2 text-white">Jobs you might like</h1>
+            <p className="text-slate-400 text-lg">Browse serious n8n briefs, compare client signals, and apply with a focused proposal.</p>
           </div>
 
           {flash && (
@@ -324,7 +417,7 @@ export default function FindWork() {
           )}
 
           {/* Filters / Search Bar (Replaces PagePrimitives components to match Stitch) */}
-          <div className="mb-8 p-4 rounded-2xl border border-white/10 bg-white/5 space-y-4">
+          <div className="mb-8 p-4 rounded-2xl border border-white/10 bg-white/5 space-y-4 lg:hidden">
             <div className="flex items-center gap-2 overflow-x-auto pb-2 custom-scrollbar">
               <div className="relative flex-1 min-w-[200px]">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
@@ -395,11 +488,17 @@ export default function FindWork() {
               const client = typeof job.clientId === "string" ? null : job.clientId;
               
               return (
-                <div 
+                <article
                   key={job._id}
-                  onClick={() => {
-                    setSelectedJob(job);
-                    updateSearch({ jobId: job._id });
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`View details for ${job.title}`}
+                  onClick={() => openJobDetails(job)}
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter" || event.key === " ") {
+                      event.preventDefault();
+                      openJobDetails(job);
+                    }
                   }}
                   className="group bg-[#1e1e1e] border border-white/10 p-6 rounded-2xl hover:border-primary/50 transition-all cursor-pointer shadow-sm relative overflow-hidden"
                 >
@@ -408,38 +507,68 @@ export default function FindWork() {
                     <div className="absolute top-0 left-0 w-1 h-full bg-primary opacity-50 group-hover:opacity-100 transition-opacity"></div>
                   )}
                   
-                  <div className="flex justify-between items-start mb-2">
-                    <div className="flex items-center gap-2">
-                      <h3 className="text-xl font-bold text-white group-hover:text-primary transition-colors text-balance mr-4">{job.title}</h3>
-                      {client && client.hiresCount && client.hiresCount > 0 ? (
-                        <span className="material-symbols-outlined text-sky-400 text-xl" title="Verified Client" style={{ fontVariationSettings: "'FILL' 1" }}>verified</span>
-                      ) : null}
+                  <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                    <div className="min-w-0">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <h3 className="text-xl font-bold text-white group-hover:text-primary transition-colors text-balance mr-2">{job.title}</h3>
+                        {client && client.hiresCount && client.hiresCount > 0 ? (
+                          <span className="inline-flex items-center gap-1 rounded-full border border-emerald-400/20 bg-emerald-500/10 px-2.5 py-1 text-[11px] font-black text-emerald-300">
+                            <BadgeCheck className="h-3.5 w-3.5" />
+                            Payment verified
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[11px] font-bold text-slate-400">
+                            New client
+                          </span>
+                        )}
+                      </div>
+                      <div className="mt-3 flex flex-wrap gap-3 text-sm text-slate-400 font-medium">
+                        <span className="flex items-center gap-1.5 border border-white/10 bg-white/5 px-2 py-0.5 rounded-full text-xs">
+                          <Clock3 className="h-3 w-3" /> Posted {formatRelativeTime(job.createdAt)}
+                        </span>
+                        {summary.detailTone === "strong" && (
+                          <span className="flex items-center gap-1.5 border border-emerald-500/20 bg-emerald-500/10 text-emerald-300 px-2 py-0.5 rounded-full text-xs">
+                            <ShieldCheck className="h-3 w-3" />
+                            Detailed brief
+                          </span>
+                        )}
+                        {summary.fit.overlap.length > 0 && (
+                          <span className="flex items-center gap-1.5 border border-sky-500/20 bg-sky-500/10 text-sky-300 px-2 py-0.5 rounded-full text-xs cursor-help" title={`Matches: ${summary.fit.overlap.join(", ")}`}>
+                            {summary.fit.overlap.length} skill match
+                          </span>
+                        )}
+                      </div>
                     </div>
-                    <span className="text-primary font-extrabold text-lg whitespace-nowrap shrink-0">
-                      ${job.budgetAmount} {job.budgetType === "hourly" ? "/hr" : "Fixed"}
-                    </span>
+
+                    <div className="rounded-2xl border border-white/10 bg-white/[0.035] px-4 py-3 text-right sm:min-w-36">
+                      <p className="flex items-center justify-end gap-1 text-xs font-black uppercase tracking-[0.18em] text-slate-500">
+                        <DollarSign className="h-3.5 w-3.5 text-emerald-300" />
+                        Budget
+                      </p>
+                      <p className="mt-1 text-xl font-black text-white">${job.budgetAmount}</p>
+                      <p className="text-xs font-bold text-slate-400">{job.budgetType === "hourly" ? "Hourly" : "Fixed price"}</p>
+                    </div>
                   </div>
-                  
-                  <div className="flex gap-3 text-sm text-slate-400 mb-4 font-medium">
-                    <span className="flex items-center gap-1.5 border border-white/10 bg-white/5 px-2 py-0.5 rounded-full text-xs">
-                      <Clock3 className="h-3 w-3" /> {formatRelativeTime(job.createdAt)}
-                    </span>
-                    {summary.detailTone === "strong" && (
-                      <span className="flex items-center gap-1.5 border border-emerald-500/20 bg-emerald-500/10 text-emerald-300 px-2 py-0.5 rounded-full text-xs">
-                        Detailed Brief
-                      </span>
-                    )}
-                    {summary.fit.overlap.length > 0 && (
-                      <span className="flex items-center gap-1.5 border border-sky-500/20 bg-sky-500/10 text-sky-300 px-2 py-0.5 rounded-full text-xs cursor-help" title={`Matches: ${summary.fit.overlap.join(', ')}`}>
-                        {summary.fit.overlap.length} Skill Match
-                      </span>
-                    )}
-                  </div>
-                  
-                  <p className="text-slate-300 mb-5 line-clamp-3 leading-relaxed text-sm">
+
+                  <p className="text-slate-300 my-5 line-clamp-3 leading-relaxed text-sm">
                     {job.description}
                   </p>
-                  
+
+                  <div className="grid gap-3 rounded-2xl border border-white/8 bg-black/15 p-3 mb-5 text-xs font-semibold text-slate-400 sm:grid-cols-3">
+                    <span className="flex items-center gap-2">
+                      <BadgeCheck className="h-4 w-4 text-emerald-300" />
+                      {client?.hiresCount ? `${client.hiresCount} hires` : "Client history pending"}
+                    </span>
+                    <span className="flex items-center gap-2">
+                      <Briefcase className="h-4 w-4 text-sky-300" />
+                      {client?.jobsPostedCount ? `${client.jobsPostedCount} jobs posted` : "New job poster"}
+                    </span>
+                    <span className="flex items-center gap-2">
+                      <Clock3 className="h-4 w-4 text-amber-300" />
+                      {client?.avgClientResponseHours ? `${client.avgClientResponseHours}h avg response` : "Response unknown"}
+                    </span>
+                  </div>
+
                   <div className="flex flex-wrap gap-2 mb-6">
                     {job.skills.map((skill) => (
                       <span key={skill} className="bg-white/5 border border-white/10 text-slate-300 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider">
@@ -452,7 +581,6 @@ export default function FindWork() {
                     <div className="flex flex-wrap items-center gap-4 text-xs font-semibold text-slate-500">
                       <span className="flex items-center gap-1.5 text-slate-400">
                         <span className="material-symbols-outlined text-lg">group</span>
-                        {/* We don't have proposal count in job object normally, but we can fake it or omit it. Let's show client name */}
                         {client ? client.companyName || client.username : "Confidential Client"}
                       </span>
                       
@@ -462,23 +590,25 @@ export default function FindWork() {
 
                     <div className="flex items-center gap-3">
                       {user?.role === "expert" && (
-                        <button 
+                        <button
+                          type="button"
                           onClick={(e) => {
                             e.stopPropagation();
                             toggleSavedJob(job._id);
                           }}
                           className={`p-1.5 rounded-full transition-colors ${savedJobIds.has(job._id) ? "text-amber-400 bg-amber-400/10" : "text-slate-400 hover:text-white hover:bg-white/10"}`}
-                          title="Save Job"
+                          aria-label={savedJobIds.has(job._id) ? `Remove saved job ${job.title}` : `Save job ${job.title}`}
+                          title={savedJobIds.has(job._id) ? "Remove saved job" : "Save job"}
                         >
                           <Star className={`h-4 w-4 ${savedJobIds.has(job._id) ? "fill-current" : ""}`} />
                         </button>
                       )}
-                      <button className="text-primary text-sm font-bold flex items-center gap-1 group-hover:underline">
-                        View Details <span className="material-symbols-outlined text-sm">arrow_forward</span>
+                      <button type="button" className="text-primary text-sm font-bold flex items-center gap-1 group-hover:underline">
+                        View details <span className="material-symbols-outlined text-sm">arrow_forward</span>
                       </button>
                     </div>
                   </div>
-                </div>
+                </article>
               );
             })}
           </div>

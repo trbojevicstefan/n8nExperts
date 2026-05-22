@@ -17,6 +17,6 @@ describe("RoleSelection", () => {
     fireEvent.click(screen.getByRole("button", { name: /i need to hire/i }));
 
     expect(screen.getByRole("button", { name: /continue as client/i })).toBeEnabled();
-    expect(screen.getByText(/next: create a client account\./i)).toBeInTheDocument();
+    expect(screen.getByText(/already have an account\?/i)).toBeInTheDocument();
   });
 });

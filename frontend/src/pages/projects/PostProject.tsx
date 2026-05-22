@@ -87,7 +87,6 @@ const initialFormState: PostProjectFormState = {
 };
 
 const sectionCardClassName = "rounded-2xl border border-white/10 bg-white/[0.02] p-6 lg:p-8 relative overflow-hidden transition-all hover:border-white/20";
-
 // Custom dark styled inputs
 const customInputClasses = "w-full bg-black/40 border-white/10 text-white rounded-xl focus:ring-primary focus:border-transparent placeholder:text-slate-600 transition-all";
 

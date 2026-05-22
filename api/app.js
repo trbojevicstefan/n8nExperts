@@ -160,6 +160,25 @@ export const createApp = () => {
     });
   });
 
+  app.get("/healthz", (_req, res) => {
+    const dbStateMap = {
+      0: "disconnected",
+      1: "connected",
+      2: "connecting",
+      3: "disconnecting",
+    };
+
+    const database = dbStateMap[mongoose.connection.readyState] || "unknown";
+
+    res.status(database === "connected" ? 200 : 503).json({
+      status: database === "connected" ? "ok" : "degraded",
+      service: "n8nExperts API",
+      database,
+      uptimeSeconds: Math.round(process.uptime()),
+      timestamp: new Date().toISOString(),
+    });
+  });
+
   app.use("/api", requireDbConnection);
 
   app.use("/api/auth", authRoute);

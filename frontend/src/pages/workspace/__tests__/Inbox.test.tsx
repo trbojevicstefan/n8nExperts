@@ -88,7 +88,7 @@ describe("Inbox", () => {
     expect(expertLabels.length).toBeGreaterThan(0);
     expect(screen.getAllByText(/application context/i).length).toBeGreaterThan(0);
 
-    await user.type(screen.getByPlaceholderText("Search threads"), "workflow");
+    await user.type(screen.getByLabelText("Search threads"), "workflow");
 
     await waitFor(() => {
       const calls = mockedChatApi.getThreads.mock.calls;
@@ -96,7 +96,7 @@ describe("Inbox", () => {
       expect(calls.some((call) => call[0]?.q === "workflow")).toBe(true);
     });
 
-    await user.type(screen.getByPlaceholderText("Attachment URL (optional)"), "example.com/report.pdf");
+    await user.type(screen.getByPlaceholderText("Paste attachment link & press Enter..."), "example.com/report.pdf");
     await user.click(screen.getByRole("button", { name: /add/i }));
     await user.click(screen.getByRole("button", { name: "Send message" }));
 

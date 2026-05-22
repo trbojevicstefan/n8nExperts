@@ -9,8 +9,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const refreshSession = useCallback(async () => {
     try {
-      const response = await authApi.me();
-      setUser(response.data);
+      const response = await authApi.session();
+      setUser(response.data.user);
     } catch {
       setUser(null);
     } finally {

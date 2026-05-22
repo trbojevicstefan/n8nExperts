@@ -164,6 +164,31 @@ export const login = async (req, res, next) => {
   }
 };
 
+export const getSession = async (req, res) => {
+  const token = req.cookies[SESSION_COOKIE_NAME] || req.cookies.accessToken;
+
+  if (!token) {
+    return res.status(200).json({ user: null });
+  }
+
+  try {
+    const payload = jwt.verify(token, process.env.JWT_KEY);
+    const user = await User.findById(payload.id);
+
+    if (!user) {
+      return res.status(200).json({ user: null });
+    }
+
+    return res.status(200).json({ user: toPublicUser(user) });
+  } catch {
+    return res
+      .clearCookie(SESSION_COOKIE_NAME, authCookieBaseOptions())
+      .clearCookie("accessToken", authCookieBaseOptions())
+      .status(200)
+      .json({ user: null });
+  }
+};
+
 // GOOGLE OAUTH CALLBACK
 export const googleCallback = async (req, res, next) => {
   try {

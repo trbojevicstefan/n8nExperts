@@ -98,6 +98,36 @@ test.beforeEach(async () => {
   ]);
 });
 
+test("health endpoint exposes release check status", async () => {
+  const response = await request(app).get("/healthz");
+
+  assert.equal(response.status, 200);
+  assert.equal(response.body.status, "ok");
+  assert.equal(response.body.service, "n8nExperts API");
+  assert.equal(response.body.database, "connected");
+  assert.equal(typeof response.body.uptimeSeconds, "number");
+});
+
+test("session endpoint returns a non-error guest response and active user when signed in", async () => {
+  const guestResponse = await request(app).get("/api/auth/session");
+
+  assert.equal(guestResponse.status, 200);
+  assert.equal(guestResponse.body.user, null);
+
+  const cookie = await registerAndGetCookie({
+    username: "session_client",
+    email: "session.client@example.com",
+    role: "client",
+  });
+
+  const sessionResponse = await request(app).get("/api/auth/session").set("Cookie", cookie);
+
+  assert.equal(sessionResponse.status, 200);
+  assert.equal(sessionResponse.body.user.username, "session_client");
+  assert.equal(sessionResponse.body.user.role, "client");
+  assert.equal(sessionResponse.body.user.password, undefined);
+});
+
 test("application filters, note permissions, and status history are enforced", async () => {
   const clientCookie = await registerAndGetCookie({
     username: "client_ops",

@@ -1,7 +1,7 @@
 // routes/auth.route.js
 import express from "express";
 import passport from "passport";
-import { register, login, logout, getCurrentUser, googleCallback } from "../controllers/auth.controller.js";
+import { register, login, logout, getCurrentUser, getSession, googleCallback } from "../controllers/auth.controller.js";
 import { verifyToken } from "../middleware/jwt.js";
 import { validateBody } from "../middleware/validate.js";
 
@@ -33,6 +33,7 @@ router.post(
 router.post("/logout", logout);
 
 // Get current user
+router.get("/session", getSession);
 router.get("/me", verifyToken, getCurrentUser);
 
 // Google OAuth routes

@@ -3,8 +3,13 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build:frontend": "npm --prefix frontend run build"
+    "build:frontend": "npm --prefix frontend run build",
+    "validate:frontend": "npm --prefix frontend run test && npm --prefix frontend run lint && npm --prefix frontend run build",
+    "validate:api": "npm --prefix api run test:integration",
+    "validate:all": "npm run validate:frontend && npm run validate:api",
+    "smoke:e2e": "npm --prefix frontend run test:e2e:smoke",
+    "smoke:e2e:public": "npm --prefix frontend run test:e2e:public",
+    "smoke:e2e:seeded": "npm --prefix frontend run test:e2e:seeded"
   },
   "keywords": [],
   "author": "",

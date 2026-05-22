@@ -9,13 +9,13 @@ export type AuthIntent = {
 const DEFAULT_POST_LOGIN_PATH: Record<Role, string> = {
   client: "/my-jobs",
   expert: "/my-applications",
-  admin: "/admin",
+  admin: "/admin/verification-queue",
 };
 
 const DEFAULT_POST_REGISTER_PATH: Record<Role, string> = {
   client: "/post-project",
   expert: "/expert/setup",
-  admin: "/admin",
+  admin: "/admin/verification-queue",
 };
 
 const routeActionLabels: Record<string, string> = {
@@ -166,5 +166,7 @@ export function getAccessRequiredCopy(intent: AuthIntent) {
 }
 
 export function getWorkspaceHomePath(role: Role) {
-  return role === "client" ? "/my-jobs" : "/my-applications";
+  if (role === "client") return "/my-jobs";
+  if (role === "expert") return "/my-applications";
+  return "/admin/verification-queue";
 }

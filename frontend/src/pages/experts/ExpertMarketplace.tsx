@@ -1,11 +1,41 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import { BookmarkPlus, Star } from "lucide-react";
+import {
+  ArrowRight,
+  BadgeCheck,
+  BookmarkPlus,
+  BriefcaseBusiness,
+  CheckCircle2,
+  Clock3,
+  DollarSign,
+  Heart,
+  MapPin,
+  Search,
+  SlidersHorizontal,
+  Sparkles,
+  Star,
+} from "lucide-react";
 import { expertApi, savedApi } from "@/lib/api";
 import { useAuth } from "@/hooks/useAuth";
 import { usePageMeta } from "@/hooks/usePageMeta";
 import type { ExpertProfile } from "@/types";
 import { Button } from "@/components/ui/button";
+
+const skillPresets = ["n8n", "JavaScript", "API Design", "Python", "PostgreSQL", "OpenAI", "HubSpot", "Slack"];
+
+const formatRate = (rate?: number) => (rate ? `$${rate}/hr` : "Rate on profile");
+
+const getExpertTitle = (expert: ExpertProfile) => expert.headline || "n8n automation specialist";
+
+const getExpertSummary = (expert: ExpertProfile) =>
+  expert.desc ||
+  "Builds, audits, and maintains n8n automation systems with clear delivery scope and handoff expectations.";
+
+const getAvailabilityLabel = (availability?: ExpertProfile["availability"]) => {
+  if (availability === "busy") return "Limited availability";
+  if (availability === "unavailable") return "Unavailable";
+  return "Available now";
+};
 
 export default function ExpertMarketplace() {
   usePageMeta({
@@ -28,6 +58,7 @@ export default function ExpertMarketplace() {
   const minRate = searchParams.get("minRate") || "";
   const maxRate = searchParams.get("maxRate") || "";
   const sort = searchParams.get("sort") || "newest";
+  const selectedSkills = useMemo(() => skillsFilter.split(",").map((skill) => skill.trim()).filter(Boolean), [skillsFilter]);
 
   const updateSearch = (patch: Record<string, string>) => {
     const next = new URLSearchParams(searchParams);
@@ -40,6 +71,8 @@ export default function ExpertMarketplace() {
     });
     setSearchParams(next, { replace: true });
   };
+
+  const clearFilters = () => setSearchParams(new URLSearchParams(), { replace: true });
 
   const loadExperts = async () => {
     setLoading(true);
@@ -102,7 +135,7 @@ export default function ExpertMarketplace() {
         },
         isPinned: false,
       });
-      setInfo("Search saved.");
+      setInfo("Search saved. You can reopen it from Saved Searches.");
     } catch (err: unknown) {
       const apiError = err as { response?: { data?: { message?: string } } };
       setError(apiError.response?.data?.message || "Failed to save current search.");
@@ -119,9 +152,11 @@ export default function ExpertMarketplace() {
           next.delete(expertId);
           return next;
         });
+        setInfo("Expert removed from your saved list.");
       } else {
         await savedApi.saveExpert(expertId);
         setSavedExpertIds((prev) => new Set([...prev, expertId]));
+        setInfo("Expert saved. You can compare them later from Saved Experts.");
       }
     } catch (err: unknown) {
       const apiError = err as { response?: { data?: { message?: string } } };
@@ -129,230 +164,318 @@ export default function ExpertMarketplace() {
     }
   };
 
-  const skillPresets = ["n8n", "JavaScript", "API Design", "Python", "PostgreSQL", "OpenAI"];
+  const toggleSkill = (skill: string) => {
+    const next = selectedSkills.includes(skill) ? selectedSkills.filter((item) => item !== skill) : [...selectedSkills, skill];
+    updateSearch({ skills: next.join(",") });
+  };
+
+  const activeFilterCount = [searchQuery, skillsFilter, minRate, maxRate].filter(Boolean).length;
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      {/* Search Header */}
-      <div className="flex flex-col items-center mb-12">
-        <div className="w-full max-w-2xl">
-          <div className="group flex items-center bg-white/5 border border-white/10 rounded-xl px-4 py-3 transition-all duration-300 focus-within:shadow-[0_0_15px_rgba(244,37,89,0.3)] focus-within:border-primary">
-            <span className="material-symbols-outlined text-slate-400 group-focus-within:text-primary mr-3">search</span>
-            <input
-              className="w-full bg-transparent border-none focus:ring-0 text-lg placeholder:text-slate-500 text-white outline-none"
-              placeholder="Search experts by name or skill..."
-              type="text"
-              value={searchQuery}
-              onChange={(e) => updateSearch({ search: e.target.value })}
-            />
+    <div className="container page-stack">
+      <section className="app-page-header">
+        <div className="hero-glow hero-glow-left" />
+        <div className="hero-glow hero-glow-right" />
+        <div className="relative z-10 grid gap-6 lg:grid-cols-[1fr_auto] lg:items-end">
+          <div>
+            <p className="eyebrow">Talent marketplace</p>
+            <h1 className="mt-5 max-w-4xl text-4xl font-black leading-[0.98] tracking-[-0.05em] text-white md:text-6xl">
+              Hire n8n experts with proof, rates, and fit in view.
+            </h1>
+            <p className="mt-5 max-w-3xl text-base leading-8 text-[var(--color-text-secondary)]">
+              Search like a serious hiring marketplace: compare specialists by skill, availability, delivery proof, and budget fit before opening a profile.
+            </p>
           </div>
-          <p className="text-center mt-4 text-sm text-slate-400">
-            Showing <span className="text-primary font-semibold">{experts.length} experts</span> matching your criteria
-          </p>
+          <div className="grid gap-2 rounded-[1.5rem] border border-white/10 bg-white/[0.04] p-4 text-sm text-[var(--color-text-secondary)] sm:min-w-72">
+            <div className="flex items-center justify-between gap-3">
+              <span>Visible experts</span>
+              <strong className="text-xl text-white">{loading ? "..." : experts.length}</strong>
+            </div>
+            <div className="flex items-center justify-between gap-3">
+              <span>Active filters</span>
+              <strong className="text-xl text-white">{activeFilterCount}</strong>
+            </div>
+          </div>
         </div>
-      </div>
+      </section>
 
-      <div className="flex flex-col lg:flex-row gap-8">
-        {/* Sidebar Filters */}
-        <aside className="w-full lg:w-64 shrink-0 space-y-8">
-          {/* Rate Filter */}
-          <div>
-            <h3 className="text-sm font-bold uppercase tracking-wider text-slate-400 mb-4">Hourly Rate</h3>
-            <div className="flex gap-2">
+      <section className="grid gap-5 lg:grid-cols-[18rem_minmax(0,1fr)]">
+        <aside className="context-aside h-fit lg:sticky lg:top-[var(--chrome-sticky-offset)]">
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.22em] text-[var(--color-text-muted)]">Filters</p>
+              <h2 className="mt-2 text-lg font-black text-white">Narrow talent</h2>
+            </div>
+            <SlidersHorizontal className="h-5 w-5 text-[var(--color-accent-cool)]" />
+          </div>
+
+          <div className="mt-6 space-y-6">
+            <div>
+              <label className="text-xs font-black uppercase tracking-[0.18em] text-[var(--color-text-muted)]" htmlFor="expert-search">
+                Search
+              </label>
+              <div className="relative mt-2">
+                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--color-text-muted)]" />
+                <input
+                  id="expert-search"
+                  className="h-11 w-full rounded-2xl border border-white/10 bg-black/25 pl-10 pr-3 text-sm text-white outline-none transition placeholder:text-slate-600 focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary-glow)]"
+                  placeholder="n8n, Slack, HubSpot..."
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => updateSearch({ search: e.target.value })}
+                />
+              </div>
+            </div>
+
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.18em] text-[var(--color-text-muted)]">Hourly rate</p>
+              <div className="mt-2 grid grid-cols-2 gap-2">
+                <input
+                  className="h-11 rounded-2xl border border-white/10 bg-black/25 px-3 text-sm text-white outline-none placeholder:text-slate-600 focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary-glow)]"
+                  placeholder="Min $"
+                  inputMode="numeric"
+                  value={minRate}
+                  onChange={(e) => updateSearch({ minRate: e.target.value })}
+                />
+                <input
+                  className="h-11 rounded-2xl border border-white/10 bg-black/25 px-3 text-sm text-white outline-none placeholder:text-slate-600 focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary-glow)]"
+                  placeholder="Max $"
+                  inputMode="numeric"
+                  value={maxRate}
+                  onChange={(e) => updateSearch({ maxRate: e.target.value })}
+                />
+              </div>
+            </div>
+
+            <div>
+              <p className="text-xs font-black uppercase tracking-[0.18em] text-[var(--color-text-muted)]">Skills</p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {skillPresets.map((skill) => {
+                  const active = selectedSkills.includes(skill);
+                  return (
+                    <button
+                      key={skill}
+                      type="button"
+                      className={
+                        active
+                          ? "rounded-full bg-[var(--color-primary)] px-3 py-1.5 text-xs font-black text-white"
+                          : "rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-bold text-[var(--color-text-secondary)] transition hover:border-white/25 hover:text-white"
+                      }
+                      onClick={() => toggleSkill(skill)}
+                    >
+                      {skill}
+                    </button>
+                  );
+                })}
+              </div>
               <input
-                className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white placeholder:text-slate-600 focus:ring-primary focus:border-primary outline-none"
-                placeholder="Min $"
-                value={minRate}
-                onChange={(e) => updateSearch({ minRate: e.target.value })}
-              />
-              <input
-                className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white placeholder:text-slate-600 focus:ring-primary focus:border-primary outline-none"
-                placeholder="Max $"
-                value={maxRate}
-                onChange={(e) => updateSearch({ maxRate: e.target.value })}
+                className="mt-3 h-11 w-full rounded-2xl border border-white/10 bg-black/25 px-3 text-sm text-white outline-none placeholder:text-slate-600 focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary-glow)]"
+                placeholder="Custom skills"
+                value={skillsFilter}
+                onChange={(e) => updateSearch({ skills: e.target.value })}
               />
             </div>
-          </div>
 
-          {/* Skills */}
-          <div>
-            <h3 className="text-sm font-bold uppercase tracking-wider text-slate-400 mb-4">Specialized Skills</h3>
-            <div className="flex flex-wrap gap-2">
-              {skillPresets.map((skill) => {
-                const isActive = skillsFilter.split(",").map(s => s.trim()).includes(skill);
-                return (
-                  <button
-                    key={skill}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
-                      isActive
-                        ? "bg-primary text-white"
-                        : "bg-white/5 border border-white/10 hover:border-primary/50"
-                    }`}
-                    onClick={() => {
-                      const current = skillsFilter.split(",").map(s => s.trim()).filter(Boolean);
-                      const next = isActive
-                        ? current.filter(s => s !== skill)
-                        : [...current, skill];
-                      updateSearch({ skills: next.join(",") });
-                    }}
-                  >
-                    {skill}
-                  </button>
-                );
-              })}
+            <div>
+              <label className="text-xs font-black uppercase tracking-[0.18em] text-[var(--color-text-muted)]" htmlFor="expert-sort">
+                Sort
+              </label>
+              <select
+                id="expert-sort"
+                className="mt-2 h-11 w-full rounded-2xl border border-white/10 bg-black/25 px-3 text-sm font-bold text-white outline-none focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary-glow)] [&>option]:bg-[#101624]"
+                value={sort}
+                onChange={(e) => updateSearch({ sort: e.target.value })}
+              >
+                <option value="newest">Newest</option>
+                <option value="rateAsc">Rate low to high</option>
+                <option value="rateDesc">Rate high to low</option>
+                <option value="projects">Most projects</option>
+              </select>
             </div>
-            <input
-              className="mt-3 w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white placeholder:text-slate-600 focus:ring-primary focus:border-primary outline-none"
-              placeholder="Custom skills (comma separated)"
-              value={skillsFilter}
-              onChange={(e) => updateSearch({ skills: e.target.value })}
-            />
-          </div>
 
-          {/* Sort */}
-          <div>
-            <h3 className="text-sm font-bold uppercase tracking-wider text-slate-400 mb-4">Sort By</h3>
-            <select
-              aria-label="Sort experts"
-              className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:ring-primary focus:border-primary outline-none"
-              value={sort}
-              onChange={(e) => updateSearch({ sort: e.target.value })}
-            >
-              <option value="newest">Newest</option>
-              <option value="rateAsc">Rate low to high</option>
-              <option value="rateDesc">Rate high to low</option>
-              <option value="projects">Most projects</option>
-            </select>
-          </div>
-
-          {/* Client Actions */}
-          {user?.role === "client" && (
-            <div className="space-y-3">
-              <Button size="sm" variant="outline" onClick={saveCurrentSearch} className="w-full">
-                <BookmarkPlus className="h-4 w-4 mr-1" />
-                Save current search
-              </Button>
-              <Link to="/saved-searches" className="block text-xs text-primary hover:underline text-center">
-                Manage saved searches
-              </Link>
+            <div className="grid gap-2 border-t border-white/10 pt-5">
+              {user?.role === "client" && (
+                <Button size="sm" variant="outline" onClick={saveCurrentSearch} className="w-full rounded-full">
+                  <BookmarkPlus className="mr-1 h-4 w-4" />
+                  Save search
+                </Button>
+              )}
+              <button type="button" className="text-sm font-bold text-[var(--color-text-muted)] transition hover:text-white" onClick={clearFilters}>
+                Clear all filters
+              </button>
             </div>
-          )}
+          </div>
         </aside>
 
-        {/* Expert Grid */}
-        <div className="flex-1">
-          {error && <div className="rounded-lg border border-red-400/30 bg-red-500/10 p-3 text-sm text-red-200 mb-4">{error}</div>}
-          {info && <p className="mb-4 text-xs text-emerald-300">{info}</p>}
-
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-            {loading && <p className="text-slate-300 col-span-full">Loading experts...</p>}
-            {!loading && experts.length === 0 && (
-              <div className="col-span-full text-center py-16">
-                <span className="material-symbols-outlined text-5xl text-slate-600 mb-4 block">search_off</span>
-                <h3 className="text-lg font-bold text-white mb-2">No experts match this filter</h3>
-                <p className="text-slate-400 text-sm">Remove one or more constraints to broaden the discovery set.</p>
-              </div>
-            )}
-            {experts.map((expert) => (
-              <div
-                key={expert._id}
-                className="rounded-xl p-6 flex flex-col hover:scale-[1.02] transition-transform duration-300 border border-white/8"
-                style={{ background: 'rgba(255, 255, 255, 0.03)', backdropFilter: 'blur(12px)' }}
-              >
-                {/* Avatar + Badge */}
-                <div className="flex items-start justify-between mb-4">
-                  <div className="rounded-full" style={{ background: 'linear-gradient(45deg, #f42559, #8b5cf6)', padding: '2px' }}>
-                    <div
-                      className="size-16 rounded-full bg-cover bg-center border-2 border-[#0d0d0d]"
-                      style={{ backgroundImage: expert.img ? `url('${expert.img}')` : undefined, backgroundColor: !expert.img ? '#1e1316' : undefined }}
-                    >
-                      {!expert.img && (
-                        <div className="w-full h-full rounded-full flex items-center justify-center text-white font-bold text-lg">
-                          {expert.username?.charAt(0)?.toUpperCase() || "?"}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                  <div className="px-3 py-1 rounded-full flex items-center gap-1" style={{ background: 'linear-gradient(90deg, rgba(34, 197, 94, 0.2), rgba(244, 37, 89, 0.2))', border: '1px solid rgba(244, 37, 89, 0.3)' }}>
-                    <span className="material-symbols-outlined text-xs text-green-400">check_circle</span>
-                    <span className="text-[10px] font-bold text-white uppercase tracking-tighter">Verified</span>
-                  </div>
-                </div>
-
-                {/* Name + Title */}
-                <div className="mb-4">
-                  <div className="flex items-center gap-1">
-                    <h3 className="text-lg font-bold text-white">{expert.username}</h3>
-                    <span className="material-symbols-outlined text-blue-400 text-lg" style={{ fontVariationSettings: "'FILL' 1" }}>verified</span>
-                  </div>
-                  <p className="text-sm text-primary font-medium">{expert.headline || "n8n Specialist"}</p>
-                </div>
-
-                {/* Stats */}
-                <div className="flex items-center gap-4 mb-6 text-sm text-slate-400">
-                  <div className="flex items-center gap-1">
-                    <span className="material-symbols-outlined text-yellow-500 text-sm" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
-                    <span className="text-white font-medium">4.9</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <span className="material-symbols-outlined text-sm">payments</span>
-                    <span className="text-white font-medium">${expert.hourlyRate || 0}/hr</span>
-                  </div>
-                </div>
-
-                {/* Skills */}
-                <div className="flex flex-wrap gap-2 mb-8 flex-grow">
-                  {(expert.skills || []).slice(0, 3).map((skill) => (
-                    <span key={skill} className="px-2 py-1 rounded bg-white/5 border border-white/10 text-[10px] uppercase font-bold text-slate-400">
-                      {skill}
-                    </span>
-                  ))}
-                </div>
-
-                {/* Actions */}
-                <div className="flex gap-3">
-                  <Link
-                    to={`/experts/${expert._id}`}
-                    className="flex-1 py-2 rounded-lg border border-primary text-primary text-sm font-bold hover:bg-primary/10 transition-colors text-center"
-                  >
-                    View Profile
-                  </Link>
-                  {user?.role === "client" ? (
-                    <button
-                      onClick={() => toggleSavedExpert(expert._id)}
-                      className={`flex-1 py-2 rounded-lg text-sm font-bold transition-colors ${
-                        savedExpertIds.has(expert._id)
-                          ? "bg-primary/20 text-primary border border-primary/30"
-                          : "bg-primary text-white hover:bg-primary/90 shadow-lg shadow-primary/20"
-                      }`}
-                    >
-                      <Star className="h-3.5 w-3.5 inline mr-1" />
-                      {savedExpertIds.has(expert._id) ? "Saved" : "Save"}
-                    </button>
-                  ) : (
-                    <Link
-                      to={`/experts/${expert._id}`}
-                      className="flex-1 py-2 rounded-lg bg-primary text-white text-sm font-bold hover:bg-primary/90 transition-colors shadow-lg shadow-primary/20 text-center"
-                    >
-                      Invite
-                    </Link>
-                  )}
-                </div>
-              </div>
-            ))}
+        <div className="min-w-0 space-y-4">
+          <div className="filter-toolbar flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+            <div>
+              <p className="text-sm font-bold text-white">
+                {loading ? "Loading experts..." : `${experts.length} n8n experts available`}
+              </p>
+              <p className="mt-1 text-xs text-[var(--color-text-muted)]">
+                Upwork-style list view: compare rate, proof, availability, and specialties without opening every profile.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-2 text-xs font-bold text-[var(--color-text-muted)]">
+              <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5">Verified profiles</span>
+              <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5">Service offers</span>
+              <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5">Job-ready proof</span>
+            </div>
           </div>
 
-          {/* Load More */}
-          {!loading && experts.length > 0 && (
-            <div className="flex justify-center mt-12">
-              <button className="px-8 py-3 bg-white/5 border border-white/10 rounded-xl text-sm font-bold hover:bg-white/10 transition-all flex items-center gap-2">
-                Load More Experts
-                <span className="material-symbols-outlined">expand_more</span>
+          {error && <div className="rounded-2xl border border-red-400/30 bg-red-500/10 p-4 text-sm font-semibold text-red-200">{error}</div>}
+          {info && <div className="rounded-2xl border border-emerald-400/30 bg-emerald-500/10 p-4 text-sm font-semibold text-emerald-200">{info}</div>}
+
+          {loading && (
+            <div className="grid gap-4">
+              {[1, 2, 3].map((item) => (
+                <div key={item} className="dense-list-card animate-pulse">
+                  <div className="h-6 w-1/3 rounded bg-white/10" />
+                  <div className="mt-4 h-4 w-2/3 rounded bg-white/8" />
+                  <div className="mt-6 h-16 rounded bg-white/6" />
+                </div>
+              ))}
+            </div>
+          )}
+
+          {!loading && experts.length === 0 && (
+            <div className="empty-state text-center">
+              <Search className="mx-auto h-10 w-10 text-[var(--color-text-muted)]" />
+              <h3 className="mt-4 text-xl font-black text-white">No experts match this search</h3>
+              <p className="mx-auto mt-2 max-w-md text-sm text-[var(--color-text-secondary)]">
+                Try a broader skill, remove a rate range, or clear filters to see the full talent pool.
+              </p>
+              <button type="button" className="mt-5 rounded-full bg-[var(--color-primary)] px-5 py-2 text-sm font-black text-white" onClick={clearFilters}>
+                Clear filters
               </button>
             </div>
           )}
+
+          {!loading &&
+            experts.map((expert) => {
+              const saved = savedExpertIds.has(expert._id);
+              const skills = (expert.skills || []).slice(0, 8);
+              const completedProjects = expert.completedProjects || expert.jobsCompletedCount || 0;
+              const rating = expert.ratingAvg || 0;
+
+              return (
+                <article key={expert._id} className="dense-list-card transition hover:border-[var(--color-border-hover)] hover:bg-[rgba(17,23,37,0.96)]">
+                  <div className="grid gap-5 lg:grid-cols-[auto_minmax(0,1fr)_12rem]">
+                    <Link
+                      to={`/experts/${expert._id}`}
+                      aria-label={`View ${expert.username}'s profile`}
+                      className="group relative h-20 w-20 overflow-hidden rounded-full border border-white/10 bg-white/5 md:h-24 md:w-24"
+                    >
+                      {expert.img ? (
+                        <img src={expert.img} alt="" className="h-full w-full object-cover transition group-hover:scale-105" />
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center bg-[linear-gradient(135deg,rgba(132,216,255,0.24),rgba(255,107,61,0.22))] text-2xl font-black text-white">
+                          {expert.username?.charAt(0)?.toUpperCase() || "?"}
+                        </div>
+                      )}
+                      <span className="absolute bottom-1 right-1 h-4 w-4 rounded-full border-2 border-[#111827] bg-[var(--color-success)]" />
+                    </Link>
+
+                    <div className="min-w-0">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <Link to={`/experts/${expert._id}`} className="text-xl font-black text-white transition hover:text-[var(--color-accent-cool)]">
+                          {expert.username}
+                        </Link>
+                        <span className="inline-flex items-center gap-1 rounded-full border border-emerald-400/20 bg-emerald-500/10 px-2.5 py-1 text-[11px] font-black text-emerald-300">
+                          <BadgeCheck className="h-3.5 w-3.5" />
+                          Verified
+                        </span>
+                        <span className="inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[11px] font-bold text-[var(--color-text-secondary)]">
+                          <Clock3 className="h-3.5 w-3.5" />
+                          {getAvailabilityLabel(expert.availability)}
+                        </span>
+                      </div>
+
+                      <h2 className="mt-2 text-base font-bold text-[var(--color-text-secondary)]">{getExpertTitle(expert)}</h2>
+                      <p className="mt-3 max-w-3xl text-sm leading-7 text-[var(--color-text-secondary)]">{getExpertSummary(expert)}</p>
+
+                      <div className="mt-4 flex flex-wrap gap-2">
+                        {skills.length > 0 ? (
+                          skills.map((skill) => (
+                            <span key={skill} className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-bold text-[var(--color-text-secondary)]">
+                              {skill}
+                            </span>
+                          ))
+                        ) : (
+                          <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-bold text-[var(--color-text-muted)]">
+                            Skills coming soon
+                          </span>
+                        )}
+                      </div>
+
+                      <div className="mt-5 grid gap-3 text-sm text-[var(--color-text-secondary)] sm:grid-cols-3">
+                        <span className="inline-flex items-center gap-2">
+                          <Star className="h-4 w-4 text-[var(--color-warning)]" />
+                          {rating ? `${rating.toFixed(1)} rating` : "New to reviews"}
+                        </span>
+                        <span className="inline-flex items-center gap-2">
+                          <BriefcaseBusiness className="h-4 w-4 text-[var(--color-accent-cool)]" />
+                          {completedProjects} completed
+                        </span>
+                        <span className="inline-flex items-center gap-2">
+                          <MapPin className="h-4 w-4 text-[var(--color-text-muted)]" />
+                          {expert.location || expert.country || "Remote"}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col justify-between gap-4 rounded-2xl border border-white/10 bg-white/[0.035] p-4 lg:items-stretch">
+                      <div>
+                        <p className="text-xs font-black uppercase tracking-[0.18em] text-[var(--color-text-muted)]">Rate</p>
+                        <p className="mt-1 flex items-center gap-1 text-2xl font-black text-white">
+                          <DollarSign className="h-5 w-5 text-[var(--color-success)]" />
+                          {formatRate(expert.hourlyRate).replace("$", "")}
+                        </p>
+                        <p className="mt-3 flex items-center gap-2 text-xs font-semibold text-[var(--color-text-muted)]">
+                          <CheckCircle2 className="h-4 w-4 text-[var(--color-success)]" />
+                          Profile ready for review
+                        </p>
+                      </div>
+
+                      <div className="grid gap-2">
+                        <Link
+                          to={`/experts/${expert._id}`}
+                          className="inline-flex items-center justify-center gap-2 rounded-full bg-[var(--color-primary)] px-4 py-2.5 text-sm font-black text-white shadow-[0_18px_45px_var(--color-primary-glow)] transition hover:bg-[var(--color-primary-hover)]"
+                        >
+                          View profile
+                          <ArrowRight className="h-4 w-4" />
+                        </Link>
+                        {user?.role === "client" ? (
+                          <button
+                            type="button"
+                            onClick={() => toggleSavedExpert(expert._id)}
+                            className={
+                              saved
+                                ? "inline-flex items-center justify-center gap-2 rounded-full border border-[var(--color-primary)] bg-[var(--color-primary)]/10 px-4 py-2.5 text-sm font-black text-[var(--color-accent)]"
+                                : "inline-flex items-center justify-center gap-2 rounded-full border border-white/12 bg-white/5 px-4 py-2.5 text-sm font-black text-white transition hover:bg-white/10"
+                            }
+                          >
+                            <Heart className={saved ? "h-4 w-4 fill-current" : "h-4 w-4"} />
+                            {saved ? "Saved" : "Save expert"}
+                          </button>
+                        ) : (
+                          <Link
+                            to="/auth/role-select"
+                            className="inline-flex items-center justify-center gap-2 rounded-full border border-white/12 bg-white/5 px-4 py-2.5 text-sm font-black text-white transition hover:bg-white/10"
+                          >
+                            <Sparkles className="h-4 w-4" />
+                            Hire path
+                          </Link>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </article>
+              );
+            })}
         </div>
-      </div>
+      </section>
     </div>
   );
 }

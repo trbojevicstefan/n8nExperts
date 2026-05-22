@@ -47,6 +47,8 @@ export const api = axios.create({
   },
 });
 
+export const buildApiUrl = (path: string) => api.getUri({ url: path.startsWith("/") ? path : `/${path}` });
+
 export type AuthRegisterPayload = {
   username: string;
   email: string;
@@ -58,6 +60,7 @@ export type AuthRegisterPayload = {
 export const authApi = {
   register: (payload: AuthRegisterPayload) => api.post<{ message: string; user: User }>("/auth/register", payload),
   login: (payload: { username: string; password: string }) => api.post<User>("/auth/login", payload),
+  session: () => api.get<{ user: User | null }>("/auth/session"),
   me: () => api.get<User>("/auth/me"),
   logout: () => api.post<{ message: string }>("/auth/logout"),
 };

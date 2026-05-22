@@ -1,153 +1,333 @@
-import { dashboardData } from "@/data/mockData";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import {
+  ArrowRight,
+  BellRing,
+  BriefcaseBusiness,
+  CircleCheck,
+  Clock3,
+  DollarSign,
+  FolderKanban,
+  Handshake,
+  MessageCircleMore,
+  Search,
+  Wallet,
+} from "lucide-react";
+import { dashboardData } from "@/data/mockData";
+import { useAuth } from "@/hooks/useAuth";
+import { usePageMeta } from "@/hooks/usePageMeta";
 
-export interface DashboardOverviewProps {}
+type WorkspaceMode = "expert" | "client";
 
-export default function DashboardOverview(_props: Readonly<DashboardOverviewProps>) {
-    return (
-        <div className="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen bg-grid overflow-x-hidden">
-            <main className="flex-1 px-6 lg:px-20 py-8 max-w-[1400px] mx-auto w-full space-y-12">
-                {/* Greeting Section */}
-                <section className="space-y-2">
-                    <p className="font-body text-sm uppercase tracking-[0.2em] text-primary/80 font-bold">Dashboard</p>
-                    <h1 className="font-headline text-4xl md:text-5xl font-black text-white tracking-tight">Good morning, <span className="text-primary">{dashboardData.user.name}</span></h1>
-                </section>
+const quickActionsByMode: Record<
+  WorkspaceMode,
+  Array<{ title: string; detail: string; to: string; icon: typeof FolderKanban }>
+> = {
+  client: [
+    {
+      title: "Post Project",
+      detail: "Publish a scoped brief",
+      to: "/post-project",
+      icon: FolderKanban,
+    },
+    {
+      title: "Find Talent",
+      detail: "Browse verified experts",
+      to: "/find-experts",
+      icon: Search,
+    },
+    {
+      title: "Withdraw Funds",
+      detail: "Open billing controls",
+      to: "/workspace?intent=withdraw",
+      icon: Wallet,
+    },
+  ],
+  expert: [
+    {
+      title: "Find Work",
+      detail: "Browse open client briefs",
+      to: "/jobs",
+      icon: Search,
+    },
+    {
+      title: "Open Inbox",
+      detail: "Respond to active threads",
+      to: "/inbox",
+      icon: MessageCircleMore,
+    },
+    {
+      title: "Withdraw Funds",
+      detail: "Open billing controls",
+      to: "/workspace?intent=withdraw",
+      icon: Wallet,
+    },
+  ],
+};
 
-                {/* Quick Actions Row */}
-                <section className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <Link to="/post-project" className="glass-card flex flex-col items-center justify-center p-6 rounded-2xl hover:bg-white/10 active:scale-95 transition-all cursor-pointer border border-white/10 bg-[#1e1316]/70 backdrop-blur-md group">
-                        <span className="material-symbols-outlined text-primary mb-3 text-3xl group-hover:scale-110 transition-transform shadow-[0_0_15px_rgba(244,37,89,0.5)] bg-primary/20 rounded-full p-2">add_circle</span>
-                        <span className="font-body text-xs font-bold text-white/90 uppercase tracking-widest text-center leading-tight">Post Project</span>
-                    </Link>
-                    <Link to="/find-talent" className="glass-card flex flex-col items-center justify-center p-6 rounded-2xl hover:bg-white/10 active:scale-95 transition-all cursor-pointer border border-white/10 bg-[#1e1316]/70 backdrop-blur-md group">
-                        <span className="material-symbols-outlined text-emerald-500 mb-3 text-3xl group-hover:scale-110 transition-transform bg-emerald-500/10 rounded-full p-2">search</span>
-                        <span className="font-body text-xs font-bold text-white/90 uppercase tracking-widest text-center leading-tight">Find Talent</span>
-                    </Link>
-                    <button className="glass-card flex flex-col items-center justify-center p-6 rounded-2xl hover:bg-white/10 active:scale-95 transition-all cursor-pointer border border-white/10 bg-[#1e1316]/70 backdrop-blur-md group">
-                        <span className="material-symbols-outlined text-white mb-3 text-3xl group-hover:scale-110 transition-transform bg-white/5 rounded-full p-2">payments</span>
-                        <span className="font-body text-xs font-bold text-white/90 uppercase tracking-widest text-center leading-tight">Withdraw</span>
-                    </button>
-                </section>
+export default function DashboardOverview() {
+  const { user } = useAuth();
+  const resolvedMode: WorkspaceMode = user?.role === "client" ? "client" : "expert";
+  const [viewMode, setViewMode] = useState<WorkspaceMode>(resolvedMode);
 
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    {/* Left Column (Metrics + Projects) */}
-                    <div className="lg:col-span-2 space-y-8">
-                        {/* Key Metrics Bento */}
-                        <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div className="glass-card md:col-span-2 p-8 rounded-3xl relative overflow-hidden border border-white/10 bg-[#1e1316]/70 backdrop-blur-md">
-                                <div className="absolute -right-10 -top-10 w-48 h-48 bg-primary/20 rounded-full blur-3xl mix-blend-screen pointer-events-none"></div>
-                                <div className="flex justify-between items-start relative z-10">
-                                    <div className="space-y-1">
-                                        <p className="text-white/50 text-sm font-bold uppercase tracking-widest">Monthly Earnings</p>
-                                        <h2 className="text-4xl md:text-5xl font-black text-white font-headline tracking-tighter">{dashboardData.metrics.monthlyEarnings}</h2>
-                                    </div>
-                                    <div className="p-3 bg-primary/20 rounded-2xl shadow-[0_0_15px_rgba(244,37,89,0.3)]">
-                                        <span className="material-symbols-outlined text-primary text-2xl">trending_up</span>
-                                    </div>
-                                </div>
-                                <div className="mt-6 flex items-center gap-2 relative z-10">
-                                    <span className="material-symbols-outlined text-emerald-500 text-sm">arrow_upward</span>
-                                    <span className="text-emerald-500 text-sm font-bold">{dashboardData.metrics.growth}</span>
-                                </div>
-                            </div>
-                            <div className="glass-card p-6 rounded-3xl space-y-4 border border-white/10 bg-[#1e1316]/70 backdrop-blur-md">
-                                <p className="text-white/50 text-xs font-bold uppercase tracking-widest">Projects</p>
-                                <div className="flex items-baseline gap-2">
-                                    <span className="text-3xl font-black text-white">{dashboardData.metrics.activeProjects}</span>
-                                    <span className="text-sm font-bold text-white/40 uppercase tracking-wider">Active</span>
-                                </div>
-                                <div className="h-1.5 w-full bg-white/10 rounded-full overflow-hidden">
-                                    <div className="h-full bg-primary w-2/3 shadow-[0_0_10px_rgba(244,37,89,0.8)]"></div>
-                                </div>
-                            </div>
-                            <div className="glass-card p-6 rounded-3xl space-y-4 border border-white/10 bg-[#1e1316]/70 backdrop-blur-md">
-                                <p className="text-white/50 text-xs font-bold uppercase tracking-widest">Job Success Score</p>
-                                <div className="flex items-baseline gap-2">
-                                    <span className="text-3xl font-black text-emerald-500 drop-shadow-[0_0_8px_rgba(16,185,129,0.5)]">{dashboardData.metrics.successRate}</span>
-                                </div>
-                                <div className="flex -space-x-3 mt-2">
-                                    <div className="w-8 h-8 rounded-full border-2 border-background-dark bg-emerald-500/20 flex items-center justify-center text-xs font-bold text-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.2)]">1st</div>
-                                    <div className="w-8 h-8 rounded-full border-2 border-background-dark bg-white/5"></div>
-                                    <div className="w-8 h-8 rounded-full border-2 border-background-dark bg-white/5"></div>
-                                </div>
-                            </div>
-                        </section>
+  useEffect(() => {
+    setViewMode(resolvedMode);
+  }, [resolvedMode]);
 
-                        {/* Active Projects List */}
-                        <section className="space-y-6">
-                            <div className="flex justify-between items-end border-b border-white/10 pb-4">
-                                <h3 className="font-headline text-2xl font-black text-white">Active Projects</h3>
-                                <Link to="/my-jobs" className="text-primary text-xs font-bold uppercase tracking-widest cursor-pointer hover:text-white transition-colors">View All</Link>
-                            </div>
-                            <div className="space-y-4">
-                                {dashboardData.activeProjects.map(project => (
-                                    <Link to={`/workspace/jobs/${project.id}`} key={project.id} className="block glass-card p-6 rounded-2xl group hover:bg-white/10 transition-colors border border-white/10 bg-[#1e1316]/70 backdrop-blur-md cursor-pointer">
-                                        <div className="flex justify-between items-start mb-4">
-                                            <div>
-                                                <h4 className="text-white font-bold text-lg mb-1 group-hover:text-primary transition-colors">{project.title}</h4>
-                                                <p className="text-slate-400 text-sm font-medium">Client: {project.client}</p>
-                                            </div>
-                                            <span className={`text-[10px] font-bold px-2.5 py-1 rounded-md uppercase tracking-wider ${project.statusColor === 'primary' ? 'bg-primary/20 text-primary border border-primary/30 shadow-[0_0_10px_rgba(244,37,89,0.2)]' : 'bg-emerald-500/20 text-emerald-500 border border-emerald-500/30 shadow-[0_0_10px_rgba(16,185,129,0.2)]'}`}>
-                                                {project.status}
-                                            </span>
-                                        </div>
-                                        <div className="space-y-3">
-                                            <div className="flex justify-between text-xs font-bold text-slate-400">
-                                                <span className="uppercase tracking-wider">Next Milestone: <span className="text-white">{project.nextMilestone}</span></span>
-                                                <span className="text-white">{project.progress}%</span>
-                                            </div>
-                                            <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden shadow-inner">
-                                                <div 
-                                                    className={`h-full rounded-full transition-all duration-1000 ${project.statusColor === 'primary' ? 'bg-primary shadow-[0_0_10px_rgba(244,37,89,0.5)]' : 'bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]'}`} 
-                                                    style={{ width: `${project.progress}%` }}>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </Link>
-                                ))}
-                            </div>
-                        </section>
-                    </div>
+  usePageMeta({
+    title: "Workspace | n8nExperts",
+    description: "Control center for active jobs, earnings, completion rate, and message context.",
+    canonicalPath: "/workspace",
+    noIndex: true,
+  });
 
-                    {/* Right Column (Messages) */}
-                    <div className="space-y-8 lg:col-span-1">
-                        <section className="glass-card rounded-3xl border border-white/10 bg-[#1e1316]/70 backdrop-blur-md overflow-hidden flex flex-col h-full min-h-[500px]">
-                            <div className="p-6 border-b border-white/10 flex justify-between items-center bg-white/5">
-                                <h3 className="font-headline text-xl font-black text-white flex items-center gap-2">
-                                    <span className="material-symbols-outlined text-primary">forum</span> Recent Messages
-                                </h3>
-                                <Link to="/inbox" className="text-xs font-bold text-slate-400 hover:text-white uppercase tracking-wider transition-colors">Inbox</Link>
-                            </div>
-                            <div className="p-6 space-y-5 flex-1 overflow-y-auto">
-                                {dashboardData.recentMessages.map(msg => (
-                                    <Link to="/inbox" key={msg.id} className="flex gap-4 items-start active:scale-[0.98] transition-transform cursor-pointer group p-3 hover:bg-white/5 rounded-xl -mx-3">
-                                        <div className="relative shrink-0 mt-1">
-                                            <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-background-dark shadow-lg">
-                                                <img alt={msg.sender} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" src={msg.avatar} />
-                                            </div>
-                                            {msg.online && (
-                                                <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-emerald-500 rounded-full border-[3px] border-background-dark shadow-[0_0_8px_rgba(16,185,129,0.8)]"></div>
-                                            )}
-                                        </div>
-                                        <div className="flex-1 min-w-0">
-                                            <div className="flex justify-between items-baseline mb-1">
-                                                <h5 className="text-white font-bold text-sm truncate group-hover:text-primary transition-colors">{msg.sender}</h5>
-                                                <span className="text-[10px] text-slate-500 font-bold uppercase">{msg.time}</span>
-                                            </div>
-                                            <p className="text-slate-400 text-xs leading-relaxed line-clamp-2">{msg.preview}</p>
-                                        </div>
-                                    </Link>
-                                ))}
-                            </div>
-                            <div className="p-4 border-t border-white/10 bg-white/5">
-                                <button className="w-full py-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl text-xs font-bold text-white uppercase tracking-widest transition-all shadow-sm">
-                                    View All Conversations
-                                </button>
-                            </div>
-                        </section>
-                    </div>
-                </div>
-            </main>
+  const topMetric = viewMode === "client"
+    ? {
+        label: "Spending This Month",
+        value: dashboardData.metrics.monthlySpending,
+        change: dashboardData.metrics.spendChange,
+        isPositive: true,
+        icon: Wallet,
+      }
+    : {
+        label: "Earnings This Month",
+        value: dashboardData.metrics.monthlyEarnings,
+        change: dashboardData.metrics.growth,
+        isPositive: true,
+        icon: DollarSign,
+      };
+
+  const projectsRoute = viewMode === "client" ? "/my-jobs" : "/my-applications";
+  const quickActions = quickActionsByMode[viewMode];
+
+  const notificationTone = {
+    info: "border-sky-400/35 bg-sky-400/10 text-sky-200",
+    success: "border-emerald-500/35 bg-emerald-500/10 text-emerald-200",
+    warning: "border-amber-400/35 bg-amber-400/10 text-amber-200",
+  } as const;
+  type NotificationLevel = keyof typeof notificationTone;
+
+  return (
+    <div className="container page-stack py-6 md:py-8">
+      <section className="app-page-header">
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div className="space-y-2">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-slate-400">Workspace</p>
+            <h1 className="text-3xl font-black tracking-tight text-white md:text-4xl">Welcome back, {dashboardData.user.name}</h1>
+            <p className="max-w-3xl text-sm text-slate-300">Keep project health, communication, and payout readiness in one place.</p>
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="inline-flex items-center gap-1 rounded-full border border-emerald-500/35 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-300">
+              <CircleCheck className="h-3.5 w-3.5" />
+              Available
+            </span>
+            <div className="inline-flex items-center overflow-hidden rounded-full border border-white/15 bg-white/5 p-0.5" role="group" aria-label="Dashboard view mode">
+              <button
+                type="button"
+                onClick={() => setViewMode("expert")}
+                className={`rounded-full px-3 py-1 text-xs font-semibold transition-colors ${viewMode === "expert" ? "bg-primary text-white" : "text-slate-300 hover:text-white"}`}
+                aria-pressed={viewMode === "expert"}
+              >
+                Expert
+              </button>
+              <button
+                type="button"
+                onClick={() => setViewMode("client")}
+                className={`rounded-full px-3 py-1 text-xs font-semibold transition-colors ${viewMode === "client" ? "bg-primary text-white" : "text-slate-300 hover:text-white"}`}
+                aria-pressed={viewMode === "client"}
+              >
+                Client
+              </button>
+            </div>
+            <span className="inline-flex items-center gap-1 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs font-semibold text-slate-200">
+              <Handshake className="h-3.5 w-3.5" />
+              {viewMode === "client" ? "Client View" : "Expert View"}
+            </span>
+          </div>
         </div>
-    );
+      </section>
+
+      <section className="stat-strip">
+        <article className="stat-pill">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">{topMetric.label}</p>
+          <div className="mt-2 flex items-end justify-between gap-2">
+            <p className="text-2xl font-extrabold text-white">{topMetric.value}</p>
+            <topMetric.icon className="h-5 w-5 text-primary" />
+          </div>
+          <p className={`mt-2 text-xs font-semibold ${topMetric.isPositive ? "text-emerald-300" : "text-amber-300"}`}>{topMetric.change}</p>
+        </article>
+
+        <article className="stat-pill">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">{viewMode === "client" ? "Active Jobs" : "Active Contracts"}</p>
+          <div className="mt-2 flex items-end justify-between gap-2">
+            <p className="text-2xl font-extrabold text-white">{dashboardData.metrics.activeProjects}</p>
+            <BriefcaseBusiness className="h-5 w-5 text-primary" />
+          </div>
+          <p className="mt-2 text-xs font-semibold text-slate-300">{viewMode === "client" ? "In delivery this week" : "Across live engagements"}</p>
+        </article>
+
+        <article className="stat-pill">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-400">Completion Rate</p>
+          <div className="mt-2 flex items-end justify-between gap-2">
+            <p className="text-2xl font-extrabold text-emerald-300">{dashboardData.metrics.successRate}</p>
+            <CircleCheck className="h-5 w-5 text-emerald-300" />
+          </div>
+          <p className="mt-2 text-xs font-semibold text-slate-300">Across closed milestones</p>
+        </article>
+      </section>
+
+      <section className="grid gap-3 md:grid-cols-3">
+        {quickActions.map((action) => {
+          const Icon = action.icon;
+          return (
+            <Link
+              key={action.title}
+              to={action.to}
+              className="surface-card group flex min-h-24 items-center justify-between rounded-xl px-4 py-3 transition-colors hover:border-primary/40"
+            >
+              <div>
+                <p className="text-sm font-semibold text-white">{action.title}</p>
+                <p className="mt-1 text-xs text-slate-400">{action.detail}</p>
+              </div>
+              <div className="flex items-center gap-2 text-primary">
+                <Icon className="h-4 w-4" />
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+              </div>
+            </Link>
+          );
+        })}
+      </section>
+
+      <section className="grid gap-4 lg:grid-cols-[minmax(0,1.6fr)_minmax(0,1fr)]">
+        <article className="surface-card rounded-xl">
+          <header className="mb-4 flex items-center justify-between gap-3">
+            <div>
+              <h2 className="text-lg font-bold text-white">{viewMode === "client" ? "Active Projects" : "Active Contracts"}</h2>
+              <p className="text-xs text-slate-400">Track milestone progress and due-state at a glance.</p>
+            </div>
+            <Link to={projectsRoute} className="text-xs font-semibold text-primary hover:text-white">
+              View all
+            </Link>
+          </header>
+
+          <div className="space-y-3">
+            {dashboardData.activeProjects.map((project) => {
+              const isUrgent = project.statusColor === "primary";
+              return (
+                <Link
+                  key={project.id}
+                  to={projectsRoute}
+                  className="dense-list-card block rounded-xl p-4 transition-colors hover:border-primary/30"
+                >
+                  <div className="flex flex-wrap items-start justify-between gap-2">
+                    <div className="min-w-0">
+                      <h3 className="truncate text-sm font-bold text-white">{project.title}</h3>
+                      <p className="text-xs text-slate-400">{viewMode === "client" ? `Client: ${project.client}` : `Partner: ${project.client}`}</p>
+                    </div>
+                    <span
+                      className={`rounded-md px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.12em] ${
+                        isUrgent
+                          ? "border border-primary/45 bg-primary/15 text-primary"
+                          : "border border-emerald-500/40 bg-emerald-500/15 text-emerald-300"
+                      }`}
+                    >
+                      {project.status}
+                    </span>
+                  </div>
+
+                  <div className="mt-3 flex items-center justify-between gap-2 text-xs text-slate-300">
+                    <span className="inline-flex items-center gap-1">
+                      <Clock3 className="h-3.5 w-3.5 text-slate-400" />
+                      Next: {project.nextMilestone}
+                    </span>
+                    <span className="font-semibold text-white">{project.progress}%</span>
+                  </div>
+
+                  <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-white/10">
+                    <div
+                      className={`h-full rounded-full ${isUrgent ? "bg-primary" : "bg-emerald-400"}`}
+                      style={{ width: `${project.progress}%` }}
+                    />
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </article>
+
+        <div className="space-y-4">
+          <article className="context-aside rounded-xl">
+            <header className="mb-3 flex items-center justify-between gap-3">
+              <h2 className="inline-flex items-center gap-2 text-lg font-bold text-white">
+                <MessageCircleMore className="h-5 w-5 text-primary" />
+                Recent Messages
+              </h2>
+              <Link to="/inbox" className="text-xs font-semibold text-primary hover:text-white">
+                Open inbox
+              </Link>
+            </header>
+
+            <div className="space-y-2">
+              {dashboardData.recentMessages.map((message) => (
+                <Link
+                  key={message.id}
+                  to="/inbox"
+                  className="flex items-start gap-3 rounded-xl border border-white/10 bg-white/3 p-3 transition-colors hover:border-primary/35"
+                >
+                  <img src={message.avatar} alt={message.sender} className="h-10 w-10 rounded-full border border-white/10 object-cover" />
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-baseline justify-between gap-2">
+                      <p className="truncate text-sm font-semibold text-white">{message.sender}</p>
+                      <p className="shrink-0 text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-500">{message.time}</p>
+                    </div>
+                    <p className="mt-1 line-clamp-2 text-xs text-slate-300">{message.preview}</p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </article>
+
+          <article className="context-aside rounded-xl">
+            <header className="mb-3 flex items-center justify-between gap-3">
+              <h2 className="inline-flex items-center gap-2 text-lg font-bold text-white">
+                <BellRing className="h-5 w-5 text-primary" />
+                Notifications
+              </h2>
+              <Link to="/notifications" className="text-xs font-semibold text-primary hover:text-white">
+                View all
+              </Link>
+            </header>
+
+            <div className="space-y-2">
+              {dashboardData.notifications.map((notification) => {
+                const level = notification.level as NotificationLevel;
+                return (
+                  <Link
+                    key={notification.id}
+                    to={notification.to}
+                    className="block rounded-xl border border-white/10 bg-white/3 p-3 transition-colors hover:border-primary/35"
+                  >
+                    <div className="flex items-center justify-between gap-2">
+                      <p className="text-sm font-semibold text-white">{notification.title}</p>
+                      <p className="shrink-0 text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-500">{notification.time}</p>
+                    </div>
+                    <p className="mt-1 text-xs text-slate-300">{notification.detail}</p>
+                    <div className="mt-2 flex items-center justify-between gap-2">
+                      <span className={`inline-flex rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.12em] ${notificationTone[level]}`}>
+                        {level}
+                      </span>
+                      <span className="inline-flex items-center gap-1 text-xs font-semibold text-primary">
+                        {notification.cta}
+                        <ArrowRight className="h-3.5 w-3.5" />
+                      </span>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          </article>
+        </div>
+      </section>
+    </div>
+  );
 }
