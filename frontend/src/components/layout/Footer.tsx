@@ -49,7 +49,7 @@ export function Footer({ tone = "full" }: { tone?: "full" | "compact" }) {
         <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr_0.9fr_0.9fr]">
           <div className="space-y-5">
             <p className="eyebrow">n8nExperts</p>
-            <h2 className="max-w-sm text-2xl font-black tracking-[-0.03em] text-white">
+            <h2 className="max-w-sm text-2xl font-bold text-white">
               A clearer marketplace for serious n8n hiring and delivery.
             </h2>
             <p className="max-w-md text-sm leading-7 text-[var(--color-text-secondary)]">{brandCopy.summary}</p>

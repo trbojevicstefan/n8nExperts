@@ -174,19 +174,17 @@ export default function ExpertMarketplace() {
   return (
     <div className="container page-stack">
       <section className="app-page-header">
-        <div className="hero-glow hero-glow-left" />
-        <div className="hero-glow hero-glow-right" />
         <div className="relative z-10 grid gap-6 lg:grid-cols-[1fr_auto] lg:items-end">
           <div>
             <p className="eyebrow">Talent marketplace</p>
-            <h1 className="mt-5 max-w-4xl text-4xl font-black leading-[0.98] tracking-[-0.05em] text-white md:text-6xl">
+            <h1 className="mt-5 max-w-4xl text-3xl font-bold leading-tight text-white md:text-4xl">
               Hire n8n experts with proof, rates, and fit in view.
             </h1>
             <p className="mt-5 max-w-3xl text-base leading-8 text-[var(--color-text-secondary)]">
               Search like a serious hiring marketplace: compare specialists by skill, availability, delivery proof, and budget fit before opening a profile.
             </p>
           </div>
-          <div className="grid gap-2 rounded-[1.5rem] border border-white/10 bg-white/[0.04] p-4 text-sm text-[var(--color-text-secondary)] sm:min-w-72">
+          <div className="grid gap-2 rounded-xl border border-white/10 bg-white/[0.04] p-4 text-sm text-[var(--color-text-secondary)] sm:min-w-72">
             <div className="flex items-center justify-between gap-3">
               <span>Visible experts</span>
               <strong className="text-xl text-white">{loading ? "..." : experts.length}</strong>
@@ -218,7 +216,7 @@ export default function ExpertMarketplace() {
                 <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--color-text-muted)]" />
                 <input
                   id="expert-search"
-                  className="h-11 w-full rounded-2xl border border-white/10 bg-black/25 pl-10 pr-3 text-sm text-white outline-none transition placeholder:text-slate-600 focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary-glow)]"
+                  className="h-11 w-full rounded-xl border border-white/10 bg-black/25 pl-10 pr-3 text-sm text-white outline-none transition placeholder:text-slate-600 focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary-glow)]"
                   placeholder="n8n, Slack, HubSpot..."
                   type="text"
                   value={searchQuery}
@@ -231,14 +229,14 @@ export default function ExpertMarketplace() {
               <p className="text-xs font-black uppercase tracking-[0.18em] text-[var(--color-text-muted)]">Hourly rate</p>
               <div className="mt-2 grid grid-cols-2 gap-2">
                 <input
-                  className="h-11 rounded-2xl border border-white/10 bg-black/25 px-3 text-sm text-white outline-none placeholder:text-slate-600 focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary-glow)]"
+                  className="h-11 rounded-xl border border-white/10 bg-black/25 px-3 text-sm text-white outline-none placeholder:text-slate-600 focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary-glow)]"
                   placeholder="Min $"
                   inputMode="numeric"
                   value={minRate}
                   onChange={(e) => updateSearch({ minRate: e.target.value })}
                 />
                 <input
-                  className="h-11 rounded-2xl border border-white/10 bg-black/25 px-3 text-sm text-white outline-none placeholder:text-slate-600 focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary-glow)]"
+                  className="h-11 rounded-xl border border-white/10 bg-black/25 px-3 text-sm text-white outline-none placeholder:text-slate-600 focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary-glow)]"
                   placeholder="Max $"
                   inputMode="numeric"
                   value={maxRate}
@@ -258,8 +256,8 @@ export default function ExpertMarketplace() {
                       type="button"
                       className={
                         active
-                          ? "rounded-full bg-[var(--color-primary)] px-3 py-1.5 text-xs font-black text-white"
-                          : "rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-bold text-[var(--color-text-secondary)] transition hover:border-white/25 hover:text-white"
+                          ? "rounded-md bg-[var(--color-primary)] px-3 py-1.5 text-xs font-black text-white"
+                          : "rounded-md border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-bold text-[var(--color-text-secondary)] transition hover:border-white/25 hover:text-white"
                       }
                       onClick={() => toggleSkill(skill)}
                     >
@@ -269,7 +267,7 @@ export default function ExpertMarketplace() {
                 })}
               </div>
               <input
-                className="mt-3 h-11 w-full rounded-2xl border border-white/10 bg-black/25 px-3 text-sm text-white outline-none placeholder:text-slate-600 focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary-glow)]"
+                className="mt-3 h-11 w-full rounded-xl border border-white/10 bg-black/25 px-3 text-sm text-white outline-none placeholder:text-slate-600 focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary-glow)]"
                 placeholder="Custom skills"
                 value={skillsFilter}
                 onChange={(e) => updateSearch({ skills: e.target.value })}
@@ -282,7 +280,7 @@ export default function ExpertMarketplace() {
               </label>
               <select
                 id="expert-sort"
-                className="mt-2 h-11 w-full rounded-2xl border border-white/10 bg-black/25 px-3 text-sm font-bold text-white outline-none focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary-glow)] [&>option]:bg-[#101624]"
+                className="mt-2 h-11 w-full rounded-xl border border-white/10 bg-black/25 px-3 text-sm font-bold text-white outline-none focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary-glow)] [&>option]:bg-[#101624]"
                 value={sort}
                 onChange={(e) => updateSearch({ sort: e.target.value })}
               >
@@ -295,7 +293,7 @@ export default function ExpertMarketplace() {
 
             <div className="grid gap-2 border-t border-white/10 pt-5">
               {user?.role === "client" && (
-                <Button size="sm" variant="outline" onClick={saveCurrentSearch} className="w-full rounded-full">
+                <Button size="sm" variant="outline" onClick={saveCurrentSearch} className="w-full rounded-md">
                   <BookmarkPlus className="mr-1 h-4 w-4" />
                   Save search
                 </Button>

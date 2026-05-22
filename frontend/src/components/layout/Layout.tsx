@@ -40,8 +40,6 @@ function ShellLayout({
 
   return (
     <div className={cn("app-shell", `shell-${mode}`)}>
-      <div className="shell-orb shell-orb-left" />
-      <div className="shell-orb shell-orb-right" />
       <Navbar mode={chromeMode} />
       <main
         className={cn(

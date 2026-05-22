@@ -113,19 +113,19 @@ export default function DashboardOverview() {
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div className="space-y-2">
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-slate-400">Workspace</p>
-            <h1 className="text-3xl font-black tracking-tight text-white md:text-4xl">Welcome back, {dashboardData.user.name}</h1>
+            <h1 className="text-3xl font-bold text-white md:text-4xl">Welcome back, {dashboardData.user.name}</h1>
             <p className="max-w-3xl text-sm text-slate-300">Keep project health, communication, and payout readiness in one place.</p>
           </div>
           <div className="flex flex-wrap items-center gap-2">
-            <span className="inline-flex items-center gap-1 rounded-full border border-emerald-500/35 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-300">
+            <span className="inline-flex items-center gap-1 rounded-md border border-emerald-500/35 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-300">
               <CircleCheck className="h-3.5 w-3.5" />
               Available
             </span>
-            <div className="inline-flex items-center overflow-hidden rounded-full border border-white/15 bg-white/5 p-0.5" role="group" aria-label="Dashboard view mode">
+            <div className="inline-flex items-center overflow-hidden rounded-md border border-white/15 bg-white/5 p-0.5" role="group" aria-label="Dashboard view mode">
               <button
                 type="button"
                 onClick={() => setViewMode("expert")}
-                className={`rounded-full px-3 py-1 text-xs font-semibold transition-colors ${viewMode === "expert" ? "bg-primary text-white" : "text-slate-300 hover:text-white"}`}
+                className={`rounded-md px-3 py-1 text-xs font-semibold transition-colors ${viewMode === "expert" ? "bg-primary text-white" : "text-slate-300 hover:text-white"}`}
                 aria-pressed={viewMode === "expert"}
               >
                 Expert
@@ -133,13 +133,13 @@ export default function DashboardOverview() {
               <button
                 type="button"
                 onClick={() => setViewMode("client")}
-                className={`rounded-full px-3 py-1 text-xs font-semibold transition-colors ${viewMode === "client" ? "bg-primary text-white" : "text-slate-300 hover:text-white"}`}
+                className={`rounded-md px-3 py-1 text-xs font-semibold transition-colors ${viewMode === "client" ? "bg-primary text-white" : "text-slate-300 hover:text-white"}`}
                 aria-pressed={viewMode === "client"}
               >
                 Client
               </button>
             </div>
-            <span className="inline-flex items-center gap-1 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-xs font-semibold text-slate-200">
+            <span className="inline-flex items-center gap-1 rounded-md border border-white/15 bg-white/5 px-3 py-1 text-xs font-semibold text-slate-200">
               <Handshake className="h-3.5 w-3.5" />
               {viewMode === "client" ? "Client View" : "Expert View"}
             </span>

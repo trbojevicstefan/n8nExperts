@@ -127,7 +127,7 @@ export function Navbar({ mode = "public" }: { mode?: ShellMode }) {
               <Network className="h-5 w-5 text-white" />
             </div>
             <div>
-              <p className="text-sm font-black leading-none tracking-[-0.03em] text-white sm:text-base">{brandCopy.name}</p>
+              <p className="text-sm font-bold leading-none text-white sm:text-base">{brandCopy.name}</p>
             </div>
           </Link>
 

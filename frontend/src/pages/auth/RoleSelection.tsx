@@ -60,7 +60,7 @@ export default function RoleSelection() {
         <div className="relative z-10 grid gap-10 lg:grid-cols-[0.82fr_1.18fr] lg:items-center">
           <div>
             <p className="eyebrow">Choose your path</p>
-            <h1 className="mt-5 max-w-[11ch] text-4xl font-black leading-[0.95] tracking-[-0.05em] text-white md:text-6xl">
+            <h1 className="mt-5 max-w-[11ch] text-4xl font-bold leading-[1.02] text-white md:text-6xl">
               Join n8nExperts
             </h1>
             <p className="mt-5 max-w-xl text-base leading-8 text-[var(--color-text-secondary)] md:text-lg">
@@ -126,7 +126,7 @@ export default function RoleSelection() {
                       </div>
 
                       <p className="mt-7 text-[11px] font-black uppercase tracking-[0.24em] text-[var(--color-text-muted)]">{card.eyebrow}</p>
-                      <h2 className="mt-3 text-2xl font-black tracking-[-0.04em] text-white">{card.title}</h2>
+                      <h2 className="mt-3 text-2xl font-bold text-white">{card.title}</h2>
                       <p className="mt-4 text-sm leading-7 text-[var(--color-text-secondary)]">{card.description}</p>
 
                       <ul className="mt-6 space-y-3">

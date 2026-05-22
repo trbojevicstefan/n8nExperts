@@ -12,7 +12,6 @@ import {
 } from "lucide-react";
 import { Link, Navigate } from "react-router-dom";
 import { ConversionRail } from "@/components/marketing/ConversionRail";
-import { HeroWorkflowScene } from "@/components/marketing/HeroWorkflowScene";
 import { SectionHeading } from "@/components/marketing/SectionHeading";
 import { homeContent } from "@/content/site";
 import { useAuth } from "@/hooks/useAuth";
@@ -75,9 +74,6 @@ export default function Home() {
   return (
     <div className="container page-stack">
       <section className="home-hero-shell">
-        <div className="hero-glow hero-glow-left" />
-        <div className="hero-glow hero-glow-right" />
-
         <div className="home-hero-grid">
           <div className="home-hero-copy">
             <p className="eyebrow">{homeContent.hero.eyebrow}</p>
@@ -109,10 +105,6 @@ export default function Home() {
                 </article>
               ))}
             </div>
-          </div>
-
-          <div className="home-hero-visual">
-            <HeroWorkflowScene />
           </div>
         </div>
 

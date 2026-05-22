@@ -61,7 +61,7 @@ type EmptyStateProps = {
 
 const actionClasses: Record<NonNullable<LinkAction["variant"]>, string> = {
   primary:
-    "bg-[var(--color-primary)] text-white shadow-[0_16px_38px_var(--color-primary-glow)] hover:bg-[var(--color-primary-hover)]",
+    "bg-[var(--color-primary)] text-white shadow-[0_8px_18px_var(--color-primary-glow)] hover:bg-[var(--color-primary-hover)]",
   secondary:
     "border border-white/12 bg-white/6 text-white hover:border-white/24 hover:bg-white/10",
   ghost: "text-[var(--color-text-secondary)] hover:text-white",
@@ -88,7 +88,7 @@ export function PublicPageHero({
             {eyebrow && <p className="eyebrow">{eyebrow}</p>}
             <h1
               className={cn(
-                "mt-4 max-w-4xl text-4xl font-black leading-[1.02] text-white md:text-[3.6rem] xl:text-[4.5rem]",
+                "mt-4 max-w-4xl text-3xl font-bold leading-tight text-white md:text-4xl xl:text-5xl",
                 align === "center" && !visual && "mx-auto"
               )}
             >
@@ -112,7 +112,7 @@ export function PublicPageHero({
                     key={`${action.href}-${action.label}`}
                     to={action.href}
                     className={cn(
-                      "inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-semibold transition-all",
+                      "inline-flex items-center justify-center gap-2 rounded-md px-5 py-3 text-sm font-semibold transition-all",
                       actionClasses[action.variant || "primary"]
                     )}
                   >
@@ -141,7 +141,7 @@ export function AppPageHeader({ eyebrow, title, description, actions, children, 
       <div className="space-y-3">
         {eyebrow && <div className="eyebrow">{eyebrow}</div>}
         <div className="space-y-2">
-          <h1 className="max-w-3xl text-3xl font-black tracking-[-0.03em] text-white md:text-[3rem]">{title}</h1>
+          <h1 className="max-w-3xl text-3xl font-bold text-white md:text-4xl">{title}</h1>
           {description && <p className="max-w-2xl text-sm leading-7 text-[var(--color-text-secondary)] md:text-base">{description}</p>}
         </div>
       </div>

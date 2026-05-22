@@ -58,7 +58,7 @@ export default function Login() {
           <aside className="hidden border-r border-white/10 p-8 lg:flex lg:flex-col lg:justify-between">
             <div>
               <p className="eyebrow">Workspace access</p>
-              <h1 className="mt-6 max-w-[10ch] text-5xl font-black leading-[0.95] tracking-[-0.05em] text-white">
+              <h1 className="mt-6 max-w-[10ch] text-5xl font-bold leading-[1.02] text-white">
                 Welcome back
               </h1>
               <p className="mt-5 max-w-md text-base leading-8 text-[var(--color-text-secondary)]">
@@ -86,7 +86,7 @@ export default function Login() {
                 <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-white/6 text-[var(--color-accent-cool)] lg:mx-0">
                   <Sparkles className="h-6 w-6" />
                 </div>
-                <h2 className="text-3xl font-black tracking-[-0.04em] text-white">Log in to n8nExperts</h2>
+                <h2 className="text-3xl font-bold text-white">Log in to n8nExperts</h2>
                 <p className="mt-3 text-sm leading-7 text-[var(--color-text-secondary)]">
                   {user ? `Signed in as ${user.username}` : "Use email, username, or Google to continue into your workspace."}
                 </p>

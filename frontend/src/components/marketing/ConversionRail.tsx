@@ -26,7 +26,7 @@ export function ConversionRail({
       <div className="relative z-10 grid gap-8 lg:grid-cols-[1.15fr_0.85fr] lg:items-end">
         <div>
           <p className="eyebrow">{eyebrow}</p>
-          <h2 className="mt-4 text-3xl font-black tracking-[-0.03em] text-white md:text-5xl">{title}</h2>
+          <h2 className="mt-4 text-3xl font-bold text-white md:text-5xl">{title}</h2>
           <p className="mt-4 max-w-2xl text-base leading-7 text-[var(--color-text-secondary)]">{description}</p>
         </div>
 

@@ -293,13 +293,8 @@ export default function FindWork() {
   };
 
   return (
-    <div className="min-h-[calc(100vh-4rem)] bg-[#0a0a0b] text-white pt-10 pb-20 relative">
-      <div 
-        className="absolute inset-0 pointer-events-none opacity-50 z-0"
-        style={{ backgroundImage: 'radial-gradient(rgba(244, 37, 89, 0.1) 1px, transparent 1px)', backgroundSize: '30px 30px' }}
-      ></div>
-
-      <div className="max-w-[1540px] mx-auto px-4 py-8 flex gap-6 relative z-10 w-full">
+    <div className="container page-stack py-6 md:py-8">
+      <div className="flex gap-6 w-full">
         <aside className="hidden lg:block w-72 shrink-0">
           <div className="context-aside sticky top-[var(--chrome-sticky-offset)]">
             <div className="flex items-center justify-between gap-3">
@@ -396,10 +391,10 @@ export default function FindWork() {
 
         {/* Job Feed Content */}
         <div className="flex-1 min-w-0 max-w-3xl xl:max-w-4xl mx-auto w-full">
-          <div className="mb-10 text-center xl:text-left">
+          <div className="mb-8 text-center xl:text-left">
             <p className="eyebrow">Job marketplace</p>
-            <h1 className="mt-4 text-4xl font-extrabold tracking-tight mb-2 text-white">Jobs you might like</h1>
-            <p className="text-slate-400 text-lg">Browse serious n8n briefs, compare client signals, and apply with a focused proposal.</p>
+            <h1 className="mt-4 mb-2 text-3xl font-bold text-white md:text-4xl">Jobs you might like</h1>
+            <p className="text-slate-400 text-base">Browse serious n8n briefs, compare client signals, and apply with a focused proposal.</p>
           </div>
 
           {flash && (
@@ -417,12 +412,12 @@ export default function FindWork() {
           )}
 
           {/* Filters / Search Bar (Replaces PagePrimitives components to match Stitch) */}
-          <div className="mb-8 p-4 rounded-2xl border border-white/10 bg-white/5 space-y-4 lg:hidden">
+          <div className="mb-8 p-4 rounded-xl border border-white/10 bg-white/5 space-y-4 lg:hidden">
             <div className="flex items-center gap-2 overflow-x-auto pb-2 custom-scrollbar">
               <div className="relative flex-1 min-w-[200px]">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
                 <Input
-                  className="pl-10 bg-white/5 border-white/10 text-white rounded-full focus:ring-primary focus:border-transparent h-10 w-full"
+                  className="pl-10 bg-white/5 border-white/10 text-white rounded-xl focus:ring-primary focus:border-transparent h-10 w-full"
                   placeholder="Search projects..."
                   value={searchText}
                   onChange={(event) => updateSearch({ search: event.target.value })}
@@ -447,7 +442,7 @@ export default function FindWork() {
               </div>
 
               {user?.role === "expert" && (
-                <Button size="sm" variant="outline" onClick={saveCurrentSearch} className="rounded-full border-white/20 bg-white/5 hover:bg-white/10 ml-auto whitespace-nowrap">
+                <Button size="sm" variant="outline" onClick={saveCurrentSearch} className="rounded-md border-white/20 bg-white/5 hover:bg-white/10 ml-auto whitespace-nowrap">
                   <BookmarkPlus className="h-4 w-4 mr-1" />
                   Save search
                 </Button>
@@ -500,7 +495,7 @@ export default function FindWork() {
                       openJobDetails(job);
                     }
                   }}
-                  className="group bg-[#1e1e1e] border border-white/10 p-6 rounded-2xl hover:border-primary/50 transition-all cursor-pointer shadow-sm relative overflow-hidden"
+                  className="group dense-list-card p-6 hover:border-primary/50 transition-all cursor-pointer relative overflow-hidden"
                 >
                   {/* Highlight bar for 'best fits' or 'strong briefs' */}
                   {(summary.detailTone === "strong" || summary.fit.score > 70) && (
@@ -540,7 +535,7 @@ export default function FindWork() {
                       </div>
                     </div>
 
-                    <div className="rounded-2xl border border-white/10 bg-white/[0.035] px-4 py-3 text-right sm:min-w-36">
+                    <div className="rounded-xl border border-white/10 bg-white/[0.035] px-4 py-3 text-right sm:min-w-36">
                       <p className="flex items-center justify-end gap-1 text-xs font-black uppercase tracking-[0.18em] text-slate-500">
                         <DollarSign className="h-3.5 w-3.5 text-emerald-300" />
                         Budget
@@ -554,7 +549,7 @@ export default function FindWork() {
                     {job.description}
                   </p>
 
-                  <div className="grid gap-3 rounded-2xl border border-white/8 bg-black/15 p-3 mb-5 text-xs font-semibold text-slate-400 sm:grid-cols-3">
+                  <div className="grid gap-3 rounded-xl border border-white/8 bg-black/15 p-3 mb-5 text-xs font-semibold text-slate-400 sm:grid-cols-3">
                     <span className="flex items-center gap-2">
                       <BadgeCheck className="h-4 w-4 text-emerald-300" />
                       {client?.hiresCount ? `${client.hiresCount} hires` : "Client history pending"}
@@ -615,7 +610,7 @@ export default function FindWork() {
         </div>
 
         {/* Sliding Proposal Drawer (Desktop Context Aside replacement) */}
-        <aside className="hidden xl:block w-[450px] sticky h-[calc(100vh-8rem)] rounded-3xl border border-white/10 shadow-2xl overflow-hidden" style={{ top: "calc(var(--chrome-sticky-offset) + 1rem)", background: 'rgba(30, 30, 30, 0.8)', backdropFilter: 'blur(12px)' }}>
+        <aside className="hidden xl:block w-[450px] sticky h-[calc(100vh-8rem)] rounded-xl border border-white/10 shadow-2xl overflow-hidden bg-[var(--color-bg-elevated)]" style={{ top: "calc(var(--chrome-sticky-offset) + 1rem)" }}>
           <div className="h-full flex flex-col">
             <div className="p-6 border-b border-white/10 flex items-center justify-between bg-white/[0.02]">
               <h2 className="text-xl font-black text-white flex items-center gap-2">
@@ -653,8 +648,7 @@ export default function FindWork() {
               ) : (
                 <div className="space-y-8">
                   {/* Job Summary Header */}
-                  <div className="p-5 bg-primary/10 rounded-2xl border border-primary/20 relative overflow-hidden">
-                    <div className="absolute -top-4 -right-4 size-16 bg-primary/20 rounded-full blur-[20px]"></div>
+                  <div className="p-5 bg-primary/10 rounded-xl border border-primary/20 relative overflow-hidden">
                     <div className="text-[10px] font-bold uppercase tracking-widest text-primary mb-2 relative z-10">Applying for</div>
                     <h4 className="text-lg font-bold text-white leading-tight relative z-10">{selectedJob.title}</h4>
                     <div className="mt-3 text-sm font-semibold text-slate-300 flex items-center gap-2 relative z-10">
@@ -754,7 +748,7 @@ export default function FindWork() {
 
           {selectedJob && (
             <div className="mt-6 space-y-6 pb-20">
-              <div className="p-4 bg-primary/10 rounded-2xl border border-primary/20">
+              <div className="p-4 bg-primary/10 rounded-xl border border-primary/20">
                 <div className="text-sm font-semibold text-slate-300 flex flex-wrap items-center justify-between gap-2">
                   <span className="flex items-center gap-2">
                     <span className="material-symbols-outlined text-base text-primary">payments</span>
